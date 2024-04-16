@@ -36,7 +36,7 @@ Npm latest version <command>
     npm install --legacy-peer-deps
 
     npx npm-check-updates -u
-
+    
 
     cache:clearCommand
     php artisan cache:clear
@@ -425,7 +425,7 @@ Npm latest version <command>
 
 
     curl https://api.stripe.com/v1/checkout/sessions/{{CHECKOUT_SESSION_ID}}/line_items \
-  -u :
+  -u sk_test_51Ko2rOSFsrov7HTSJAkhuTXyQiUGw5kfiU67lVR7riELEoXvcoUI6duFWM6djjYVNwmvGMec5OhyVeZyy5X3eRcj00r1l2zaoX:
 
 
   stripe listen --forward-to http://192.168.1.7:8001/api/v1/webhook/stripewebhooks
