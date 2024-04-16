@@ -22,7 +22,7 @@ const HomePage = Loadable(lazy(() => import('../pages/home')));
 // ----------------------------------------------------------------------
 
 export default function Router() {
-
+    return <h1>Hello</h1>
     const routes = useRoutes([
         {
             element: (
