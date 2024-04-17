@@ -45,4 +45,3 @@ export function useWidth() {
     }, null) || 'xs'
   );
 }
-
