@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable import/no-unresolved */
 // @mui
 import { styled } from '@mui/material/styles';
@@ -7,7 +8,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import Page from 'src/components/page';
 
-import { PaymentSummary, PaymentMethods, PaymentBillingAddress } from '../sections/payment';
+import { PaymentSummary, PaymentMethods, PaymentBillingAddress } from 'src/sections/payment';
 
 // ----------------------------------------------------------------------
 

@@ -8,6 +8,10 @@ import DashboardLayout from 'src/layouts/dashboard';
 import MainLayout from 'src/layouts/main';
 import ComingSoon from 'src/pages/error-pages/coming-soon';
 import Maintenance from 'src/pages/error-pages/maintenance';
+import About from 'src/pages/landing-pages/about';
+import Contact from 'src/pages/landing-pages/contact';
+import Faqs from 'src/pages/landing-pages/faqs';
+import HomePage from 'src/pages/landing-pages/home';
 import Payment from 'src/pages/landing-pages/payment';
 import Pricing from 'src/pages/landing-pages/pricing';
 
@@ -23,31 +27,31 @@ export const Page500 = lazy(() => import('src/pages/page-500'));
 
 export default function Router() {
   const routes = useRoutes([
-    {
-      path: 'auth',
-      children: [
-        {
-          path: 'login',
-          element: (
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          ),
-        },
-        {
-          path: 'register',
-          element: (
-            <GuestGuard>
-              <Register />
-            </GuestGuard>
-          ),
-        },
-        { path: 'login-unprotected', element: <Login /> },
-        { path: 'register-unprotected', element: <Register /> },
-        { path: 'reset-password', element: <ResetPassword /> },
-        { path: 'verify', element: <VerifyCode /> },
-      ],
-    },
+    // {
+    //   path: 'auth',
+    //   children: [
+    //     {
+    //       path: 'login',
+    //       element: (
+    //         <GuestGuard>
+    //           <Login />
+    //         </GuestGuard>
+    //       ),
+    //     },
+    //     {
+    //       path: 'register',
+    //       element: (
+    //         <GuestGuard>
+    //           <Register />
+    //         </GuestGuard>
+    //       ),
+    //     },
+    //     { path: 'login-unprotected', element: <Login /> },
+    //     { path: 'register-unprotected', element: <Register /> },
+    //     { path: 'reset-password', element: <ResetPassword /> },
+    //     { path: 'verify', element: <VerifyCode /> },
+    //   ],
+    // },
     {
       path: '/dashboard',
       element: (
