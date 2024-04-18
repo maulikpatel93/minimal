@@ -1,8 +1,10 @@
+/* eslint-disable import/no-unresolved */
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
+// eslint-disable-next-line import/no-unresolved
 import { RouterLink } from 'src/routes/components';
 
 import Logo from 'src/components/logo';

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { faker } from '@faker-js/faker';
 
 import Container from '@mui/material/Container';
