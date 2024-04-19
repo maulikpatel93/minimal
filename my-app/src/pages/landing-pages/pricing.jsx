@@ -1,12 +1,9 @@
+/* eslint-disable import/no-unresolved */
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Switch, Container, Typography, Stack } from '@mui/material';
-// _mock_
-import { _pricingPlans } from '../_mock';
-// components
-import Page from '../components/Page';
-// sections
-import { PricingPlanCard } from '../sections/pricing';
+import { Box, Stack, Switch, Container, Typography } from '@mui/material';
+
+import Page from 'src/components/Page';
 
 // ----------------------------------------------------------------------
 
@@ -46,13 +43,6 @@ export default function Pricing() {
             </Typography>
           </Box>
 
-          <Grid container spacing={3}>
-            {_pricingPlans.map((card, index) => (
-              <Grid item xs={12} md={4} key={card.subscription}>
-                <PricingPlanCard card={card} index={index} />
-              </Grid>
-            ))}
-          </Grid>
         </Container>
       </RootStyle>
     </Page>

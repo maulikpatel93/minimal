@@ -1,11 +1,13 @@
+/* eslint-disable import/no-unresolved */
 import { Link as RouterLink } from 'react-router-dom';
+
 // @mui
 import { styled } from '@mui/material/styles';
-import { Button, Typography, Container } from '@mui/material';
-// components
-import Page from '../components/Page';
-//
-import { MaintenanceIllustration } from '../assets';
+import { Button, Container, Typography } from '@mui/material';
+
+import { MaintenanceIllustration } from 'src/assets';
+
+import Page from 'src/components/Page';
 
 // ----------------------------------------------------------------------
 

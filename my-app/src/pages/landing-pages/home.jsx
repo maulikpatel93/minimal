@@ -1,19 +1,8 @@
+/* eslint-disable import/no-unresolved */
 // @mui
 import { styled } from '@mui/material/styles';
-// components
-import Page from '../components/Page';
-// sections
-import {
-  HomeHero,
-  HomeMinimal,
-  HomeDarkMode,
-  HomeLookingFor,
-  HomeColorPresets,
-  HomePricingPlans,
-  HomeAdvertisement,
-  HomeCleanInterfaces,
-  HomeHugePackElements,
-} from '../sections/home';
+
+import Page from 'src/components/Page';
 
 // ----------------------------------------------------------------------
 
@@ -33,24 +22,8 @@ export default function HomePage() {
   return (
     <Page title="The starting point for your next project">
       <RootStyle>
-        <HomeHero />
-        <ContentStyle>
-          <HomeMinimal />
-
-          <HomeHugePackElements />
-
-          <HomeDarkMode />
-
-          <HomeColorPresets />
-
-          <HomeCleanInterfaces />
-
-          <HomePricingPlans />
-
-          <HomeLookingFor />
-
-          <HomeAdvertisement />
-        </ContentStyle>
+        Home
+        <ContentStyle>Home</ContentStyle>
       </RootStyle>
     </Page>
   );

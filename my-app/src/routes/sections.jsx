@@ -15,17 +15,17 @@ import HomePage from 'src/pages/landing-pages/home';
 import Payment from 'src/pages/landing-pages/payment';
 import Pricing from 'src/pages/landing-pages/pricing';
 
-export const IndexPage = lazy(() => import('src/pages/app'));
-export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
-export const LoginPage = lazy(() => import('src/pages/login'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
-export const Page404 = lazy(() => import('src/pages/page-not-found'));
-export const Page500 = lazy(() => import('src/pages/page-500'));
-
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const IndexPage = lazy(() => import('src/pages/app'));
+  // const BlogPage = lazy(() => import('src/pages/blog'));
+  const UserPage = lazy(() => import('src/pages/user'));
+  // const LoginPage = lazy(() => import('src/pages/login'));
+  const ProductsPage = lazy(() => import('src/pages/products'));
+  const Page404 = lazy(() => import('src/pages/error-pages/page-not-found'));
+  const Page500 = lazy(() => import('src/pages/error-pages/page-500'));
+
   const routes = useRoutes([
     // {
     //   path: 'auth',

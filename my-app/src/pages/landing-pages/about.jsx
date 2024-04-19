@@ -1,9 +1,9 @@
+/* eslint-disable import/no-unresolved */
 // @mui
-import { styled } from '@mui/material/styles';
 import { Divider } from '@mui/material';
-// components
-import Page from '../components/Page';
-import { AboutHero, AboutWhat, AboutTeam, AboutVision, AboutTestimonials } from '../sections/about';
+import { styled } from '@mui/material/styles';
+
+import Page from 'src/components/Page';
 
 // ----------------------------------------------------------------------
 
@@ -20,17 +20,10 @@ export default function About() {
   return (
     <Page title="About us">
       <RootStyle>
-        <AboutHero />
-
-        <AboutWhat />
-
-        <AboutVision />
+        About us
 
         <Divider orientation="vertical" sx={{ my: 10, mx: 'auto', width: 2, height: 40 }} />
 
-        <AboutTeam />
-
-        <AboutTestimonials />
       </RootStyle>
     </Page>
   );

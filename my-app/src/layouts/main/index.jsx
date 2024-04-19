@@ -4,33 +4,34 @@
 import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Logo from 'src/components/logo';
+import MainHeader from './main-header';
 
 export default function MainLayout() {
-    return (
-        <Stack sx={{ minHeight: 1 }}>
+  return (
+    <Stack sx={{ minHeight: 1 }}>
+      <MainHeader />
+      <Outlet />
 
-            <Outlet />
+      <Box sx={{ flexGrow: 1 }} />
 
-            <Box sx={{ flexGrow: 1 }} />
+      <Box
+        sx={{
+          py: 5,
+          textAlign: 'center',
+          position: 'relative',
+          bgcolor: 'background.default',
+        }}
+      >
+        <Container>
+          <Logo sx={{ mb: 1, mx: 'auto' }} />
 
-            <Box
-                sx={{
-                    py: 5,
-                    textAlign: 'center',
-                    position: 'relative',
-                    bgcolor: 'background.default',
-                }}
-            >
-                <Container>
-                    <Logo sx={{ mb: 1, mx: 'auto' }} />
-
-                    <Typography variant="caption" component="p">
-                        © All rights reserved
-                        <br /> made by &nbsp;
-                        <Link href="https://minimals.cc/">minimals.cc</Link>
-                    </Typography>
-                </Container>
-            </Box>
-        </Stack>
-    );
+          <Typography variant="caption" component="p">
+            © All rights reserved
+            <br /> made by &nbsp;
+            <Link href="https://minimals.cc/">minimals.cc</Link>
+          </Typography>
+        </Container>
+      </Box>
+    </Stack>
+  );
 }
