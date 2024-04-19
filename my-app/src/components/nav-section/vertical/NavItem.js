@@ -3,9 +3,9 @@ import { NavLink as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, Link, ListItemText } from '@mui/material';
 //
-import Iconify from '../../Iconify';
 import { ListItemStyle, ListItemTextStyle, ListItemIconStyle } from './style';
 import { isExternalLink } from '..';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

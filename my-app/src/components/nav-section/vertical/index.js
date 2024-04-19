@@ -1,7 +1,10 @@
+/* eslint-disable import/no-cycle */
 import PropTypes from 'prop-types';
+
 // @mui
 import { styled } from '@mui/material/styles';
-import { List, Box, ListSubheader } from '@mui/material';
+import { Box, List, ListSubheader } from '@mui/material';
+
 //
 import { NavListRoot } from './NavList';
 
