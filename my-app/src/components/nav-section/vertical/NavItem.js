@@ -1,11 +1,16 @@
+/* eslint-disable import/no-cycle */
 import PropTypes from 'prop-types';
 import { NavLink as RouterLink } from 'react-router-dom';
+
 // @mui
 import { Box, Link, ListItemText } from '@mui/material';
+
+// eslint-disable-next-line import/no-unresolved
+import Iconify from 'src/components/iconify';
+
+import { isExternalLink } from '..';
 //
 import { ListItemStyle, ListItemTextStyle, ListItemIconStyle } from './style';
-import { isExternalLink } from '..';
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

@@ -1,11 +1,14 @@
-import PropTypes from 'prop-types';
+/* eslint-disable import/no-cycle */
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+
 // @mui
 import { List, Collapse } from '@mui/material';
-//
-import { NavItemRoot, NavItemSub } from './NavItem';
+
 import { getActive } from '..';
+//
+import { NavItemSub, NavItemRoot } from './NavItem';
 
 // ----------------------------------------------------------------------
 

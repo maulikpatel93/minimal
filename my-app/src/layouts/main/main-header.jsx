@@ -17,6 +17,7 @@ import Label from 'src/components/label';
 
 import { HEADER } from '../../config';
 import MenuMobile from './menu-mobile';
+import menuConfig from './menu-config';
 import MenuDesktop from './menu-desktop';
 // ----------------------------------------------------------------------
 
@@ -82,7 +83,7 @@ export default function MainHeader() {
           </Label>
           <Box sx={{ flexGrow: 1 }} />
 
-          {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
+          {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={menuConfig} />}
 
           <Button
             variant="contained"
@@ -93,7 +94,7 @@ export default function MainHeader() {
             Purchase Now
           </Button>
 
-          {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
+          {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={menuConfig} />}
         </Container>
       </ToolbarStyle>
 

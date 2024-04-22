@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { m } from 'framer-motion';
+import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
+
 // @mui
 import { Box, IconButton } from '@mui/material';
 
