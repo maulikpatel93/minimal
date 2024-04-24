@@ -22,7 +22,7 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import { CheckoutProvider } from 'src/sections/checkout/context';
 
 import { AuthProvider } from 'src/auth/context/jwt';
-import ReduxProvider from './redux/redux-provider';
+// import ReduxProvider from './redux/redux-provider';
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
 // import { AuthProvider } from 'src/auth/context/firebase';
@@ -47,7 +47,6 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <ReduxProvider>
       <LocalizationProvider>
         <SettingsProvider
           defaultSettings={{
@@ -72,7 +71,6 @@ export default function App() {
           </ThemeProvider>
         </SettingsProvider>
       </LocalizationProvider>
-      </ReduxProvider>
     </AuthProvider>
   );
 }
