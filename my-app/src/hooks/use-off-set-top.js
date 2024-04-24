@@ -1,26 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useScroll } from 'framer-motion';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
-export default function useOffSetTop(top) {
-  const [offsetTop, setOffSetTop] = useState(false);
-  const isTop = top || 100;
+export function useOffSetTop(top = 0, options) {
+  const { scrollY } = useScroll(options);
+
+  const [value, setValue] = useState(false);
+
+  const onOffSetTop = useCallback(() => {
+    scrollY.on('change', (scrollHeight) => {
+      if (scrollHeight > top) {
+        setValue(true);
+      } else {
+        setValue(false);
+      }
+    });
+  }, [scrollY, top]);
 
   useEffect(() => {
-    window.onscroll = () => {
-      if (window.pageYOffset > isTop) {
-        setOffSetTop(true);
-      } else {
-        setOffSetTop(false);
-      }
-    };
-    return () => {
-      window.onscroll = null;
-    };
-  }, [isTop]);
+    onOffSetTop();
+  }, [onOffSetTop]);
 
-  return offsetTop;
+  const memoizedValue = useMemo(() => value, [value]);
+
+  return memoizedValue;
 }
 
 // Usage
 // const offset = useOffSetTop(100);
+
+// Or
+// const offset = useOffSetTop(100, {
+//   container: ref,
+// });

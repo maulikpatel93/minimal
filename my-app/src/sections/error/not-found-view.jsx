@@ -1,75 +1,47 @@
-/* eslint-disable import/no-unresolved */
-import Box from '@mui/material/Box';
+import { m } from 'framer-motion';
+
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-// eslint-disable-next-line import/no-unresolved
 import { RouterLink } from 'src/routes/components';
 
-import Logo from 'src/components/logo';
+import CompactLayout from 'src/layouts/compact';
+import { PageNotFoundIllustration } from 'src/assets/illustrations';
+
+import { varBounce, MotionContainer } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
 export default function NotFoundView() {
-  const renderHeader = (
-    <Box
-      component="header"
-      sx={{
-        top: 0,
-        left: 0,
-        width: 1,
-        lineHeight: 0,
-        position: 'fixed',
-        p: (theme) => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) }),
-      }}
-    >
-      <Logo />
-    </Box>
-  );
-
   return (
-    <>
-      {renderHeader}
-
-      <Container>
-        <Box
-          sx={{
-            py: 12,
-            maxWidth: 480,
-            mx: 'auto',
-            display: 'flex',
-            minHeight: '100vh',
-            textAlign: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="h3" sx={{ mb: 3 }}>
-            Sorry, page not found!
+    <CompactLayout>
+      <MotionContainer>
+        <m.div variants={varBounce().in}>
+          <Typography variant="h3" sx={{ mb: 2 }}>
+            Sorry, Page Not Found!
           </Typography>
+        </m.div>
 
+        <m.div variants={varBounce().in}>
           <Typography sx={{ color: 'text.secondary' }}>
             Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
             sure to check your spelling.
           </Typography>
+        </m.div>
 
-          <Box
-            component="img"
-            src="/assets/illustrations/illustration_404.svg"
+        <m.div variants={varBounce().in}>
+          <PageNotFoundIllustration
             sx={{
-              mx: 'auto',
               height: 260,
               my: { xs: 5, sm: 10 },
             }}
           />
+        </m.div>
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
-            Go to Home
-          </Button>
-        </Box>
-      </Container>
-    </>
+        <Button component={RouterLink} href="/" size="large" variant="contained">
+          Go to Home
+        </Button>
+      </MotionContainer>
+    </CompactLayout>
   );
 }

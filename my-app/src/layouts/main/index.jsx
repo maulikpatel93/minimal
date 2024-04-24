@@ -1,46 +1,40 @@
-/* eslint-disable perfectionist/sort-named-imports */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable perfectionist/sort-imports */
-import { Box, Container, Link, Stack, Typography } from '@mui/material';
-import { Outlet, useLocation } from 'react-router-dom';
-import Logo from 'src/components/logo';
-import MainHeader from './main-header';
-import MainFooter from './main-footer';
+import PropTypes from 'prop-types';
 
-export default function MainLayout() {
-  const { pathname } = useLocation();
+import Box from '@mui/material/Box';
 
-  const isHome = pathname === '/';
+import { usePathname } from 'src/routes/hooks';
+
+import Footer from './footer';
+import Header from './header';
+
+// ----------------------------------------------------------------------
+
+export default function MainLayout({ children }) {
+  const pathname = usePathname();
+
+  const homePage = pathname === '/';
 
   return (
-    <Stack sx={{ minHeight: 1 }}>
-      <MainHeader />
-      <Outlet />
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
+      <Header />
 
-      <Box sx={{ flexGrow: 1 }} />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          ...(!homePage && {
+            pt: { xs: 8, md: 10 },
+          }),
+        }}
+      >
+        {children}
+      </Box>
 
-      {isHome ? (
-        <MainFooter />
-      ) : (
-        <Box
-          sx={{
-            py: 5,
-            textAlign: 'center',
-            position: 'relative',
-            bgcolor: 'background.default',
-          }}
-        >
-          <Container>
-            <Logo sx={{ mb: 1, mx: 'auto' }} />
-
-            <Typography variant="caption" component="p">
-              © All rights reserved
-              <br /> made by &nbsp;
-              <Link href="https://minimals.cc/">minimals.cc</Link>
-            </Typography>
-          </Container>
-        </Box>
-      )}
-    </Stack>
+      <Footer />
+    </Box>
   );
 }
+
+MainLayout.propTypes = {
+  children: PropTypes.node,
+};

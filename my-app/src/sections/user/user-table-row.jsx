@@ -1,105 +1,138 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Popover from '@mui/material/Popover';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
-  selected,
-  name,
-  avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
-  handleClick,
-}) {
-  const [open, setOpen] = useState(null);
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+  const { name, avatarUrl, company, role, status, email, phoneNumber } = row;
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
-  };
+  const confirm = useBoolean();
 
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
+  const quickEdit = useBoolean();
+
+  const popover = usePopover();
 
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
+          <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell component="th" scope="row" padding="none">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
-            <Typography variant="subtitle2" noWrap>
-              {name}
-            </Typography>
-          </Stack>
+        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+
+          <ListItemText
+            primary={name}
+            secondary={email}
+            primaryTypographyProps={{ typography: 'body2' }}
+            secondaryTypographyProps={{
+              component: 'span',
+              color: 'text.disabled',
+            }}
+          />
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell>
 
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
         <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
+          <Label
+            variant="soft"
+            color={
+              (status === 'active' && 'success') ||
+              (status === 'pending' && 'warning') ||
+              (status === 'banned' && 'error') ||
+              'default'
+            }
+          >
+            {status}
+          </Label>
         </TableCell>
 
-        <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+          <Tooltip title="Quick Edit" placement="top" arrow>
+            <IconButton color={quickEdit.value ? 'inherit' : 'default'} onClick={quickEdit.onTrue}>
+              <Iconify icon="solar:pen-bold" />
+            </IconButton>
+          </Tooltip>
+
+          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
       </TableRow>
 
-      <Popover
-        open={!!open}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: { width: 140 },
-        }}
-      >
-        <MenuItem onClick={handleCloseMenu}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
+      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+      <CustomPopover
+        open={popover.open}
+        onClose={popover.onClose}
+        arrow="right-top"
+        sx={{ width: 140 }}
+      >
+        <MenuItem
+          onClick={() => {
+            confirm.onTrue();
+            popover.onClose();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
-      </Popover>
+
+        <MenuItem
+          onClick={() => {
+            onEditRow();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:pen-bold" />
+          Edit
+        </MenuItem>
+      </CustomPopover>
+
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button variant="contained" color="error" onClick={onDeleteRow}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }
 
 UserTableRow.propTypes = {
-  avatarUrl: PropTypes.any,
-  company: PropTypes.any,
-  handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
-  name: PropTypes.any,
-  role: PropTypes.any,
-  selected: PropTypes.any,
-  status: PropTypes.string,
+  onDeleteRow: PropTypes.func,
+  onEditRow: PropTypes.func,
+  onSelectRow: PropTypes.func,
+  row: PropTypes.object,
+  selected: PropTypes.bool,
 };
