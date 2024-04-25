@@ -1,15 +1,16 @@
 import axios from "axios";
-import config from "../config.js";
 
-const API_URL = config.API_URL;
+const API_URL = import.meta.env.VITE_HOST_API;;
 
-const categoryOptions = (values) => {
-    const action = `/category/options`;
-
-    return axios.get(API_URL + action, {
+const usersroleoption = (values) => {
+    const action = `/auth/roles`;
+    const formData = new FormData();
+    for (let value in values) {
+        formData.append(value, values[value]);
+    }
+    return axios.post(API_URL + action,formData, {
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${values?.isToken}`
+            "Content-Type": "application/json"
         },
     });
 };
@@ -72,7 +73,7 @@ const relatableproduct = (values) => {
 
 
 const dropdownApiController = {
-    categoryOptions,
+    usersroleoption,
     countryOptions,
     subcategoryoptions,
     brandOptions,

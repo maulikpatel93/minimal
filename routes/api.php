@@ -17,8 +17,9 @@ use Illuminate\Support\Str;
  */
 
 Route::prefix('auth')->group(function () {
-    Route::post('/login', [UserController::class, 'userLoginController']);
-    Route::post('/register', [UserController::class, 'userRegisterController']);
+    Route::post('/login', [UserController::class, 'userLogin']);
+    Route::post('/register', [UserController::class, 'userRegister']);
+    Route::post('/roles', [UserController::class, 'userRolesDropDown']);
 });
 
 // Routes under the 'admin'

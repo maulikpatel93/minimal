@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,15 +21,19 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserRoleDropDownApi } from 'src/store/Slices/dropdownSlice';
+import { authRegisterApi } from 'src/store/Slices/authSlice';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
-
+  const dispatch = useDispatch();
   const router = useRouter();
-
+  const isUserRoleDropdown = useSelector((state) => state.dropdown.isUserRoleDropdown);
+  console.log('isUserRoleList: ', isUserRoleDropdown);
   const [errorMsg, setErrorMsg] = useState('');
 
   const searchParams = useSearchParams();
@@ -38,18 +42,37 @@ export default function JwtRegisterView() {
 
   const password = useBoolean();
 
+  useEffect(() => {
+    dispatch(UserRoleDropDownApi());
+  }, []);
+
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required('First name required'),
     lastName: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
+    roles: Yup.object().required('Role is required'),
   });
+
+  // `id`, `first_name`,
+  // `last_name`, `profile_image`,
+  // `role_id`, `email`,
+  // `email_verified_at`, `status`,
+  // `email_otp`, `phone_otp`,
+  // `password`, `remember_token`,
+  // `created_at`, `updated_at
 
   const defaultValues = {
     firstName: '',
     lastName: '',
     email: '',
     password: '',
+    roles: '',
+    profile_image: '',
+    email_verified_at: 1,
+    status: 1,
+    email_otp: '',
+    phone_otp: '',
   };
 
   const methods = useForm({
@@ -64,16 +87,26 @@ export default function JwtRegisterView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('data: ', data);
     try {
-      await register?.(data.email, data.password, data.firstName, data.lastName);
+      dispatch(authRegisterApi(data)).then((action)=>{
+        console.log('action: ', action);
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      })
+      // await register?.(data.email, data.password, data.firstName, data.lastName);
+      // router.push(returnTo || PATH_AFTER_LOGIN);
+
     } catch (error) {
       console.error(error);
       reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
+
+  const rolesOptions =
+    isUserRoleDropdown && isUserRoleDropdown.roles && isUserRoleDropdown.roles.length > 0
+      ? isUserRoleDropdown.roles
+      : [];
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
@@ -133,6 +166,12 @@ export default function JwtRegisterView() {
             </InputAdornment>
           ),
         }}
+      />
+      <RHFAutocomplete
+        name="roles"
+        options={rolesOptions}
+        label="Role"
+        helperText="Select a role that best describes the service you are looking for."
       />
 
       <LoadingButton
