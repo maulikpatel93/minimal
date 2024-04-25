@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -16,13 +16,39 @@ use Illuminate\Support\Str;
 |
  */
 
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [UserController::class, 'userLogin']);
-    Route::post('/register', [UserController::class, 'userRegister']);
-    Route::post('/roles', [UserController::class, 'userRolesDropDown']);
-});
+Route::prefix('v1')->group(function () {
+    // Route::controller(CommonApiController::class)->prefix('common')->name('common.')->group(function () {
+    //     Route::get('/downloadFile', 'downloadFile');
+    //     Route::post('/sampleclientexport', 'sampleclientexport');
+    //     Route::post('/sampleclientnoteexport', 'sampleclientnoteexport');
+    //     Route::post('/sampleclientvoucherexport', 'sampleclientvoucherexport');
+    //     Route::post('/sampleproductexport', 'sampleproductexport');
+    //     Route::post('/timezone', 'timezone');
+    //     Route::post('/whentosend', 'whentosend');
+    //     Route::post('/checkuser', 'checkuser');
+    // });
 
-// Routes under the 'admin'
+    Route::middleware(['guest:sanctum'])->prefix('beforelogin')->group(function () {
+        // Route::controller(SalonsApiController::class)->prefix('salons')->name('salons.')->group(function () {
+        //     Route::post('/checkexist', 'checkexist');
+        //     Route::post('/isexist', 'isexist');
+        //     Route::post('/store', 'store');
+        //     Route::post('/update/{id}', 'update');
+        // });
+        // Route::post('/forgotpassword', [GuestApiController::class, 'forgotpassword']);
+        // Route::post('/forgotpasswordsalonoptions', [GuestApiController::class, 'forgotpasswordsalonoptions']);
+        // Route::post('/salonoptions', [GuestApiController::class, 'salonoptions']);
+        // Route::post('/twofactorlogin', [GuestApiController::class, 'twofactorlogin']);
+
+        Route::post('/login', [UserController::class, 'userLogin']);
+        Route::post('/register', [UserController::class, 'userRegister']);
+        Route::post('/roles', [UserController::class, 'userRolesDropDown']);
+    });
+
+    Route::middleware(['auth:sanctum'])->prefix('afterlogin')->group(function () {
+        
+    });
+});
 
 Route::post('/getSlug', function (Request $request) {
     $slug = '';
@@ -35,16 +61,3 @@ Route::post('/getSlug', function (Request $request) {
     ]);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Routes under the 'admin'
-    // Route::prefix('category')->group(function () {
-    //     Route::post('/store', [CategoryController::class, 'store']);
-    //     Route::post('/view', [CategoryController::class, 'index']);
-    //     Route::get('/options', [CategoryController::class, 'categoryDropdown']);
-    //     Route::post('/{id}', [CategoryController::class, 'detail']);
-    //     Route::put('/update/{id}', [CategoryController::class, 'update']);
-    //     Route::delete('/delete/{id}', [CategoryController::class, 'delete']);
-    // });
-    // Routes under the 'frontends'
-
-});

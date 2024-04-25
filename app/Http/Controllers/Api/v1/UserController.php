@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\Controller;
+use App\Models\JwtService;
 use App\Models\Role;
 use App\Models\User;
 use Dotenv\Exception\ValidationException;
@@ -65,11 +67,13 @@ class UserController extends Controller
                 'label' => $role->name,
             ];
         });
-
-        return response()->json([
+        $payload = [
             'status' => true,
             'message' => 'Roles Fetched SuccessFully',
             'roles' => $rolesDropdown
-        ]);
+        ];
+        $token = JwtService::encode($payload);
+        // $token1 = JwtService::decode($token);
+        return response()->json(['token' => $token]);
     }
 }
