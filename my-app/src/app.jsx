@@ -22,6 +22,11 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import { CheckoutProvider } from 'src/sections/checkout/context';
 
 import { AuthProvider } from 'src/auth/context/jwt';
+
+import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { persistor, store } from './store/store';
+
 // import ReduxProvider from './redux/redux-provider';
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -46,6 +51,8 @@ export default function App() {
   useScrollToTop();
 
   return (
+    <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <AuthProvider>
       <LocalizationProvider>
         <SettingsProvider
@@ -72,5 +79,7 @@ export default function App() {
         </SettingsProvider>
       </LocalizationProvider>
     </AuthProvider>
+    </PersistGate>
+    </Provider>
   );
 }

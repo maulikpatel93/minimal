@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 
 import { varFade, MotionViewport } from 'src/components/animate';
 
+import { useDispatch, useSelector } from "react-redux";
+import { ReduxInitiation } from 'src/store/Slices/cartSlice';
 // ----------------------------------------------------------------------
 
 const CARDS = [
@@ -33,6 +35,9 @@ const CARDS = [
 // ----------------------------------------------------------------------
 
 export default function HomeMinimal() {
+  const dispatch = useDispatch();
+  const isReduxInitiated = useSelector((state)=>state.cart.isReduxInitiated);
+  console.log('isReduxInitiated: ', isReduxInitiated);
   return (
     <Container
       component={MotionViewport}
@@ -54,8 +59,10 @@ export default function HomeMinimal() {
         </m.div>
 
         <m.div variants={varFade().inDown}>
-          <Typography variant="h2">
-            What Minimal <br /> helps you?
+          <Typography variant="h2" onClick={()=>{
+              dispatch(ReduxInitiation("difference"))
+          }}>
+            <span>What Minimal </span><br /> helps you?
           </Typography>
         </m.div>
       </Stack>

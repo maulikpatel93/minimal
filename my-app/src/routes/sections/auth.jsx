@@ -61,7 +61,7 @@ const authAmplify = {
       path: 'register',
       element: (
         <GuestGuard>
-          <AuthClassicLayout title="Manage the job more effectively with Minimal">
+          <AuthClassicLayout title="Manage the event more effectively with Minimal">
             <AmplifyRegisterPage />
           </AuthClassicLayout>
         </GuestGuard>
