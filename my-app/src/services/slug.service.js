@@ -1,7 +1,6 @@
 import axios from "axios";
-import config from "../config.js";
 
-const API_URL = config.API_URL;
+const API_URL = import.meta.env.VITE_HOST_API;
 
 
 const view = (values) => {

@@ -22,12 +22,15 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { authLoginApi } from 'src/redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView() {
+  const dispatch = useDispatch();
   const { login } = useAuthContext();
-
+  const[openAlert,setOpenAlert] = useState(false);
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -44,9 +47,11 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: '',
+    password: '',
   };
+
+
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
@@ -56,18 +61,28 @@ export default function JwtLoginView() {
   const {
     reset,
     handleSubmit,
+    setError,
+    register,
     formState: { isSubmitting },
   } = methods;
 
+  // const { errors } = formState;
+
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // dispatch(authLoginApi(data)).then((action) => {
+      //   if(action.meta.requestStatus === "fulfilled"){
+      //      router.push(returnTo || PATH_AFTER_LOGIN);
+      //   }
+      // });
       await login?.(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      setOpenAlert(true);
     }
   });
 
@@ -125,12 +140,17 @@ export default function JwtLoginView() {
     <>
       {renderHead}
 
-      <Alert severity="info" sx={{ mb: 3 }}>
+      {/* <Alert severity="info" sx={{ mb: 3 }}>
         Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
-      </Alert>
+      </Alert> */}
 
-      {!!errorMsg && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+      {!!errorMsg && openAlert && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => {
+          setOpenAlert(false);
+        }} slotProps={{
+          closeButton: true,
+          closeIcon: true
+        }}>
           {errorMsg}
         </Alert>
       )}

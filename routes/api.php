@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\v1\UserController;
+use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\GuestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -17,6 +18,14 @@ use Illuminate\Support\Str;
  */
 
 Route::prefix('v1')->group(function () {
+
+    Route::middleware('web')->get('/sanctum/csrf-cookie', function (Request $request) {
+        // Get the CSRF token
+        $csrfToken = csrf_token();
+    
+        // Return the CSRF token in the response
+        return response()->json(['csrf_token' => $csrfToken]);
+    });
     // Route::controller(CommonApiController::class)->prefix('common')->name('common.')->group(function () {
     //     Route::get('/downloadFile', 'downloadFile');
     //     Route::post('/sampleclientexport', 'sampleclientexport');
@@ -40,13 +49,17 @@ Route::prefix('v1')->group(function () {
         // Route::post('/salonoptions', [GuestApiController::class, 'salonoptions']);
         // Route::post('/twofactorlogin', [GuestApiController::class, 'twofactorlogin']);
 
-        Route::post('/login', [UserController::class, 'userLogin']);
-        Route::post('/register', [UserController::class, 'userRegister']);
-        Route::post('/roles', [UserController::class, 'userRolesDropDown']);
+        Route::controller(GuestController::class)->prefix('guest')->name('guest.')->group(function () {
+            Route::post('/login', 'userLogin');
+            Route::post('/register', 'userRegister');
+            Route::get('/roles', 'userRolesDropDown');
+        });
     });
 
     Route::middleware(['auth:sanctum'])->prefix('afterlogin')->group(function () {
-        
+        Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(function () {
+            Route::get('/me', 'me');
+        });
     });
 });
 

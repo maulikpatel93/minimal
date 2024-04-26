@@ -63,10 +63,16 @@ const authSlice = createSlice({
       .addCase(authRegisterApi.pending, (state) => {
         state.isApiStatus = { ...state.isApiStatus, authRegisterApi: "loading" };
       })
-      .addCase(authRegisterApi.fulfilled, (state) => {
+      .addCase(authRegisterApi.fulfilled, (state,action) => {
+        state.isLoggedIn = true;
+        state.user = action.payload.user;
+        state.isToken = action.payload.token;
         state.isApiStatus = { ...state.isApiStatus, authRegisterApi: "succeeded" };
       })
       .addCase(authRegisterApi.rejected, (state) => {
+        state.isLoggedIn = false;
+        state.user = null;
+        state.isToken = "";
         state.isApiStatus = { ...state.isApiStatus, authRegisterApi: "failed" };
       })
       .addCase(authLoginApi.pending, (state) => {

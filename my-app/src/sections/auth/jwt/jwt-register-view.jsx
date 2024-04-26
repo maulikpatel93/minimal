@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,17 +21,27 @@ import { useAuthContext } from 'src/auth/hooks';
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import FormProvider, {
+  RHFAutocomplete,
+  RHFTextField,
+  RHFUploadAvatar,
+} from 'src/components/hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserRoleDropDownApi } from 'src/store/Slices/dropdownSlice';
-import { authRegisterApi } from 'src/store/Slices/authSlice';
+import { authRegisterApi } from 'src/redux/slices/authSlice';
+import { UserRoleDropDownApi } from 'src/redux/slices/dropdownSlice';
+import { fData } from 'src/utils/format-number';
+import { alert } from 'src/theme/overrides/components/alert';
+import { useTheme } from '@emotion/react';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
   const dispatch = useDispatch();
+  const theme = useTheme();
+  console.log('theme: ', theme);
   const router = useRouter();
+  const [value, setValue] = useState('');
   const isUserRoleDropdown = useSelector((state) => state.dropdown.isUserRoleDropdown);
   console.log('isUserRoleList: ', isUserRoleDropdown);
   const [errorMsg, setErrorMsg] = useState('');
@@ -47,8 +57,8 @@ export default function JwtRegisterView() {
   }, []);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
+    first_name: Yup.string().required('First name required'),
+    last_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     password: Yup.string().required('Password is required'),
     roles: Yup.object().required('Role is required'),
@@ -63,12 +73,12 @@ export default function JwtRegisterView() {
   // `created_at`, `updated_at
 
   const defaultValues = {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
     password: '',
     roles: '',
-    profile_image: '',
+    profile_image: null,
     email_verified_at: 1,
     status: 1,
     email_otp: '',
@@ -89,13 +99,12 @@ export default function JwtRegisterView() {
   const onSubmit = handleSubmit(async (data) => {
     console.log('data: ', data);
     try {
-      dispatch(authRegisterApi(data)).then((action)=>{
-        console.log('action: ', action);
-
-      })
-      // await register?.(data.email, data.password, data.firstName, data.lastName);
-      // router.push(returnTo || PATH_AFTER_LOGIN);
-
+      dispatch(authRegisterApi(data)).then((action) => {
+        if(action.meta.requestStatus === "fulfilled"){
+           router.push(returnTo || PATH_AFTER_LOGIN);
+        }
+      });
+      
     } catch (error) {
       console.error(error);
       reset();
@@ -107,6 +116,27 @@ export default function JwtRegisterView() {
     isUserRoleDropdown && isUserRoleDropdown.roles && isUserRoleDropdown.roles.length > 0
       ? isUserRoleDropdown.roles
       : [];
+
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+
+      // Store the selected file in state
+      setValue(file);
+
+      const newFile = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+
+      if (file) {
+        setValue('avatarUrl', newFile, { shouldValidate: true });
+
+        // Update the profile_image value in the form data
+        methods.setValue('profile_image', file);
+      }
+    },
+    [setValue, methods]
+  );
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
@@ -127,6 +157,7 @@ export default function JwtRegisterView() {
       component="div"
       sx={{
         mt: 2.5,
+        mb:5,
         textAlign: 'center',
         typography: 'caption',
         color: 'text.secondary',
@@ -145,10 +176,30 @@ export default function JwtRegisterView() {
   );
 
   const renderForm = (
-    <Stack spacing={2.5}>
+    <Stack spacing={2.5} marginBottom={0}>
+      <RHFUploadAvatar
+        name="profile_image"
+        maxSize={3145728}
+        onDrop={handleDrop}
+        helperText={
+          <Typography
+            variant="caption"
+            sx={{
+              mt: 3,
+              mx: 'auto',
+              display: 'block',
+              textAlign: 'center',
+              color: 'text.disabled',
+            }}
+          >
+            Allowed *.jpeg, *.jpg, *.png, *.gif
+            <br /> max size of {fData(3145728)}
+          </Typography>
+        }
+      />
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="firstName" label="First name" />
-        <RHFTextField name="lastName" label="Last name" />
+        <RHFTextField name="first_name" label="First name" />
+        <RHFTextField name="last_name" label="Last name" />
       </Stack>
 
       <RHFTextField name="email" label="Email address" />
@@ -199,9 +250,9 @@ export default function JwtRegisterView() {
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
         {renderForm}
+      {renderTerms}
       </FormProvider>
 
-      {renderTerms}
     </>
   );
 }

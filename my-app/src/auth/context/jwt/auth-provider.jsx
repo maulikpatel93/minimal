@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
-import { useMemo, useEffect, useReducer, useCallback } from 'react';
-
+import { useEffect, useReducer, useCallback, useMemo } from 'react';
+// utils
 import axios, { endpoints } from 'src/utils/axios';
-
+//
 import { AuthContext } from './auth-context';
-import { setSession, isValidToken } from './utils';
+import { isValidToken, setSession } from './utils';
 
 // ----------------------------------------------------------------------
-/**
- * NOTE:
- * We only build demo at basic level.
- * Customer will need to do some extra handling yourself if you want to extend the logic and other features...
- */
+
+// NOTE:
+// We only build demo at basic level.
+// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
+
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -56,11 +56,25 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
+      // Fetch CSRF token cookie
+      await axios.get('/sanctum/csrf-cookie');
+      // const csrfToken = response1.data.csrf_token;
+      // Extract CSRF token from cookies
+      // const cookies = document.cookie.split(';');
+      // const csrfCookie = cookies.find(cookie => cookie.trim().startsWith('XSRF-TOKEN='));
+      // const csrfToken = csrfCookie ? csrfCookie.split('=')[1] : null;
+      // console.log('hello', csrfToken);
+      // if (!csrfToken) {
+      //   console.log('hello', csrfToken);
+      // }
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
-
+        
+        // const csrfToken = response1.data.csrf_token;
+        // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+      
         const response = await axios.get(endpoints.auth.me);
 
         const { user } = response.data;
@@ -68,10 +82,7 @@ export function AuthProvider({ children }) {
         dispatch({
           type: 'INITIAL',
           payload: {
-            user: {
-              ...user,
-              accessToken,
-            },
+            user,
           },
         });
       } else {
@@ -113,10 +124,7 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user: {
-          ...user,
-          accessToken,
-        },
+        user,
       },
     });
   }, []);
@@ -139,10 +147,7 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'REGISTER',
       payload: {
-        user: {
-          ...user,
-          accessToken,
-        },
+        user,
       },
     });
   }, []);
