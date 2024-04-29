@@ -116,12 +116,18 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
+  const register = useCallback(async ({ first_name, last_name, email, password, roles, profile_image, email_verified_at, status, email_otp, phone_otp }) => {
     const data = {
+      first_name,
+      last_name,
       email,
       password,
-      firstName,
-      lastName,
+      roles,
+      profile_image,
+      email_verified_at,
+      status,
+      email_otp,
+      phone_otp
     };
 
     const response = await axios.post(endpoints.auth.register, data);
