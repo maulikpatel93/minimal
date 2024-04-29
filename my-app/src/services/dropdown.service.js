@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_HOST_API;;
 const VITE_JWT_SECRET = import.meta.env.VITE_JWT_SECRET;
 
 const usersroleoption = (values) => {
-    const action = `beforelogin/roles`;
+    const action = `beforelogin/guest/roles`;
     // const formData = new FormData();
     // for (let value in values) {
     //     formData.append(value, values[value]);
@@ -17,7 +17,7 @@ const usersroleoption = (values) => {
     // console.log('token', token);
     // const formData1 = new FormData();
     // formData1.append('access_token', token)
-    return axios.post(API_URL + action, {
+    return axios.get(API_URL + action, {
         headers: {
             "Content-Type": "application/json"
         },

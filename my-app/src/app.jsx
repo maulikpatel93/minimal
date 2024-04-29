@@ -24,7 +24,8 @@ import { CheckoutProvider } from 'src/sections/checkout/context';
 import { AuthProvider } from 'src/auth/context/jwt';
 
 import ReduxProvider from './redux/redux-provider';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import ReduxProvider from './redux/redux-provider';
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -68,6 +69,7 @@ export default function App() {
                   <CheckoutProvider>
                     <SettingsDrawer />
                     <ProgressBar />
+                    <ToastContainer />
                     <Router />
                   </CheckoutProvider>
                 </SnackbarProvider>

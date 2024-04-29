@@ -130,15 +130,25 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
+  const register = useCallback(async ( first_name, last_name, email, password, roles, profile_image, email_verified_at, status, email_otp, phone_otp ) => {
     const data = {
-      email,
-      password,
-      firstName,
-      lastName,
+        first_name,
+        last_name,
+        email,
+        password,
+        roles,
+        profile_image,
+        email_verified_at,
+        status,
+        email_otp,
+        phone_otp
     };
 
-    const response = await axios.post(endpoints.auth.register, data);
+    const response = await axios.post(endpoints.auth.register, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     const { accessToken, user } = response.data;
 

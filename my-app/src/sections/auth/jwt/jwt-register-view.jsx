@@ -32,18 +32,18 @@ import { UserRoleDropDownApi } from 'src/redux/slices/dropdownSlice';
 import { fData } from 'src/utils/format-number';
 import { alert } from 'src/theme/overrides/components/alert';
 import { useTheme } from '@emotion/react';
+import { toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
+  console.log('register: ', register);
   const dispatch = useDispatch();
   const theme = useTheme();
-  console.log('theme: ', theme);
   const router = useRouter();
   const [value, setValue] = useState('');
   const isUserRoleDropdown = useSelector((state) => state.dropdown.isUserRoleDropdown);
-  console.log('isUserRoleList: ', isUserRoleDropdown);
   const [errorMsg, setErrorMsg] = useState('');
 
   const searchParams = useSearchParams();
@@ -60,7 +60,11 @@ export default function JwtRegisterView() {
     first_name: Yup.string().required('First name required'),
     last_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    // password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required')
+      .min(8, 'Password must be at least 8 characters long')
+      .max(16, 'Password must not exceed 16 characters')
+      .matches(/^(?=.*[A-Z])(?=.*\d).+$/, 'Password must contain an uppercase letter and a number'),
     roles: Yup.object().required('Role is required'),
   });
 
@@ -97,20 +101,32 @@ export default function JwtRegisterView() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data: ', data);
     try {
-      dispatch(authRegisterApi(data)).then((action) => {
-        if(action.meta.requestStatus === "fulfilled"){
-           router.push(returnTo || PATH_AFTER_LOGIN);
-        }
-      });
-      
+      const response = await register?.(
+        data.first_name,
+        data.last_name,
+        data.email,
+        data.password,
+        data.roles,
+        data.profile_image,
+        data.email_verified_at,
+        data.status,
+        data.email_otp,
+        data.phone_otp
+      );
+
+      router.push(returnTo || PATH_AFTER_LOGIN);
+      toast.success('Registration successful');
     } catch (error) {
-      console.error(error);
-      reset();
+      console.log('error: ', error);
+      const message = error && error.message ? error.message : "";
+      if(message){
+        toast.danger(message);
+      }
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
+
 
   const rolesOptions =
     isUserRoleDropdown && isUserRoleDropdown.roles && isUserRoleDropdown.roles.length > 0

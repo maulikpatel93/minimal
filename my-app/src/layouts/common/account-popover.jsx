@@ -42,7 +42,10 @@ const OPTIONS = [
 export default function AccountPopover() {
   const router = useRouter();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
+  const profileImage = user && (user.storage_url && user.profile_image) ?  `${user.storage_url}/${user.profile_image}` : '';
+  console.log('profileImage: ', profileImage);
+  console.log('user: ', user);
 
   const { logout } = useAuthContext();
 
@@ -85,15 +88,15 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={user?.photoURL}
-          alt={user?.displayName}
+          src={profileImage}
+          alt={user?.first_name}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {user?.displayName?.charAt(0).toUpperCase()}
+          {user?.first_name?.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 

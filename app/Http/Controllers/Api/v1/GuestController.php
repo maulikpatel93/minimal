@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class GuestController extends Controller
 {
@@ -28,12 +29,13 @@ class GuestController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], $this->errorStatus); 
+            return response()->json(['error' => $validator->errors()], $this->errorStatus);
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $user->storage_url = asset('storage/user/profile');
+            $user->load('role');
             $nameToken = $user->first_name . ' ' . $user->last_name;
 
             $expirationTime = Config::get('sanctum.expiration');
@@ -75,13 +77,11 @@ class GuestController extends Controller
             $user->email = $request->email;
             $nameToken = $user->first_name . ' ' . $user->last_name;
             $user->password = Hash::make($request->password);
-            if ($request->has('roles')) {
-                $roleData = json_decode($request->roles, true);
-                if (isset($roleData['value'])) {
-                    $role = Role::find($roleData['value']);
-                    if ($role) {
-                        $user->role_id = $role->id;
-                    }
+            $roleData = $request->roles;
+            if (isset($roleData['value'])) {
+            $role = Role::find($roleData['value']);
+                if ($role) {
+                    $user->role_id = $role->id;
                 }
             }
             $file = $request->file('profile_image');
@@ -91,6 +91,7 @@ class GuestController extends Controller
                 $user->profile_image = $fileName;
             }
             $user->save();
+            $user->load('role');
             $user->storage_url = asset('storage/user/profile');
 
             $expirationTime = Config::get('sanctum.expiration');
@@ -109,8 +110,9 @@ class GuestController extends Controller
                 'message' => 'User registered successfully.',
             ], $this->successStatus);
         }
-
-        // If validation fails, return error response
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
         return response()->json(['error' => $validator->errors()], $this->errorStatus);
     }
 

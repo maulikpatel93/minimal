@@ -23,6 +23,10 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $user = Auth::user();
+        if ($user) {
+            $user->load('role');
+            $user->storage_url = asset('storage/user/profile');
+        }
         return response()->json([
             'user' => $user,
         ], $this->successStatus);
