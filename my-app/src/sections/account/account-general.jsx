@@ -24,19 +24,21 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required'),
+    first_name: Yup.string().required('First Name is required'),
+    last_name: Yup.string().required('Last Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    photoURL: Yup.mixed().nullable().required('Avatar is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    profile_image: Yup.mixed().nullable().required('Avatar is required'),
+    phone: Yup.string().required('Phone number is required'),
     country: Yup.string().required('Country is required'),
     address: Yup.string().required('Address is required'),
     state: Yup.string().required('State is required'),
@@ -48,9 +50,10 @@ export default function AccountGeneral() {
   });
 
   const defaultValues = {
-    displayName: user?.displayName || '',
+    first_name: user?.first_name || '',
+    last_name: user?.last_name || '',
     email: user?.email || '',
-    photoURL: user?.photoURL || null,
+    profile_image: `${user?.storage_url}/${user?.profile_image}` || null,
     phoneNumber: user?.phoneNumber || '',
     country: user?.country || '',
     address: user?.address || '',
@@ -91,7 +94,7 @@ export default function AccountGeneral() {
       });
 
       if (file) {
-        setValue('photoURL', newFile, { shouldValidate: true });
+        setValue('profile_image', newFile, { shouldValidate: true });
       }
     },
     [setValue]
@@ -147,7 +150,8 @@ export default function AccountGeneral() {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="displayName" label="Name" />
+              <RHFTextField name="first_name" label="First Name" />
+              <RHFTextField name="last_name" label="Last Name" />
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
               <RHFTextField name="address" label="Address" />

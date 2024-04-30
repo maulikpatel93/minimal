@@ -17,8 +17,8 @@ import { SplashScreen } from 'src/components/loading-screen';
 // const AmplifyForgotPasswordPage = lazy(() => import('src/pages/auth/amplify/forgot-password'));
 
 // JWT
-const JwtLoginPage = lazy(() => import('src/pages/auth/jwt/login'));
-const JwtRegisterPage = lazy(() => import('src/pages/auth/jwt/register'));
+const LoginPage = lazy(() => import('src/pages/auth/login'));
+const RegisterPage = lazy(() => import('src/pages/auth/register'));
 
 // FIREBASE
 // const FirebaseLoginPage = lazy(() => import('src/pages/auth/firebase/login'));
@@ -95,7 +95,7 @@ const authJwt = {
       element: (
         <GuestGuard>
           <AuthClassicLayout>
-            <JwtLoginPage />
+            <LoginPage />
           </AuthClassicLayout>
         </GuestGuard>
       ),
@@ -105,7 +105,7 @@ const authJwt = {
       element: (
         <GuestGuard>
           <AuthClassicLayout title="Manage the job more effectively with Minimal">
-            <JwtRegisterPage />
+            <RegisterPage />
           </AuthClassicLayout>
         </GuestGuard>
       ),

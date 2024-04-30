@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { JwtRegisterView } from 'src/sections/auth/jwt';
+import { RegisterView } from 'src/sections/auth';
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +8,10 @@ export default function RegisterPage() {
   return (
     <>
       <Helmet>
-        <title> Jwt: Register</title>
+        <title>Register</title>
       </Helmet>
 
-      <JwtRegisterView />
+      <RegisterView />
     </>
   );
 }

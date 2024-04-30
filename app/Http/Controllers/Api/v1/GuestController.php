@@ -63,57 +63,52 @@ class GuestController extends Controller
 
     public function userRegister(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $requestAll = $request->all();
+        $validator = Validator::make($requestAll, [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'roles' => 'required',
+            'phone_number' => 'required',
+            'country_code' => 'required',
+            'role_id' => 'required|exists:roles,id',
         ]);
-        if ($validator->passes()) {
-            $user = new User();
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $nameToken = $user->first_name . ' ' . $user->last_name;
-            $user->password = Hash::make($request->password);
-            $roleData = $request->roles;
-            if (isset($roleData['value'])) {
-            $role = Role::find($roleData['value']);
-                if ($role) {
-                    $user->role_id = $role->id;
-                }
-            }
-            $file = $request->file('profile_image');
-            if ($file) {
-                $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-                $filePath = $file->storeAs('user/profile', $fileName, 'public');
-                $user->profile_image = $fileName;
-            }
-            $user->save();
-            $user->load('role');
-            $user->storage_url = asset('storage/user/profile');
-
-            $expirationTime = Config::get('sanctum.expiration');
-            $expTimestamp = now()->addSeconds($expirationTime);
-
-            $token = $user->createToken($nameToken, ['*'], $expTimestamp)->plainTextToken;
-            $payload = [
-                'accessToken' => $token,
-                'iat' => time(),
-                'exp' => $expTimestamp->timestamp,
-            ];
-            $token = JwtService::encode($payload);
-            return response()->json([
-                'user' => $user,
-                'accessToken' => $token,
-                'message' => 'User registered successfully.',
-            ], $this->successStatus);
-        }
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->toArray());
+            // return response()->json(['error' => $validator->errors()], $this->errorStatus);
         }
-        return response()->json(['error' => $validator->errors()], $this->errorStatus);
+        $user = new User();
+        $requestAll['password'] = Hash::make($request->password);
+       
+        $user->fill($requestAll);
+        $file = $request->file('profile_image');
+        if ($file) {
+            $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $filePath = $file->storeAs('user/profile', $fileName, 'public');
+            $user->profile_image = $fileName;
+        }
+        
+        $user->save();
+        // $nameToken = $user->first_name . ' ' . $user->last_name;
+        // $user->load('role');
+        // $user->storage_url = asset('storage/user/profile');
+
+        // $expirationTime = Config::get('sanctum.expiration');
+        // $expTimestamp = now()->addSeconds($expirationTime);
+
+        // $token = $user->createToken($nameToken, ['*'], $expTimestamp)->plainTextToken;
+        // $payload = [
+        //     'accessToken' => $token,
+        //     'iat' => time(),
+        //     'exp' => $expTimestamp->timestamp,
+        // ];
+        // $token = JwtService::encode($payload);
+        return response()->json([
+            // 'user' => $user,
+            // 'accessToken' => $token,
+            'message' => 'User registered successfully.',
+        ], $this->successStatus);
+
     }
 
     public function userRolesDropDown()

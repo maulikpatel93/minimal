@@ -33,10 +33,11 @@ import { fData } from 'src/utils/format-number';
 import { alert } from 'src/theme/overrides/components/alert';
 import { useTheme } from '@emotion/react';
 import { toast } from 'react-toastify';
+import { countries } from 'src/assets/data';
 
 // ----------------------------------------------------------------------
 
-export default function JwtRegisterView() {
+export default function RegisterView() {
   const { register } = useAuthContext();
   console.log('register: ', register);
   const dispatch = useDispatch();
@@ -61,11 +62,15 @@ export default function JwtRegisterView() {
     last_name: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     // password: Yup.string().required('Password is required'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string()
+      .required('Password is required')
       .min(8, 'Password must be at least 8 characters long')
       .max(16, 'Password must not exceed 16 characters')
       .matches(/^(?=.*[A-Z])(?=.*\d).+$/, 'Password must contain an uppercase letter and a number'),
-    roles: Yup.object().required('Role is required'),
+    role_id: Yup.object().required('Role is required'),
+    phone_number: Yup.string()
+    .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
+    .required('Phone number is required'),
   });
 
   // `id`, `first_name`,
@@ -81,12 +86,14 @@ export default function JwtRegisterView() {
     last_name: '',
     email: '',
     password: '',
-    roles: '',
+    role_id: '',
     profile_image: null,
     email_verified_at: 1,
     status: 1,
     email_otp: '',
     phone_otp: '',
+    country_code:'',
+    phone_number:''
   };
 
   const methods = useForm({
@@ -102,13 +109,16 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+
       const response = await register?.(
         data.first_name,
         data.last_name,
         data.email,
         data.password,
-        data.roles,
+        data.role_id?.value,
         data.profile_image,
+        data.phone_number,
+        data.country_code?.value,
         data.email_verified_at,
         data.status,
         data.email_otp,
@@ -119,14 +129,13 @@ export default function JwtRegisterView() {
       toast.success('Registration successful');
     } catch (error) {
       console.log('error: ', error);
-      const message = error && error.message ? error.message : "";
-      if(message){
-        toast.danger(message);
+      const message = error && error.message ? error.message : '';
+      if (message) {
+        toast.error(message);
       }
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
-
 
   const rolesOptions =
     isUserRoleDropdown && isUserRoleDropdown.roles && isUserRoleDropdown.roles.length > 0
@@ -173,7 +182,7 @@ export default function JwtRegisterView() {
       component="div"
       sx={{
         mt: 2.5,
-        mb:5,
+        mb: 5,
         textAlign: 'center',
         typography: 'caption',
         color: 'text.secondary',
@@ -217,6 +226,15 @@ export default function JwtRegisterView() {
         <RHFTextField name="first_name" label="First name" />
         <RHFTextField name="last_name" label="Last name" />
       </Stack>
+        <RHFAutocomplete
+          name="country_code"
+          type="country_code"
+          label="Country"
+          placeholder="Choose a country"
+          options={countries && countries.length > 0 ? countries : []}
+          // getOptionLabel={(option) => option}
+        />
+        <RHFTextField name="phone_number" label="Phone number" />
 
       <RHFTextField name="email" label="Email address" />
 
@@ -235,7 +253,7 @@ export default function JwtRegisterView() {
         }}
       />
       <RHFAutocomplete
-        name="roles"
+        name="role_id"
         options={rolesOptions}
         label="Role"
         helperText="Select a role that best describes the service you are looking for."
@@ -266,9 +284,8 @@ export default function JwtRegisterView() {
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
         {renderForm}
-      {renderTerms}
+        {renderTerms}
       </FormProvider>
-
     </>
   );
 }

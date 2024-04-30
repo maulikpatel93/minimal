@@ -22,12 +22,15 @@ import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { authLoginApi } from 'src/redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
-export default function SupabaseLoginView() {
+export default function LoginView() {
+  const dispatch = useDispatch();
   const { login } = useAuthContext();
-
+  const[openAlert,setOpenAlert] = useState(false);
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -48,6 +51,8 @@ export default function SupabaseLoginView() {
     password: '',
   };
 
+
+
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
@@ -56,18 +61,28 @@ export default function SupabaseLoginView() {
   const {
     reset,
     handleSubmit,
+    setError,
+    register,
     formState: { isSubmitting },
   } = methods;
 
+  // const { errors } = formState;
+
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // dispatch(authLoginApi(data)).then((action) => {
+      //   if(action.meta.requestStatus === "fulfilled"){
+      //      router.push(returnTo || PATH_AFTER_LOGIN);
+      //   }
+      // });
       await login?.(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
+      setOpenAlert(true);
     }
   });
 
@@ -78,7 +93,7 @@ export default function SupabaseLoginView() {
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
 
-        <Link component={RouterLink} href={paths.auth.supabase.register} variant="subtitle2">
+        <Link component={RouterLink} href={paths.auth.jwt.register} variant="subtitle2">
           Create an account
         </Link>
       </Stack>
@@ -104,14 +119,7 @@ export default function SupabaseLoginView() {
         }}
       />
 
-      <Link
-        component={RouterLink}
-        href={paths.auth.supabase.forgotPassword}
-        variant="body2"
-        color="inherit"
-        underline="always"
-        sx={{ alignSelf: 'flex-end' }}
-      >
+      <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
         Forgot password?
       </Link>
 
@@ -132,8 +140,17 @@ export default function SupabaseLoginView() {
     <>
       {renderHead}
 
-      {!!errorMsg && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+      {/* <Alert severity="info" sx={{ mb: 3 }}>
+        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+      </Alert> */}
+
+      {!!errorMsg && openAlert && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => {
+          setOpenAlert(false);
+        }} slotProps={{
+          closeButton: true,
+          closeIcon: true
+        }}>
           {errorMsg}
         </Alert>
       )}
