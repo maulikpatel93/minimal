@@ -44,8 +44,6 @@ export default function AccountPopover() {
 
   const { user } = useAuthContext();
   const profileImage = user && (user.storage_url && user.profile_image) ?  `${user.storage_url}/${user.profile_image}` : '';
-  console.log('profileImage: ', profileImage);
-  console.log('user: ', user);
 
   const { logout } = useAuthContext();
 

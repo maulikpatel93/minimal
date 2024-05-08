@@ -7,7 +7,11 @@ import { HOST_API } from 'src/config-global';
 const axiosInstance = axios.create({ baseURL: HOST_API, withCredentials: true, xsrfCookieName: "XSRF-TOKEN", xsrfHeaderName: 'X-XSRF-TOKEN' });
 
 axiosInstance.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    console.log('resAXIO: ', res);
+
+    return res
+  },
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
@@ -31,10 +35,9 @@ export const endpoints = {
   calendar: '/api/calendar',
   auth: {
     me: 'afterlogin/auth/me',
-    // login: '/api/auth/login',
     login: 'beforelogin/guest/login',
-    // register: '/api/auth/register',
     register: 'beforelogin/guest/register',
+    update:'afterlogin/auth/update',
   },
   mail: {
     list: '/api/mail/list',

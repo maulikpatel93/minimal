@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import checkoutReducer from './slices/checkoutSlice';
 import dropdownReducer from './slices/dropdownSlice';
 import authReducer from './slices/authSlice';
+import profileReducer from './slices/profileSlice';
 
 // // ----------------------------------------------------------------------
 
@@ -24,6 +25,11 @@ const persistConfigs = [
     storage,
     keyPrefix: 'eventmanage-',
   },
+  {
+    key: 'profile',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
   // Add more persist configurations as needed...
 ];
 
@@ -31,7 +37,8 @@ const persistConfigs = [
 const reducers = {
   checkout: checkoutReducer,
   dropdown:dropdownReducer,
-  auth:authReducer
+  auth:authReducer,
+  profile:profileReducer,
 };
 
 // Combine all reducers into a single reducer

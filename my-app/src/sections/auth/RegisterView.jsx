@@ -39,7 +39,6 @@ import { countries } from 'src/assets/data';
 
 export default function RegisterView() {
   const { register } = useAuthContext();
-  console.log('register: ', register);
   const dispatch = useDispatch();
   const theme = useTheme();
   const router = useRouter();
@@ -128,7 +127,6 @@ export default function RegisterView() {
       router.push(returnTo || PATH_AFTER_LOGIN);
       toast.success('Registration successful');
     } catch (error) {
-      console.log('error: ', error);
       const message = error && error.message ? error.message : '';
       if (message) {
         toast.error(message);

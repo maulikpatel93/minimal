@@ -38,6 +38,12 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
+  if (action.type === 'USERUPDATE') {
+    return {
+      ...state,
+      user: action.payload.user,
+    };
+  }
   if (action.type === 'LOGOUT') {
     return {
       ...state,
@@ -163,6 +169,32 @@ export function AuthProvider({ children }) {
       },
     });
   }, []);
+  const authToken = sessionStorage.getItem(STORAGE_KEY);
+  const userupdate = useCallback(async ( first_name, last_name, email, profile_image,phone_number,country_code) => {
+    const data = {
+        first_name,
+        last_name,
+        email,
+        profile_image,
+        phone_number,
+        country_code,
+    };
+
+    const response = await axios.post(endpoints.auth.update, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const { user } = response.data;
+
+    dispatch({
+      type: 'USERUPDATE',
+      payload: {
+        user,
+      },
+    });
+  }, []);
 
   // LOGOUT
   const logout = useCallback(async () => {
@@ -189,8 +221,9 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      userupdate
     }),
-    [login, logout, register, state.user, status]
+    [login, logout, register,userupdate, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

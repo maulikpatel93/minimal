@@ -59,6 +59,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum'])->prefix('afterlogin')->group(function () {
         Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(function () {
             Route::get('/me', 'me');
+            Route::post('/update', 'userUpdate');
+            Route::post('/changepassword', 'passwordChange');
         });
     });
 });
