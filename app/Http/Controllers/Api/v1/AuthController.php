@@ -40,21 +40,28 @@ class AuthController extends Controller
             'phone_number' => 'required',
             'country_code' => 'required',
         ]);
+        
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->toArray());
         }
+        
         $user = $request->user();
         $user->fill($requestAll);
-        $file = $request->file('profile_image');
-        if ($file) {
-            if ($user->profile_image) {
-                Storage::disk('public')->delete('user/profile/' . $user->profile_image);
-            }
-            $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
-            $filePath = $file->storeAs('user/profile', $fileName, 'public');
-            $user->profile_image = $fileName;
+        
+        // Check if 'profile_image' is a file
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            // Handle file upload
+            if ($file->isValid()) {
+                if ($user->profile_image) {
+                    Storage::disk('public')->delete('user/profile/' . $user->profile_image);
+                }
+                $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+                $filePath = $file->storeAs('user/profile', $fileName, 'public');
+                $user->profile_image = $fileName;
+            } 
         }
-
+    
         $user->save();
         $user->storage_url = asset('storage/user/profile');
         return response()->json([
@@ -62,6 +69,7 @@ class AuthController extends Controller
             'user' => $user,
         ], $this->successStatus);
     }
+    
     public function passwordChange(Request $request)
     {
         $requestAll = $request->all();

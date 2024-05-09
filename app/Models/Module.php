@@ -5,17 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Module extends Model
 {
     use HasFactory;
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-    public function modules()
-    {
-        return $this->hasMany(Module::class);
-    }
+    protected $guarded = [];
 
     public function submodules()
     {
@@ -25,5 +18,10 @@ class Role extends Model
     public function tabs()
     {
         return $this->hasMany(Tab::class);
+    }
+
+    public function rolePermissions()
+    {
+        return $this->hasMany(RolePermission::class);
     }
 }
