@@ -8,7 +8,6 @@ import Drawer from '@mui/material/Drawer';
 import { usePathname } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
@@ -18,17 +17,20 @@ import { NAV } from '../config-layout';
 import NavUpgrade from '../common/nav-upgrade';
 import { useNavData } from './config-navigation';
 import NavToggleButton from '../common/nav-toggle-button';
+import { useDispatch } from 'react-redux';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function NavVertical({ openNav, onCloseNav }) {
-  const { user } = useMockedUser();
-
+  const { user } = useAuthContext();
+  
   const pathname = usePathname();
 
   const lgUp = useResponsive('up', 'lg');
 
   const navData = useNavData();
+  
 
   useEffect(() => {
     if (openNav) {
@@ -53,13 +55,13 @@ export default function NavVertical({ openNav, onCloseNav }) {
       <NavSectionVertical
         data={navData}
         slotProps={{
-          currentRole: user?.role,
+          currentRole: user?.role?.name,
         }}
       />
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <NavUpgrade />
+      {/* <NavUpgrade /> */}
     </Scrollbar>
   );
 

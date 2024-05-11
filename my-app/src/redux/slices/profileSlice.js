@@ -9,6 +9,7 @@ export const passwordChangeApi = createAsyncThunk("profile/password/update", asy
       const resposedata = await axios.post(API_URL + `afterlogin/auth/changepassword`, formValues)
         .then((response) => HandleResponse(thunkAPI, response, "changepassword"))
         .catch((error) => HandleError(thunkAPI, error, "changepassword"));
+        
       return resposedata;
     } catch (error) {
       const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();

@@ -8,11 +8,17 @@ const axiosInstance = axios.create({ baseURL: HOST_API, withCredentials: true, x
 
 axiosInstance.interceptors.response.use(
   (res) => {
-    console.log('resAXIO: ', res);
+    // console.log('resAXIO: ', res);
 
     return res
   },
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+  (error) => {
+    return Promise.reject(({
+      status:error.response?.status, 
+      data:error.response?.data, 
+      message:error.response?.message
+     }) || 'Something went wrong');
+  }
 );
 
 export default axiosInstance;

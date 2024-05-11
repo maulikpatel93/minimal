@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\GuestController;
-use App\Http\Controllers\UserModuleController;
+use App\Http\Controllers\Api\v1\UserModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -62,8 +62,9 @@ Route::prefix('v1')->group(function () {
             Route::get('/me', 'me');
             Route::post('/update', 'userUpdate');
             Route::post('/changepassword', 'passwordChange');
+            Route::get('/role-access', 'roleAccess');
         });
-        Route::controller(UserModuleController::class)->prefix('auth')->name('auth.')->group(function () {
+        Route::controller(UserModuleController::class)->prefix('module')->name('module.')->group(function () {
             Route::get('/view', 'view');
         });
     });

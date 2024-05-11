@@ -12,16 +12,16 @@ class Module extends Model
 
     public function submodules()
     {
-        return $this->hasMany(Submodule::class);
+        return $this->hasMany(Submodule::class)->where('is_active', 1);
     }
 
     public function tabs()
     {
-        return $this->hasMany(Tab::class);
+        return $this->hasMany(Tab::class)->where('is_active', 1);
     }
 
     public function rolePermissions()
     {
-        return $this->hasMany(RolePermission::class);
+        return $this->hasMany(RolePermission::class)->where('is_active', 1);
     }
 }

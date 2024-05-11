@@ -1,8 +1,6 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
-
 import { hideScroll } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
@@ -11,11 +9,12 @@ import { NavSectionMini } from 'src/components/nav-section';
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
 import NavToggleButton from '../common/nav-toggle-button';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function NavMini() {
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const navData = useNavData();
 
@@ -48,7 +47,7 @@ export default function NavMini() {
         <NavSectionMini
           data={navData}
           slotProps={{
-            currentRole: user?.role,
+            currentRole: user?.role?.name,
           }}
         />
       </Stack>

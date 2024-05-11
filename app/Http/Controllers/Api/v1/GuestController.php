@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\JwtService;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -35,7 +36,7 @@ class GuestController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $user->storage_url = asset('storage/user/profile');
-            $user->load('role');
+            $user->load('role:id,name');
             $nameToken = $user->first_name . ' ' . $user->last_name;
 
             $expirationTime = Config::get('sanctum.expiration');
@@ -87,7 +88,8 @@ class GuestController extends Controller
             $filePath = $file->storeAs('user/profile', $fileName, 'public');
             $user->profile_image = $fileName;
         }
-        
+        $user->is_active = 1;
+        $user->is_active_at = Carbon::now()->format('Y-m-d H:i:s');
         $user->save();
         // $nameToken = $user->first_name . ' ' . $user->last_name;
         // $user->load('role');

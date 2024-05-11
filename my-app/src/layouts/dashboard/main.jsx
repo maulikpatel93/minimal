@@ -7,6 +7,8 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { useSettingsContext } from 'src/components/settings';
 
 import { NAV, HEADER } from '../config-layout';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +22,7 @@ export default function Main({ children, sx, ...other }) {
   const isNavHorizontal = settings.themeLayout === 'horizontal';
 
   const isNavMini = settings.themeLayout === 'mini';
+
 
   if (isNavHorizontal) {
     return (

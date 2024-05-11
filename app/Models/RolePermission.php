@@ -12,21 +12,21 @@ class RolePermission extends Model
 
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->where('is_active', 1);
     }
 
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class)->where('is_active', 1);
     }
 
-    public function submodule()
+    public function subModule()
     {
-        return $this->belongsTo(Submodule::class);
+        return $this->belongsTo(SubModule::class)->where('is_active', 1);
     }
 
     public function tab()
     {
-        return $this->belongsTo(Tab::class);
+        return $this->belongsTo(Tab::class)->where('is_active', 1);
     }
 }

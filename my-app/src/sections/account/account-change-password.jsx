@@ -13,10 +13,13 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { passwordChangeApi } from 'src/redux/slices/profileSlice';
 import { Alert } from '@mui/material';
 import { useState } from 'react';
+import { openModal } from 'src/redux/slices/commonSlice';
+import AlertDialog from '../_examples/mui/dialog-view/alert-dialog';
+import TransitionsDialog from '../_examples/mui/dialog-view/transitions-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -26,17 +29,22 @@ export default function AccountChangePassword() {
   const password = useBoolean();
   const [alertBox, setAlertBox] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const isOpenModal = useSelector((state) => state.common.isOpenModal);
   const ChangePassWordSchema = Yup.object().shape({
-    // old_password: Yup.string().required('Old Password is required'),
-    // password: Yup.string()
-    //   .required('New Password is required')
-    //   .min(6, 'Password must be at least 6 characters')
-    //   .test(
-    //     'no-match',
-    //     'New password must be different than old password',
-    //     (value, { parent }) => value !== parent.old_password
-    //   ),
-    //   confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
+    old_password: Yup.string().required('Old Password is required'),
+    password: Yup.string()
+    .required('New Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .matches(
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).{8,}$/,
+      'Password must contain at least 8 characters including one uppercase letter, one lowercase letter, and one number'
+    )
+    .test(
+      'no-match',
+      'New password must be different than old password',
+      (value, { parent }) => value !== parent.old_password
+    ),
+      confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Passwords must match'),
   });
 
   const defaultValues = {
@@ -53,26 +61,32 @@ export default function AccountChangePassword() {
   const {
     reset,
     handleSubmit,
+    setError,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       const action = await dispatch(passwordChangeApi(data));
-      console.log('action: ', action);
-  
       if (action.meta.requestStatus === 'fulfilled') {
         enqueueSnackbar('Password changed successfully', { variant: 'success' });
         reset();
       } else if (action.meta.requestStatus === 'rejected') {
-        if (action.payload && action.payload.error) {
-          // Iterate over the keys of the error object
-          Object.keys(action.payload.error).forEach((key) => {
-            // Set error message for each field
-            methods.setError(key, action.payload.error[key]);
+        const status = action.payload.status;
+        const message = action.payload.message;
+        const data = action.payload.data;
+        if (status === 422 && data) {
+          // Construct the error message to display in the dialog
+          Object.keys(data).forEach((field) => {
+            const errorMessage = data[field].join(', '); // Join the error messages for the field
+            setError(field, {
+              type: 'manual', // Set the error type as 'manual'
+              message: errorMessage, // Provide the error message
+            });
           });
-          // Set alert box to true
-          setAlertBox(true);
+
+          // Open the dialog with the error message
+          // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
         } else {
           enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
         }
@@ -126,12 +140,7 @@ export default function AccountChangePassword() {
                 </InputAdornment>
               ),
             }}
-            helperText={
-              <Stack component="span" direction="row" alignItems="center">
-                <Iconify icon="eva:info-fill" width={16} sx={{ mr: 0.5 }} /> Password must be
-                minimum 6+
-              </Stack>
-            }
+            helperText={""}
           />
 
           <RHFTextField
@@ -159,6 +168,7 @@ export default function AccountChangePassword() {
           </LoadingButton>
         </Stack>
       </FormProvider>
+      {isOpenModal && <TransitionsDialog />}
     </>
   );
 }

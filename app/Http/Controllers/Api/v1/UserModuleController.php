@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserModuleController extends Controller
@@ -17,19 +17,13 @@ class UserModuleController extends Controller
     public function view()
     {
         $user = Auth::user();
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Invalid email or password.',
-            ], $this->unauthorizedStatus);
-        }
+        $role_id = $user->role_id;
+        // // Assuming there's a relationship defined in the Role model
+        // $roles = Role::with([])->get();
 
-        // Assuming there's a relationship defined in the Role model
-        $roles = Role::with(['modules', 'submodules', 'tabs'])->get();
-
-        return response()->json([
-            'status' => true,
-            'roles' => $roles,
-        ], $this->successStatus);
+        // return response()->json([
+        //     'status' => true,
+        //     'roles' => $roles,
+        // ], $this->successStatus);
     }
 }

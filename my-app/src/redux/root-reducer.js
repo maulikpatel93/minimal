@@ -6,6 +6,8 @@ import checkoutReducer from './slices/checkoutSlice';
 import dropdownReducer from './slices/dropdownSlice';
 import authReducer from './slices/authSlice';
 import profileReducer from './slices/profileSlice';
+import commonReducer from './slices/commonSlice';
+import rolePermissionReducer from './slices/rolePermissionSlice';
 
 // // ----------------------------------------------------------------------
 
@@ -30,6 +32,16 @@ const persistConfigs = [
     storage,
     keyPrefix: 'eventmanage-',
   },
+  {
+    key: 'common',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'rolepermission',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
   // Add more persist configurations as needed...
 ];
 
@@ -39,6 +51,8 @@ const reducers = {
   dropdown:dropdownReducer,
   auth:authReducer,
   profile:profileReducer,
+  common:commonReducer,
+  rolepermission:rolePermissionReducer,
 };
 
 // Combine all reducers into a single reducer

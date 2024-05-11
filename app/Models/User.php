@@ -26,6 +26,8 @@ class User extends Authenticatable
         'profile_image',
         'email',
         'password',
+        'is_active',
+        'is_active_at',
     ];
 
     /**
@@ -52,6 +54,6 @@ class User extends Authenticatable
     }
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->where('is_active', 1);
     }
 }

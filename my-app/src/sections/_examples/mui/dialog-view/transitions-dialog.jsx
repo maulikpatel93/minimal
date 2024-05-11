@@ -1,45 +1,46 @@
-import { forwardRef } from 'react';
-
+import React, { forwardRef } from 'react';
 import Slide from '@mui/material/Slide';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
-// ----------------------------------------------------------------------
+import { useSelector, useDispatch } from 'react-redux';
+import { closeModal, openModal } from 'src/redux/slices/commonSlice';
 
 const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function TransitionsDialog() {
-  const dialog = useBoolean();
+  const dispatch = useDispatch();
+  const isOpenModal = useSelector((state) => state.common.isOpenModal);
+  const modalTitle = useSelector((state) => state.common.IsModalTitle);
+  const modalDescription = useSelector((state) => state.common.IsModalDescription);
+
+  const handleCloseDialog = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <div>
-      <Button variant="outlined" color="success" onClick={dialog.onTrue}>
-        Transitions Dialogs
-      </Button>
-
       <Dialog
         keepMounted
-        open={dialog.value}
+        open={isOpenModal}
         TransitionComponent={Transition}
-        onClose={dialog.onFalse}
+        onClose={handleCloseDialog}
       >
-        <DialogTitle>{`Use Google's location service?`}</DialogTitle>
+        <DialogTitle>{modalTitle}</DialogTitle>
 
         <DialogContent sx={{ color: 'text.secondary' }}>
-          Let Google help apps determine location. This means sending anonymous location data to
-          Google, even when no apps are running.
+          {modalDescription.split('\n').map((line, index) => (
+            <p key={index}>{line}</p>
+          ))}
         </DialogContent>
 
         <DialogActions>
-          <Button variant="outlined" onClick={dialog.onFalse}>
+          <Button variant="outlined" onClick={handleCloseDialog}>
             Disagree
           </Button>
-          <Button variant="contained" onClick={dialog.onFalse} autoFocus>
+          <Button variant="contained" onClick={handleCloseDialog} autoFocus>
             Agree
           </Button>
         </DialogActions>

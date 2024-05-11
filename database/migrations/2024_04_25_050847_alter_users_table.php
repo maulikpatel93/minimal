@@ -25,8 +25,8 @@ return new class extends Migration
                 $table->string('profile_image')->nullable()->after('last_name');
             }
             if (!Schema::hasColumn('users', 'role_id')) {
-                $table->unsignedBigInteger('role_id')->nullable()->after('profile_image');
-                $table->foreign('role_id')->references('id')->on('roles');
+                $table->unsignedBigInteger('role_id')->after('id')->nullable()->comment('Type Of Role');
+                $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
             }
             if (!Schema::hasColumn('users', 'status')) {
                 $table->string('status')->default('active')->after('email_verified_at');
