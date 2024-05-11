@@ -33,7 +33,7 @@ class GuestController extends Controller
             return response()->json(['error' => $validator->errors()], $this->errorStatus);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'is_active' => 1])) {
             $user = Auth::user();
             $user->storage_url = asset('storage/user/profile');
             $user->load('role:id,name');
@@ -80,7 +80,7 @@ class GuestController extends Controller
         }
         $user = new User();
         $requestAll['password'] = Hash::make($request->password);
-       
+
         $user->fill($requestAll);
         $file = $request->file('profile_image');
         if ($file) {
