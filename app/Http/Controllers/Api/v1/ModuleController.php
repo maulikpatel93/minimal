@@ -18,12 +18,14 @@ class ModuleController extends Controller
     {
         $requestAll = $request->all();
         $is_active = $request->is_active;
-        $limit = 10;
-        if ($is_active === 0 || $is_active === 1) {
-            $model = Module::where('is_active', $is_active)->paginate($limit);
-        } else {
-            $model = Module::paginate($limit);
+        $limit = $request->limit ? $request->limit : config('app.apiPerPage');
+        $filter = $request->filter;
+
+        $query = Module::select('*');
+        if($filter){
+            echo '<pre>'; print_r($filter); echo '</pre>';dd();
         }
+        $model = $query->paginate($limit);
         $successData = $model ? $model : [];
         return response()->json($successData, $this->successStatus);
     }

@@ -1,23 +1,20 @@
-// @mui
+import PropTypes from 'prop-types';
+
 import Container from '@mui/material/Container';
-// routes
+
 import { paths } from 'src/routes/paths';
-import { useParams } from 'src/routes/hooks/use-params';
-// _mock
+
 import { _userList } from 'src/_mock';
-// components
+
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import ModuleNewEditForm from '../module-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleEditView() {
+export default function ModuleEditView({ id }) {
   const settings = useSettingsContext();
-
-  const params = useParams();
-
-  const { id } = params;
 
   const currentModule = _userList.find((user) => user.id === id);
 
@@ -41,6 +38,11 @@ export default function ModuleEditView() {
         }}
       />
 
+      <ModuleNewEditForm currentModule={currentModule} />
     </Container>
   );
 }
+
+ModuleEditView.propTypes = {
+  id: PropTypes.string,
+};

@@ -12,7 +12,12 @@ import { LoadingScreen } from 'src/components/loading-screen';
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
 const UserAccountPage = lazy(() => import('src/pages/account/account'));
-const ModulePage = lazy(() => import('src/pages/dashboard/role-management/module/list'));
+
+// MODULE
+const ModuleListPage = lazy(() => import('src/pages/dashboard/role-management/module/list'));
+const ModuleCreatePage = lazy(() => import('src/pages/dashboard/role-management/module/new'));
+const ModuleEditPage = lazy(() => import('src/pages/dashboard/role-management/module/edit'));
+
 // // TEST RENDER PAGE BY ROLE
 // const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
 // BLANK PAGE
@@ -36,15 +41,18 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       {
         path: 'role-management',
-        children: [
-          { path: 'modules', element: <ModulePage /> },
-        ],
+        children: [{
+          path: 'modules',
+          children: [
+            { path: 'list', element: <ModuleListPage /> },
+            { path: 'new', element: <ModuleCreatePage /> },
+            { path: ':id/edit', element: <ModuleEditPage /> },
+          ],
+        }],
       },
       {
         path: 'user',
-        children: [
-          { path: 'account', element: <UserAccountPage /> },
-        ],
+        children: [{ path: 'account', element: <UserAccountPage /> }],
       },
       // { path: 'permission', element: <PermissionDeniedPage /> },
       // { path: 'blank', element: <BlankPage /> },

@@ -1,165 +1,280 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
-// @mui
-import { alpha } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
-import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
-// routes
-import { paths } from 'src/routes/paths';
+import { useState, useEffect, useCallback } from 'react';
 
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import {
+  DataGrid,
+  GridToolbarExport,
+  GridActionsCellItem,
+  GridToolbarContainer,
+  GridToolbarQuickFilter,
+  GridToolbarFilterButton,
+  GridToolbarColumnsButton,
+} from '@mui/x-data-grid';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
-// _mock
-import { _userList, _roles, USER_STATUS_OPTIONS } from 'src/_mock';
-// hooks
+
 import { useBoolean } from 'src/hooks/use-boolean';
-// components
-import Label from 'src/components/label';
+
 import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
+import { useSnackbar } from 'src/components/snackbar';
+import EmptyContent from 'src/components/empty-content';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import {
-  useTable,
-  getComparator,
-  emptyRows,
-  TableNoData,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
-} from 'src/components/table';
-import { useRouter } from 'src/routes/hooks/use-router';
-//
-// import ModuleTableRow from '../user-table-row';
-// import ModuleTableToolbar from '../user-table-toolbar';
-// import ModuleTableFiltersResult from '../user-table-filters-result';
+
+// import ModuleTableToolbar from '../module-table-toolbar';
+// import ModuleTableFiltersResult from '../module-table-filters-result';
+// import {
+//   RenderCellStock,
+//   RenderCellPrice,
+//   RenderCellPublish,
+//   RenderCellModule,
+//   RenderCellCreatedAt,
+// } from '../module-table-row';
+import { ModuleListApi } from 'src/redux/slices/moduleSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
-const ModuleTableRow = [];
-const ModuleTableToolbar = [];
-const ModuleTableFiltersResult = [];
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
-const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone Number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
-  { id: '', width: 88 },
+const PUBLISH_OPTIONS = [
+  { value: 'published', label: 'Published' },
+  { value: 'draft', label: 'Draft' },
 ];
 
 const defaultFilters = {
-  name: '',
-  role: [],
-  status: 'all',
+  publish: [],
+  stock: [],
 };
+
+const HIDE_COLUMNS = {
+  category: false,
+};
+
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
 
 // ----------------------------------------------------------------------
 
 export default function ModuleListView() {
-  const table = useTable();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const settings = useSettingsContext();
+  const confirmRows = useBoolean();
 
   const router = useRouter();
 
-  const confirm = useBoolean();
+  const settings = useSettingsContext();
 
-  const [tableData, setTableData] = useState(_userList);
+  const [value, setValue] = useState('');
+  const [status, setStatus] = useState('');
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [sort, setSort] = useState([]);
+  const [filter, setFilter] = useState([]);
+  const [addUserOpen, setAddUserOpen] = useState(false);
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const dispatch = useDispatch();
+  const moduleList = useSelector((state) => state.module.list);
+  const loadingList = useSelector((state) => state.module.loading.list);
+  const totalRows = moduleList ? moduleList.total : 0;
+  const currentPage = moduleList ? moduleList.current_page : 1;
 
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(table.order, table.orderBy),
-    filters,
-  });
+  useEffect(() => {
+    dispatch(
+      ModuleListApi({
+        q: value,
+        limit: pageSize,
+        page: page + 1,
+        sort: sort,
+        filter: filter,
+      })
+    );
+  }, [dispatch, value, pageSize, page, sort, filter]);
 
-  const dataInPage = dataFiltered.slice(
-    table.page * table.rowsPerPage,
-    table.page * table.rowsPerPage + table.rowsPerPage
-  );
+  const handleFilter = useCallback((val) => {
+    setValue(val);
+  }, []);
 
-  const denseHeight = table.dense ? 52 : 72;
+  const handleStatusChange = useCallback((e) => {
+    setStatus(e.target.value);
+  }, []);
 
-  const canReset = !isEqual(defaultFilters, filters);
+  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  // useEffect(() => {
+  //   if (modules.length) {
+  //     setTableData(modules);
+  //   }
+  // }, [modules]);
 
-  const handleFilters = useCallback(
-    (name, value) => {
-      table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [table]
-  );
+  // const dataFiltered = applyFilter({
+  //   inputData: tableData,
+  //   filters,
+  // });
 
-  const handleDeleteRow = useCallback(
-    (id) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
+  // const canReset = !isEqual(defaultFilters, filters);
 
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
+  // const handleFilters = useCallback((name, value) => {
+  //   setFilters((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // }, []);
+
+  // const handleResetFilters = useCallback(() => {
+  //   setFilters(defaultFilters);
+  // }, []);
+
+  // const handleDeleteRow = useCallback(
+  //   (id) => {
+  //     const deleteRow = tableData.filter((row) => row.id !== id);
+
+  //     enqueueSnackbar('Delete success!');
+
+  //     setTableData(deleteRow);
+  //   },
+  //   [enqueueSnackbar, tableData]
+  // );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
+    // const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
 
-    table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+    enqueueSnackbar('Delete success!');
 
-  const handleEditRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.user.edit(id));
+    // setTableData(deleteRows);
+  }, [enqueueSnackbar, selectedRowIds]);
+
+  // const handleEditRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.edit(id));
+  //   },
+  //   [router]
+  // );
+
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.details(id));
+  //   },
+  //   [router]
+  // );
+
+  const columns = [
+    {
+      // minWidth: 250,
+      field: 'title',
+      headerName: 'Title',
+      renderCell: ({ row }) => {
+        return (
+          <Typography noWrap variant="subtitle1">
+            {row.title}
+          </Typography>
+        );
+      },
     },
-    [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
+    {
+      // minWidth: 250,
+      field: 'route',
+      headerName: 'Route',
+      renderCell: ({ row }) => {
+        return (
+          <Typography noWrap variant="icon">
+            {row.route}
+          </Typography>
+        );
+      },
     },
-    [handleFilters]
-  );
+    {
+      // minWidth: 250,
+      field: 'icon',
+      headerName: 'Icon',
+      renderCell: ({ row }) => {
+        return (
+          <Typography noWrap variant="body2">
+            {row.icon}
+          </Typography>
+        );
+      },
+    },
+    {
+      // minWidth: 250,
+      field: 'panel',
+      headerName: 'Panel',
+      renderCell: ({ row }) => {
+        return (
+          <Typography noWrap variant="icon">
+            {row.panel}
+          </Typography>
+        );
+      },
+    },
+    {
+        // minWidth: 110,
+        field: "is_active",
+        headerName: "Status",
+        renderCell: ({ row }) => {
+          return row.is_active;
+            // return (
+            //     <CustomChip
+            //         skin="light"
+            //         size="small"
+            //         label={row.is_active == 1 ? "Active" : "Inactive"}
+            //         color={
+            //             listStatusObj[
+            //             row.is_active == 1 ? "active" : "inactive"
+            //             ]
+            //         }
+            //         sx={{
+            //             textTransform: "capitalize",
+            //             "& .MuiChip-label": { lineHeight: "18px" },
+            //         }}
+            //     />
+            // );
+        },
+    },
+    // {
+    //     minWidth: 90,
+    //     sortable: false,
+    //     field: "actions",
+    //     headerName: "Actions",
+    //     renderCell: ({ row }) => <RowOptions id={row.id} title={row.title} />,
+    // },
+  ];
 
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
+  // const getTogglableColumns = () =>
+  //   columns
+  //     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+  //     .map((column) => column.field);
 
   return (
     <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <Container
+        maxWidth={settings.themeStretch ? false : 'lg'}
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <CustomBreadcrumbs
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Module', href: paths.dashboard.user.root },
+            {
+              name: 'Module',
+              // href: paths.dashboard.roleManagement.module.root,
+            },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.user.new}
+              href={paths.dashboard.roleManagement.module.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
@@ -167,157 +282,122 @@ export default function ModuleListView() {
             </Button>
           }
           sx={{
-            mb: { xs: 3, md: 5 },
+            mb: {
+              xs: 3,
+              md: 5,
+            },
           }}
         />
 
-        <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+        <Card
+          sx={{
+            height: { xs: 800, md: 2 },
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
+          }}
+        >
+          <DataGrid
+            checkboxSelection
+            disableRowSelectionOnClick
+            rows={moduleList && moduleList?.data ? moduleList.data : []}
+            columns={columns}
+            loading={loadingList}
+            getRowHeight={() => 'auto'}
+            filterMode="server"
+            sortingMode="server"
+            paginationMode="server"
+            pageSizeOptions={[10, 25, 50]}
+            pagination
+            pageSize={pageSize} // Number of rows per page
+            rowCount={totalRows}
+            paginationModel={{
+              page: currentPage - 1,
+              pageSize: pageSize,
             }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && _userList.length}
-                    {tab.value === 'active' &&
-                      _userList.filter((user) => user.status === 'active').length}
+            rowSelectionModel={selectedRowIds}
+            onPaginationModelChange={(newPageSize) => {
+              const cNewPage = newPageSize.page;
+              const cPageSize = newPageSize.pageSize;
+              setPageSize(cPageSize);
+              setPage(cNewPage);
+            }}
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              setSelectedRowIds(newRowSelectionModel);
+            }}
+            onSortModelChange={(newOnSortModelChange) => {
+              setSort(newOnSortModelChange);
+            }}
+            onFilterModelChange={(newOnFilterModelChange) => {
+              setFilter(newOnFilterModelChange);
+            }}
+            slots={{
+              toolbar: () => (
+                <>
+                  <GridToolbarContainer>
+                    {/* <ModuleTableToolbar
+                      filters={filters}
+                      onFilters={handleFilters}
+                      stockOptions={PRODUCT_STOCK_OPTIONS}
+                      publishOptions={PUBLISH_OPTIONS}
+                    /> */}
 
-                    {tab.value === 'pending' &&
-                      _userList.filter((user) => user.status === 'pending').length}
-                    {tab.value === 'banned' &&
-                      _userList.filter((user) => user.status === 'banned').length}
-                    {tab.value === 'rejected' &&
-                      _userList.filter((user) => user.status === 'rejected').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
+                    <GridToolbarQuickFilter />
 
-          <ModuleTableToolbar
-            filters={filters}
-            onFilters={handleFilters}
-            //
-            roleOptions={_roles}
-          />
+                    <Stack
+                      spacing={1}
+                      flexGrow={1}
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="flex-end"
+                    >
+                      {!!selectedRowIds.length && (
+                        <Button
+                          size="small"
+                          color="error"
+                          startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
+                          onClick={confirmRows.onTrue}
+                        >
+                          Delete ({selectedRowIds.length})
+                        </Button>
+                      )}
 
-          {canReset && (
-            <ModuleTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
+                      <GridToolbarColumnsButton />
+                      <GridToolbarFilterButton />
+                      <GridToolbarExport />
+                    </Stack>
+                  </GridToolbarContainer>
 
-          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
-            <Scrollbar>
-              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                <TableHeadCustom
-                  order={table.order}
-                  orderBy={table.orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={table.selected.length}
-                  onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
-                />
-
-                <TableBody>
-                  {dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <ModuleTableRow
-                        key={row.id}
-                        row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                      />
-                    ))}
-
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
-                  />
-
-                  <TableNoData notFound={notFound} />
-                </TableBody>
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={table.page}
-            rowsPerPage={table.rowsPerPage}
-            onPageChange={table.onChangePage}
-            onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
-            dense={table.dense}
-            onChangeDense={table.onChangeDense}
+                  {/* {canReset && (
+                    <ModuleTableFiltersResult
+                      filters={filters}
+                      onFilters={handleFilters}
+                      onResetFilters={handleResetFilters}
+                      results={dataFiltered.length}
+                      sx={{ p: 2.5, pt: 0 }}
+                    />
+                  )} */}
+                </>
+              ),
+              noRowsOverlay: () => <EmptyContent title="No Data" />,
+              noResultsOverlay: () => <EmptyContent title="No results found" />,
+            }}
+            // slotProps={{
+            //   columnsPanel: {
+            //     getTogglableColumns,
+            //   },
+            // }}
           />
         </Card>
       </Container>
 
       <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
+        open={confirmRows.value}
+        onClose={confirmRows.onFalse}
         title="Delete"
         content={
           <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
+            Are you sure want to delete <strong> {selectedRowIds.length} </strong> items?
           </>
         }
         action={
@@ -326,7 +406,7 @@ export default function ModuleListView() {
             color="error"
             onClick={() => {
               handleDeleteRows();
-              confirm.onFalse();
+              confirmRows.onFalse();
             }}
           >
             Delete
@@ -335,36 +415,4 @@ export default function ModuleListView() {
       />
     </>
   );
-}
-
-// ----------------------------------------------------------------------
-
-function applyFilter({ inputData, comparator, filters }) {
-  const { name, status, role } = filters;
-
-  const stabilizedThis = inputData.map((el, index) => [el, index]);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  if (name) {
-    inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    );
-  }
-
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
-  }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
-  }
-
-  return inputData;
 }

@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
-// sections
-import { ModuleList } from 'src/sections/module/view';
+
+import { ModuleListView } from 'src/sections/module/view';
 
 // ----------------------------------------------------------------------
 
-export default function list() {
+export default function ModuleListPage() {
   return (
     <>
       <Helmet>
         <title> Dashboard: Module List</title>
       </Helmet>
 
-      <ModuleList />
+      <ModuleListView />
     </>
   );
 }
