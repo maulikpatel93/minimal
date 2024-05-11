@@ -8,6 +8,7 @@ import authReducer from './slices/authSlice';
 import profileReducer from './slices/profileSlice';
 import commonReducer from './slices/commonSlice';
 import rolePermissionReducer from './slices/rolePermissionSlice';
+import moduleReducer from './slices/moduleSlice';
 
 // // ----------------------------------------------------------------------
 
@@ -42,6 +43,11 @@ const persistConfigs = [
     storage,
     keyPrefix: 'eventmanage-',
   },
+  {
+    key: 'module',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
   // Add more persist configurations as needed...
 ];
 
@@ -53,6 +59,7 @@ const reducers = {
   profile:profileReducer,
   common:commonReducer,
   rolepermission:rolePermissionReducer,
+  module:moduleReducer,
 };
 
 // Combine all reducers into a single reducer

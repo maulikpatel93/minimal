@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\GuestController;
-use App\Http\Controllers\Api\v1\UserModuleController;
+use App\Http\Controllers\Api\v1\ModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('web')->get('/sanctum/csrf-cookie', function (Request $request) {
         // Get the CSRF token
         $csrfToken = csrf_token();
-    
+
         // Return the CSRF token in the response
         return response()->json(['csrf_token' => $csrfToken]);
     });
@@ -64,8 +64,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/changepassword', 'passwordChange');
             Route::get('/role-access', 'roleAccess');
         });
-        Route::controller(UserModuleController::class)->prefix('module')->name('module.')->group(function () {
-            Route::get('/view', 'view');
+        Route::controller(ModuleController::class)->prefix('module')->name('module.')->group(function () {
+            Route::get('/list', 'list');
         });
     });
 });
@@ -80,4 +80,3 @@ Route::post('/getSlug', function (Request $request) {
         'slug' => $slug,
     ]);
 });
-

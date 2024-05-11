@@ -12,7 +12,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
 const UserAccountPage = lazy(() => import('src/pages/account/account'));
-const ModulePage = lazy(() => import('src/pages/dashboard/role-management/modules'));
+const ModulePage = lazy(() => import('src/pages/dashboard/role-management/module/list'));
 // // TEST RENDER PAGE BY ROLE
 // const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
 // BLANK PAGE
