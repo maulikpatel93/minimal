@@ -89,7 +89,7 @@ class GuestController extends Controller
             $user->profile_image = $fileName;
         }
         $user->is_active = 1;
-        $user->is_active_at = Carbon::now()->format('Y-m-d H:i:s');
+        $user->is_active_at = currentDateTime();
         $user->save();
         // $nameToken = $user->first_name . ' ' . $user->last_name;
         // $user->load('role');
