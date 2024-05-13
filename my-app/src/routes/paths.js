@@ -65,9 +65,9 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/role-management`,
       module: {
         root: `${ROOTS.DASHBOARD}/role-management/module`,
-        new: `${ROOTS.DASHBOARD}/role-management/module/new`,
-        list: `${ROOTS.DASHBOARD}/role-management/module/list`,
-        edit: (id) => `${ROOTS.DASHBOARD}/role-management/module/${id}/edit`,
+        new: `${ROOTS.DASHBOARD}/role-management/modules/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/modules/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/modules/${id}/edit`,
       }
     },
     user: {

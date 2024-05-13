@@ -31,8 +31,9 @@ export const ModuleUpdateApi = createAsyncThunk("module/update", async (formValu
 });
 
 export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
+    console.log('formValues: ', formValues);
     try {
-        const resposedata = await axios.get(API_URL + `afterlogin/module/delete`, formValues)
+        const resposedata = await axios.delete(API_URL + `afterlogin/module/delete`, { data: formValues })
             .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/delete"))
             .catch((error) => HandleError(thunkAPI, error, "afterlogin/module/delete"));
         return resposedata;
@@ -41,6 +42,7 @@ export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValu
         return thunkAPI.rejectWithValue(message);
     }
 });
+
 
 const initialState = {
     request: { list: {}, update: {}, delete: {} },
@@ -91,8 +93,13 @@ export const moduleSlice = createSlice({
                 state.loading.delete = true;
             })
             .addCase(ModuleDeleteApi.fulfilled, (state, action) => {
-                state.delete = action.payload;
-                state.request.delete = action.meta && action.meta.arg
+                if (action.payload) {
+                    const deletedIds = action.payload; // Assuming the payload contains deleted IDs
+                    // Filter out the deleted modules from the existing list
+                    if(state.list.data && state.list.data.length > 0){
+                        state.list.data = state.list.data.filter(module => !deletedIds.includes(module.id));
+                    }
+                }
                 state.loading.delete = false;
             })
             .addCase(ModuleDeleteApi.rejected, (state, action) => {

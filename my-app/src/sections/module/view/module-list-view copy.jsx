@@ -27,7 +27,7 @@ import EmptyContent from 'src/components/empty-content';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { Icon } from '@iconify/react';
+
 // import ModuleTableToolbar from '../module-table-toolbar';
 // import ModuleTableFiltersResult from '../module-table-filters-result';
 // import {
@@ -37,7 +37,7 @@ import { Icon } from '@iconify/react';
 //   RenderCellModule,
 //   RenderCellCreatedAt,
 // } from '../module-table-row';
-import { ModuleDeleteApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
+import { ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 
@@ -150,25 +150,23 @@ export default function ModuleListView() {
     // setTableData(deleteRows);
   }, [enqueueSnackbar, selectedRowIds]);
 
-  const handleEditRow = useCallback(
-    (id) => {
-      // const ModuleEditPath = paths.dashboard.roleManagement.root + paths.dashboard.roleManagement.
-      // console.log(paths.dashboard.roleManagement.module.edit(id))
-      router.push(paths.dashboard.roleManagement.module.edit(id));
-    },
-    [router]
-  );
+  // const handleEditRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.edit(id));
+  //   },
+  //   [router]
+  // );
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.module.details(id));
-    },
-    [router]
-  );
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.details(id));
+  //   },
+  //   [router]
+  // );
 
   const columns = [
     {
-      minWidth: 183,
+      // minWidth: 250,
       field: 'title',
       headerName: 'Title',
       renderCell: ({ row }) => {
@@ -180,7 +178,7 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
+      // minWidth: 250,
       field: 'route',
       headerName: 'Route',
       renderCell: ({ row }) => {
@@ -192,7 +190,7 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
+      // minWidth: 250,
       field: 'icon',
       headerName: 'Icon',
       renderCell: ({ row }) => {
@@ -204,7 +202,7 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
+      // minWidth: 250,
       field: 'panel',
       headerName: 'Panel',
       renderCell: ({ row }) => {
@@ -216,73 +214,36 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
-      field: 'is_active',
-      headerName: 'Status',
-      renderCell: ({ row }) => {
-        // return row.is_active;
-        return (
-          <>
-            {row.is_active === 1 ? (
-              <Icon icon="bi:check-circle-fill" style={{ color: '#198754' }} />
-            ) : (
-              <Icon icon="bi:x-circle-fill" style={{ color: '#dc3545' }} />
-            )}
-          </>
-        );
-        // return (
-        //     <CustomChip
-        //         skin="light"
-        //         size="small"
-        //         label={row.is_active == 1 ? "Active" : "Inactive"}
-        //         color={
-        //             listStatusObj[
-        //             row.is_active == 1 ? "active" : "inactive"
-        //             ]
-        //         }
-        //         sx={{
-        //             textTransform: "capitalize",
-        //             "& .MuiChip-label": { lineHeight: "18px" },
-        //         }}
-        //     />
-        // );
-      },
+        // minWidth: 110,
+        field: "is_active",
+        headerName: "Status",
+        renderCell: ({ row }) => {
+          return row.is_active;
+            // return (
+            //     <CustomChip
+            //         skin="light"
+            //         size="small"
+            //         label={row.is_active == 1 ? "Active" : "Inactive"}
+            //         color={
+            //             listStatusObj[
+            //             row.is_active == 1 ? "active" : "inactive"
+            //             ]
+            //         }
+            //         sx={{
+            //             textTransform: "capitalize",
+            //             "& .MuiChip-label": { lineHeight: "18px" },
+            //         }}
+            //     />
+            // );
+        },
     },
     // {
-    //     minWidth: 185,
+    //     minWidth: 90,
     //     sortable: false,
     //     field: "actions",
     //     headerName: "Actions",
     //     renderCell: ({ row }) => <RowOptions id={row.id} title={row.title} />,
     // },
-    {
-      type: 'actions',
-      field: 'actions',
-      headerName: 'Actions',
-      align: 'right',
-      headerAlign: 'right',
-      minWidth: 185,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      getActions: (params) => [
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:pen-bold" />}
-          label="Edit"
-          onClick={() => handleEditRow(params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-          label="Delete"
-          // onClick={() => {
-          //   handleDeleteRow(params.row.id);
-          // }}
-          sx={{ color: 'error.main' }}
-        />,
-      ],
-    },
   ];
 
   // const getTogglableColumns = () =>
@@ -444,8 +405,7 @@ export default function ModuleListView() {
             variant="contained"
             color="error"
             onClick={() => {
-              const deleteRowsData = moduleList?.data?.filter((row) => !selectedRowIds.includes(row.id));
-              dispatch(ModuleDeleteApi(selectedRowIds))
+              handleDeleteRows();
               confirmRows.onFalse();
             }}
           >

@@ -66,6 +66,8 @@ Route::prefix('v1')->group(function () {
         });
         Route::controller(ModuleController::class)->prefix('module')->name('module.')->group(function () {
             Route::get('/list', 'list');
+            Route::put('/update', 'update');
+            Route::delete('/delete', 'delete');
         });
     });
 });

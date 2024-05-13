@@ -29,7 +29,7 @@ export default function ModuleEditView({ id }) {
           },
           {
             name: 'Module',
-            href: paths.dashboard.user.root,
+            href: paths.dashboard.roleManagement.module.list,
           },
           { name: currentModule?.name },
         ]}
