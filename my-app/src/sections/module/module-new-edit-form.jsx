@@ -33,6 +33,7 @@ import FormProvider, {
 // ----------------------------------------------------------------------
 
 export default function ModuleNewEditForm({ currentModule }) {
+  console.log('currentModule: ', currentModule);
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();

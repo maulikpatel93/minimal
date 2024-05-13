@@ -75,6 +75,7 @@ export default function ModuleListView() {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  console.log('selectedRowIds: ', selectedRowIds);
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -276,9 +277,41 @@ export default function ModuleListView() {
           showInMenu
           icon={<Iconify icon="solar:trash-bin-trash-bold" />}
           label="Delete"
-          // onClick={() => {
-          //   handleDeleteRow(params.row.id);
-          // }}
+          onClick={(e) => {
+            console.log('props: ', params.row.id);
+            const id = [params.row.id];
+            setSelectedRowIds(id);
+            confirmRows.onTrue();
+            // if(id.length > 0){
+            //   dispatch(ModuleDeleteApi(id)).then((action) => {
+            //       if (action.meta.requestStatus === 'fulfilled') {
+            //         dispatch(
+            //           ModuleListApi({
+            //             q: value,
+            //             limit: pageSize,
+            //             page: page,
+            //             sort: sort,
+            //             filter: filter,
+            //           })
+            //         ).then(() => {
+            //           const message =
+            //             action.payload && action.payload.data && action.payload.data.message
+            //               ? action.payload.data.message
+            //               : '';
+            //           enqueueSnackbar(message || 'Successfully deleted');
+            //         });
+            //       } else if (action.meta.requestStatus === 'rejected') {
+            //         const message =
+            //           action.payload && action.payload.data && action.payload.data.message
+            //             ? action.payload.data.message
+            //             : '';
+            //         enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
+            //         console.log('message: ', message);
+            //       }
+            //     });
+            //     confirmRows.onFalse();
+            // }
+          }}
           sx={{ color: 'error.main' }}
         />,
       ],
@@ -444,8 +477,32 @@ export default function ModuleListView() {
             variant="contained"
             color="error"
             onClick={() => {
-              const deleteRowsData = moduleList?.data?.filter((row) => !selectedRowIds.includes(row.id));
-              dispatch(ModuleDeleteApi(selectedRowIds))
+              dispatch(ModuleDeleteApi(selectedRowIds)).then((action) => {
+                if (action.meta.requestStatus === 'fulfilled') {
+                  dispatch(
+                    ModuleListApi({
+                      q: value,
+                      limit: pageSize,
+                      page: page,
+                      sort: sort,
+                      filter: filter,
+                    })
+                  ).then(() => {
+                    const message =
+                      action.payload && action.payload.data && action.payload.data.message
+                        ? action.payload.data.message
+                        : '';
+                    enqueueSnackbar(message || 'Successfully deleted');
+                  });
+                } else if (action.meta.requestStatus === 'rejected') {
+                  const message =
+                    action.payload && action.payload.data && action.payload.data.message
+                      ? action.payload.data.message
+                      : '';
+                  enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
+                  console.log('message: ', message);
+                }
+              });
               confirmRows.onFalse();
             }}
           >

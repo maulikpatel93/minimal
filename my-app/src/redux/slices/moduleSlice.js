@@ -33,15 +33,35 @@ export const ModuleUpdateApi = createAsyncThunk("module/update", async (formValu
 export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
     console.log('formValues: ', formValues);
     try {
-        const resposedata = await axios.delete(API_URL + `afterlogin/module/delete`, { data: formValues })
+        const urlParams = new URLSearchParams();
+        formValues.forEach(value => {
+            urlParams.append('module_id[]', value);
+        });
+
+        const response = await axios.delete(API_URL + `afterlogin/module/delete?${urlParams}`)
             .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/delete"))
             .catch((error) => HandleError(thunkAPI, error, "afterlogin/module/delete"));
-        return resposedata;
+        
+        return response;
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
     }
 });
+
+
+// export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
+//     console.log('formValues: ', formValues);
+//     try {
+//         const resposedata = await axios.delete(API_URL + `afterlogin/module/delete`, { data: formValues })
+//             .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/delete"))
+//             .catch((error) => HandleError(thunkAPI, error, "afterlogin/module/delete"));
+//         return resposedata;
+//     } catch (error) {
+//         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+//         return thunkAPI.rejectWithValue(message);
+//     }
+// });
 
 
 const initialState = {
@@ -93,13 +113,13 @@ export const moduleSlice = createSlice({
                 state.loading.delete = true;
             })
             .addCase(ModuleDeleteApi.fulfilled, (state, action) => {
-                if (action.payload) {
-                    const deletedIds = action.payload; // Assuming the payload contains deleted IDs
-                    // Filter out the deleted modules from the existing list
-                    if(state.list.data && state.list.data.length > 0){
-                        state.list.data = state.list.data.filter(module => !deletedIds.includes(module.id));
-                    }
-                }
+                // if (action.payload) {
+                //     const deletedIds = action.payload.flat().map(id => id.toString()); // Flattening the array of arrays and converting IDs to strings
+                //     console.log('deletedIds: ', JSON.stringify(deletedIds,null,2));
+                //     if (deletedIds && state.list.data && state.list.data.length > 0) {
+                //         state.list.data = state.list.data.filter(module => !deletedIds.includes(module.id.toString()));
+                //     }
+                // }
                 state.loading.delete = false;
             })
             .addCase(ModuleDeleteApi.rejected, (state, action) => {
