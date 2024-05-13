@@ -8,16 +8,13 @@ import { _userList } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import ModuleNewEditForm from '../module-new-edit-form';
+import ModuleForm from '../ModuleForm';
 
 // ----------------------------------------------------------------------
 
 export default function ModuleEditView({ id }) {
   const settings = useSettingsContext();
-
-  const currentModule = _userList.find((user) => user.id === id);
-
+  const currentModule = useSelector((state) => state.module.detail);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -38,7 +35,7 @@ export default function ModuleEditView({ id }) {
         }}
       />
 
-      <ModuleNewEditForm currentModule={currentModule} />
+      <ModuleForm currentModule={currentModule} />
     </Container>
   );
 }

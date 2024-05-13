@@ -68,6 +68,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/list', 'list');
             Route::put('/update', 'update');
             Route::delete('/delete', 'delete');
+            Route::get('/detail/{id}', 'detail');
         });
     });
 });

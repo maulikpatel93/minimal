@@ -29,6 +29,17 @@ export const ModuleUpdateApi = createAsyncThunk("module/update", async (formValu
         return thunkAPI.rejectWithValue(message);
     }
 });
+export const ModuleDetailApi = createAsyncThunk("module/detail", async (formValues, thunkAPI) => {
+    try {
+        const resposedata = await axios.get(API_URL + `afterlogin/module/detail/${formValues?.id}`, formValues)
+            .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/update"))
+            .catch((error) => HandleError(thunkAPI, error, "afterlogin/module/update"));
+        return resposedata;
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+});
 
 export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
     console.log('formValues: ', formValues);
@@ -65,11 +76,12 @@ export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValu
 
 
 const initialState = {
-    request: { list: {}, update: {}, delete: {} },
+    request: { list: {}, update: {}, delete: {},detail:{} },
     list: "",
     update: "",
     delete: "",
-    loading: { list: false, update: false, delete: false }
+    detail:"",
+    loading: { list: false, update: false, delete: false,detail:false }
 };
 
 export const moduleSlice = createSlice({
@@ -91,6 +103,19 @@ export const moduleSlice = createSlice({
             .addCase(ModuleListApi.rejected, (state) => {
                 state.list = [];
                 state.loading.list = false
+                
+            })
+            //ModuleDetail
+            .addCase(ModuleDetailApi.pending, (state) => {
+                state.loading.detail = true;
+            })
+            .addCase(ModuleDetailApi.fulfilled, (state, action) => {
+                state.detail = action.payload;
+                state.loading.detail = false;
+            })
+            .addCase(ModuleDetailApi.rejected, (state) => {
+                state.detail = {};
+                state.loading.detail = false;
                 
             })
 

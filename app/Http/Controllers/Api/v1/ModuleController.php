@@ -50,4 +50,10 @@ class ModuleController extends Controller
         $requestAll = $request->all();
 
     }
+    public function detail(Request $request,$moduleId)
+    {
+        $requestAll = $request->all();
+        $successData = Module::where('id',$moduleId)->where('is_active',1)->first();
+        return response()->json($successData,$this->successStatus);
+    }
 }

@@ -37,7 +37,7 @@ import { Icon } from '@iconify/react';
 //   RenderCellModule,
 //   RenderCellCreatedAt,
 // } from '../module-table-row';
-import { ModuleDeleteApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
+import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
 
@@ -143,18 +143,9 @@ export default function ModuleListView() {
   //   [enqueueSnackbar, tableData]
   // );
 
-  const handleDeleteRows = useCallback(() => {
-    // const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
-
-    enqueueSnackbar('Delete success!');
-
-    // setTableData(deleteRows);
-  }, [enqueueSnackbar, selectedRowIds]);
-
   const handleEditRow = useCallback(
     (id) => {
-      // const ModuleEditPath = paths.dashboard.roleManagement.root + paths.dashboard.roleManagement.
-      // console.log(paths.dashboard.roleManagement.module.edit(id))
+      dispatch(ModuleDetailApi({id:id}))
       router.push(paths.dashboard.roleManagement.module.edit(id));
     },
     [router]
@@ -282,35 +273,6 @@ export default function ModuleListView() {
             const id = [params.row.id];
             setSelectedRowIds(id);
             confirmRows.onTrue();
-            // if(id.length > 0){
-            //   dispatch(ModuleDeleteApi(id)).then((action) => {
-            //       if (action.meta.requestStatus === 'fulfilled') {
-            //         dispatch(
-            //           ModuleListApi({
-            //             q: value,
-            //             limit: pageSize,
-            //             page: page,
-            //             sort: sort,
-            //             filter: filter,
-            //           })
-            //         ).then(() => {
-            //           const message =
-            //             action.payload && action.payload.data && action.payload.data.message
-            //               ? action.payload.data.message
-            //               : '';
-            //           enqueueSnackbar(message || 'Successfully deleted');
-            //         });
-            //       } else if (action.meta.requestStatus === 'rejected') {
-            //         const message =
-            //           action.payload && action.payload.data && action.payload.data.message
-            //             ? action.payload.data.message
-            //             : '';
-            //         enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
-            //         console.log('message: ', message);
-            //       }
-            //     });
-            //     confirmRows.onFalse();
-            // }
           }}
           sx={{ color: 'error.main' }}
         />,

@@ -149,7 +149,7 @@ class AuthController extends Controller
 
                     $tabs = RolePermission::leftJoin('tabs', 'role_permissions.tab_id', '=', 'tabs.id')
                         ->where('role_permissions.role_id', $role_id)
-                        ->where('role_permissions.module_id', $module->id)
+                        ->where('role_permissions.module_id', $module->module_id)
                         ->whereNotNull('role_permissions.module_id')
                         ->whereNotNull('role_permissions.tab_id')
                         ->whereNotNull('role_permissions.module_type')
@@ -173,7 +173,7 @@ class AuthController extends Controller
 
                     $sub_modules = RolePermission::leftJoin('sub_modules', 'role_permissions.sub_module_id', '=', 'sub_modules.id')
                         ->where('role_permissions.role_id', $role_id)
-                        ->where('role_permissions.module_id', $module->id)
+                        ->where('role_permissions.module_id', $module->module_id)
                         ->whereNotNull('role_permissions.module_id')
                         ->whereNotNull('role_permissions.sub_module_id')
                         ->whereNotNull('role_permissions.module_type')
@@ -190,7 +190,7 @@ class AuthController extends Controller
                             //Sub Module Tab section
                             $tabs = RolePermission::leftJoin('tabs', 'role_permissions.tab_id', '=', 'tabs.id')
                                 ->where('role_permissions.role_id', $role_id)
-                                ->where('role_permissions.module_id', $module->id)
+                                ->where('role_permissions.module_id', $module->module_id)
                                 ->whereNotNull('role_permissions.module_id')
                                 ->whereNotNull('role_permissions.tab_id')
                                 ->whereNotNull('role_permissions.module_type')
