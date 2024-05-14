@@ -13,6 +13,7 @@ import {
   GridToolbarQuickFilter,
   GridToolbarFilterButton,
   GridToolbarColumnsButton,
+  GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
@@ -39,7 +40,8 @@ import { Icon } from '@iconify/react';
 // } from '../module-table-row';
 import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Typography } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
+import TableHeader from './TableHeader';
 
 // ----------------------------------------------------------------------
 
@@ -54,11 +56,9 @@ const defaultFilters = {
 };
 
 const HIDE_COLUMNS = {
-  category: false,
+  id: false,
 };
-
-const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
-
+const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 // ----------------------------------------------------------------------
 
 export default function ModuleListView() {
@@ -70,11 +70,13 @@ export default function ModuleListView() {
 
   const settings = useSettingsContext();
 
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+
   console.log('selectedRowIds: ', selectedRowIds);
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -100,7 +102,7 @@ export default function ModuleListView() {
 
   const handleFilter = useCallback((val) => {
     setValue(val);
-  }, []);
+}, []);
 
   const handleStatusChange = useCallback((e) => {
     setStatus(e.target.value);
@@ -145,7 +147,7 @@ export default function ModuleListView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      dispatch(ModuleDetailApi({id:id}))
+      dispatch(ModuleDetailApi({ id: id }));
       router.push(paths.dashboard.roleManagement.module.edit(id));
     },
     [router]
@@ -160,21 +162,24 @@ export default function ModuleListView() {
 
   const columns = [
     {
-      minWidth: 183,
       field: 'title',
       headerName: 'Title',
-      renderCell: ({ row }) => {
-        return (
-          <Typography noWrap variant="subtitle1">
-            {row.title}
+      flex: 1,
+      minWidth: 180,
+      hideable: false,
+      renderCell: (params) => (
+        <Stack spacing={2} direction="row" alignItems="center" sx={{ minWidth: 0 }}>
+          <Typography component="span" variant="body2" noWrap>
+            {params.row.title}
           </Typography>
-        );
-      },
+        </Stack>
+      ),
     },
     {
-      minWidth: 183,
       field: 'route',
       headerName: 'Route',
+      flex: 1,
+      minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
@@ -184,9 +189,9 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
       field: 'icon',
       headerName: 'Icon',
+      width: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="body2">
@@ -196,9 +201,10 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
       field: 'panel',
       headerName: 'Panel',
+      flex: 1,
+      minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
@@ -208,9 +214,10 @@ export default function ModuleListView() {
       },
     },
     {
-      minWidth: 183,
       field: 'is_active',
       headerName: 'Status',
+      flex: 1,
+      width: 50,
       renderCell: ({ row }) => {
         // return row.is_active;
         return (
@@ -240,24 +247,24 @@ export default function ModuleListView() {
         // );
       },
     },
-    // {
-    //     minWidth: 185,
-    //     sortable: false,
-    //     field: "actions",
-    //     headerName: "Actions",
-    //     renderCell: ({ row }) => <RowOptions id={row.id} title={row.title} />,
-    // },
     {
       type: 'actions',
       field: 'actions',
       headerName: 'Actions',
       align: 'right',
       headerAlign: 'right',
-      minWidth: 185,
+      width: 80,
+      flex: 1,
       sortable: false,
       filterable: false,
       disableColumnMenu: true,
       getActions: (params) => [
+        <GridActionsCellItem
+          showInMenu
+          icon={<Iconify icon="solar:eye-bold" />}
+          label="View"
+          onClick={() => console.info('VIEW', params.row.id)}
+        />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
@@ -280,10 +287,10 @@ export default function ModuleListView() {
     },
   ];
 
-  // const getTogglableColumns = () =>
-  //   columns
-  //     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
-  //     .map((column) => column.field);
+  const getTogglableColumns = () =>
+    columns
+      .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+      .map((column) => column.field);
 
   return (
     <>
@@ -325,21 +332,28 @@ export default function ModuleListView() {
 
         <Card
           sx={{
-            width:"100%",
+            width: '100%',
             height: { xs: 800, md: 2 },
             flexGrow: { md: 1 },
             display: { md: 'flex' },
             flexDirection: { md: 'column' },
           }}
         >
+           <TableHeader
+                        value={value}
+                        handleFilter={handleFilter}
+                    />
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick
             rows={moduleList && moduleList?.data ? moduleList.data : []}
             columns={columns}
             loading={loadingList}
-            getRowHeight={() => 'auto'}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            getRowHeight={() => '150'}
             filterMode="server"
+            filterDebounceMs={150}
             sortingMode="server"
             paginationMode="server"
             pageSizeOptions={[10, 25, 50]}
@@ -370,14 +384,9 @@ export default function ModuleListView() {
               toolbar: () => (
                 <>
                   <GridToolbarContainer>
-                    {/* <ModuleTableToolbar
-                      filters={filters}
-                      onFilters={handleFilters}
-                      stockOptions={PRODUCT_STOCK_OPTIONS}
-                      publishOptions={PUBLISH_OPTIONS}
-                    /> */}
-
-                    <GridToolbarQuickFilter />
+                    {/* <GridToolbarQuickFilter debounceMs={150} /> */}
+                   
+                    <Box sx={{ flexGrow: 1 }} />
 
                     <Stack
                       spacing={1}
@@ -398,30 +407,24 @@ export default function ModuleListView() {
                       )}
 
                       <GridToolbarColumnsButton />
-                      <GridToolbarFilterButton />
+                      {/* <GridToolbarFilterButton /> */}
+                      <GridToolbarDensitySelector />
                       <GridToolbarExport />
                     </Stack>
                   </GridToolbarContainer>
-
-                  {/* {canReset && (
-                    <ModuleTableFiltersResult
-                      filters={filters}
-                      onFilters={handleFilters}
-                      onResetFilters={handleResetFilters}
-                      results={dataFiltered.length}
-                      sx={{ p: 2.5, pt: 0 }}
-                    />
-                  )} */}
                 </>
               ),
               noRowsOverlay: () => <EmptyContent title="No Data" />,
               noResultsOverlay: () => <EmptyContent title="No results found" />,
             }}
-            // slotProps={{
-            //   columnsPanel: {
-            //     getTogglableColumns,
-            //   },
-            // }}
+            slotProps={{
+              toolbar: {
+                showQuickFilter: true,
+              },
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
           />
         </Card>
       </Container>

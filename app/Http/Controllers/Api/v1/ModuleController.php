@@ -22,9 +22,30 @@ class ModuleController extends Controller
         $filter = $request->filter;
 
         $query = Module::select('*');
-        // if($filter){
-        //     echo '<pre>'; print_r($filter); echo '</pre>';dd();
-        // }
+
+        if (!empty($filter) && isset($filter['quickFilterValues'])) {
+            $logicOperator = strtoupper($filter['quickFilterLogicOperator']);
+
+            // Set the initial logic operator based on the quickFilterLogicOperator value
+            if ($logicOperator === 'AND') {
+                $query->where(function ($query) use ($filter) {
+                    foreach ($filter['quickFilterValues'] as $value) {
+                        $query->where(function ($query) use ($value) {
+                            $query->where('title', 'like', '%' . $value . '%')
+                                ->orWhere('route', 'like', '%' . $value . '%');
+                        });
+                    }
+                });
+            } elseif ($logicOperator === 'OR') {
+                $query->where(function ($query) use ($filter) {
+                    foreach ($filter['quickFilterValues'] as $value) {
+                        $query->orWhere('title', 'like', '%' . $value . '%')
+                            ->orWhere('route', 'like', '%' . $value . '%');
+                    }
+                });
+            }
+        }
+
         $model = $query->paginate($limit);
         $successData = $model ? $model : [];
 
@@ -60,8 +81,11 @@ class ModuleController extends Controller
         $module->permissions = $request->permissions;
         $module->is_active = $request->is_active;
         $module->is_active_at = currentDateTime();
-        echo '<pre>'; print_r($module); echo '</pre>';dd();
-        
+        echo '<pre>';
+        print_r($module);
+        echo '</pre>';
+        dd();
+
         // $module->save();
         return response()->json(['message' => 'Module created successfully'], $this->successStatus);
     }
