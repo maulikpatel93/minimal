@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('panel', ['Backend', 'Frontend', 'Common'])->default('Backend');
             $table->string('title',100);
-            $table->string('route',100);
+            $table->string('route',100)->nullable();
             $table->string('icon')->nullable();
             $table->string('position')->comment('Menu Position');
             $table->text('permissions')->comment('create,update,read,delete');

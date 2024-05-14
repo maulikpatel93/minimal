@@ -9,6 +9,7 @@ import { _userList } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import ModuleForm from '../ModuleForm';
+import { useSelector } from 'src/redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +29,7 @@ export default function ModuleEditView({ id }) {
             name: 'Module',
             href: paths.dashboard.roleManagement.module.list,
           },
-          { name: currentModule?.name },
+          { name: 'Edit' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

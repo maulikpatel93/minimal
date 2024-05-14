@@ -14,7 +14,7 @@ export default function ModuleCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new user"
+        heading="Create a new module"
         links={[
           {
             name: 'Dashboard',
@@ -22,9 +22,9 @@ export default function ModuleCreateView() {
           },
           {
             name: 'Module',
-            href: paths.dashboard.user.root,
+            href: paths.dashboard.roleManagement.module.list,
           },
-          { name: 'New user' },
+          { name: 'Create' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

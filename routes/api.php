@@ -66,7 +66,8 @@ Route::prefix('v1')->group(function () {
         });
         Route::controller(ModuleController::class)->prefix('module')->name('module.')->group(function () {
             Route::get('/list', 'list');
-            Route::put('/update', 'update');
+            Route::post('/create', 'create');
+            Route::put('/update/{id}', 'update');
             Route::delete('/delete', 'delete');
             Route::get('/detail/{id}', 'detail');
         });
@@ -79,7 +80,6 @@ Route::post('/getSlug', function (Request $request) {
         $slug = Str::slug($request->title);
     }
     return response()->json([
-        'status' => true,
         'slug' => $slug,
-    ]);
+    ],200);
 });

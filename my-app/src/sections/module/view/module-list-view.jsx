@@ -325,6 +325,7 @@ export default function ModuleListView() {
 
         <Card
           sx={{
+            width:"100%",
             height: { xs: 800, md: 2 },
             flexGrow: { md: 1 },
             display: { md: 'flex' },

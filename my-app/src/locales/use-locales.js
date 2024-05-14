@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { localStorageGetItem } from 'src/utils/storage-available';
@@ -26,6 +26,12 @@ export function useTranslate() {
   const { t, i18n, ready } = useTranslation();
 
   const settings = useSettingsContext();
+  useEffect(() => {
+    i18n.init({
+      debug:true
+    })
+  }, [i18n]);
+  
 
   const onChangeLang = useCallback(
     (newlang) => {
