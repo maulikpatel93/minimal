@@ -102,7 +102,7 @@ export default function ModuleListView() {
 
   const handleFilter = useCallback((val) => {
     setValue(val);
-}, []);
+  }, []);
 
   const handleStatusChange = useCallback((e) => {
     setStatus(e.target.value);
@@ -339,10 +339,7 @@ export default function ModuleListView() {
             flexDirection: { md: 'column' },
           }}
         >
-           <TableHeader
-                        value={value}
-                        handleFilter={handleFilter}
-                    />
+          <TableHeader value={value} handleFilter={handleFilter} />
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick
@@ -385,7 +382,7 @@ export default function ModuleListView() {
                 <>
                   <GridToolbarContainer>
                     {/* <GridToolbarQuickFilter debounceMs={150} /> */}
-                   
+
                     <Box sx={{ flexGrow: 1 }} />
 
                     <Stack
