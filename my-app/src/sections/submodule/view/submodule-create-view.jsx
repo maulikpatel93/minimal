@@ -1,26 +1,20 @@
-import PropTypes from 'prop-types';
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _userList } from 'src/_mock';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import ModuleForm from '../ModuleForm';
-import { useSelector } from 'src/redux/store';
+import ModuleForm from '../SubModuleForm';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleEditView({ id }) {
+export default function SubModuleCreateView() {
   const settings = useSettingsContext();
-  const currentModule = useSelector((state) => state.module.detail);
- 
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Create a new module"
         links={[
           {
             name: 'Dashboard',
@@ -30,18 +24,14 @@ export default function ModuleEditView({ id }) {
             name: 'Module',
             href: paths.dashboard.roleManagement.module.list,
           },
-          { name: 'Edit' },
+          { name: 'Create' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <ModuleForm currentModule={currentModule} />
+      <ModuleForm />
     </Container>
   );
 }
-
-ModuleEditView.propTypes = {
-  id: PropTypes.string,
-};

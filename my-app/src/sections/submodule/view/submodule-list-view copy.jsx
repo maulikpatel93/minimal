@@ -13,7 +13,6 @@ import {
   GridToolbarQuickFilter,
   GridToolbarFilterButton,
   GridToolbarColumnsButton,
-  GridToolbarDensitySelector,
 } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
@@ -28,7 +27,7 @@ import EmptyContent from 'src/components/empty-content';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { Icon } from '@iconify/react';
+
 // import ModuleTableToolbar from '../module-table-toolbar';
 // import ModuleTableFiltersResult from '../module-table-filters-result';
 // import {
@@ -38,11 +37,9 @@ import { Icon } from '@iconify/react';
 //   RenderCellModule,
 //   RenderCellCreatedAt,
 // } from '../module-table-row';
-import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
+import { ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, TextField, Typography } from '@mui/material';
-import TableHeader from './TableHeader';
-import { useTranslation } from 'react-i18next';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -57,12 +54,14 @@ const defaultFilters = {
 };
 
 const HIDE_COLUMNS = {
-  id: false,
+  category: false,
 };
-const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
+
+const HIDE_COLUMNS_TOGGLABLE = ['category', 'actions'];
+
 // ----------------------------------------------------------------------
 
-export default function ModuleListView() {
+export default function SubModuleListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const confirmRows = useBoolean();
@@ -70,16 +69,12 @@ export default function ModuleListView() {
   const router = useRouter();
 
   const settings = useSettingsContext();
-  const { t } = useTranslation();
 
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
   const [value, setValue] = useState('');
   const [status, setStatus] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
-
-  console.log('selectedRowIds: ', selectedRowIds);
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -147,46 +142,45 @@ export default function ModuleListView() {
   //   [enqueueSnackbar, tableData]
   // );
 
-  const handleEditRow = useCallback(
-    (id) => {
-      dispatch(ModuleDetailApi({ id: id })).then(action => {
-        if(action.meta.requestStatus === "fulfilled"){
-          router.push(paths.dashboard.roleManagement.module.edit(id));
-        }else if(action.meta.requestStatus === "rejected"){
-          enqueueSnackbar(t('Data not found'));
-        }
-      });
-    },
-    [router]
-  );
+  const handleDeleteRows = useCallback(() => {
+    // const deleteRows = tableData.filter((row) => !selectedRowIds.includes(row.id));
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.roleManagement.module.details(id));
-    },
-    [router]
-  );
+    enqueueSnackbar('Delete success!');
+
+    // setTableData(deleteRows);
+  }, [enqueueSnackbar, selectedRowIds]);
+
+  // const handleEditRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.edit(id));
+  //   },
+  //   [router]
+  // );
+
+  // const handleViewRow = useCallback(
+  //   (id) => {
+  //     router.push(paths.dashboard.module.details(id));
+  //   },
+  //   [router]
+  // );
 
   const columns = [
     {
+      // minWidth: 250,
       field: 'title',
       headerName: 'Title',
-      flex: 1,
-      minWidth: 180,
-      hideable: false,
-      renderCell: (params) => (
-        <Stack spacing={2} direction="row" alignItems="center" sx={{ minWidth: 0 }}>
-          <Typography component="span" variant="body2" noWrap>
-            {params.row.title}
+      renderCell: ({ row }) => {
+        return (
+          <Typography noWrap variant="subtitle1">
+            {row.title}
           </Typography>
-        </Stack>
-      ),
+        );
+      },
     },
     {
+      // minWidth: 250,
       field: 'route',
       headerName: 'Route',
-      flex: 1,
-      minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
@@ -196,9 +190,9 @@ export default function ModuleListView() {
       },
     },
     {
+      // minWidth: 250,
       field: 'icon',
       headerName: 'Icon',
-      width: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="body2">
@@ -208,10 +202,9 @@ export default function ModuleListView() {
       },
     },
     {
+      // minWidth: 250,
       field: 'panel',
       headerName: 'Panel',
-      flex: 1,
-      minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
@@ -221,83 +214,42 @@ export default function ModuleListView() {
       },
     },
     {
-      field: 'is_active',
-      headerName: 'Status',
-      flex: 1,
-      width: 50,
-      renderCell: ({ row }) => {
-        // return row.is_active;
-        return (
-          <>
-            {row.is_active === 1 ? (
-              <Icon icon="bi:check-circle-fill" style={{ color: '#198754' }} />
-            ) : (
-              <Icon icon="bi:x-circle-fill" style={{ color: '#dc3545' }} />
-            )}
-          </>
-        );
-        // return (
-        //     <CustomChip
-        //         skin="light"
-        //         size="small"
-        //         label={row.is_active == 1 ? "Active" : "Inactive"}
-        //         color={
-        //             listStatusObj[
-        //             row.is_active == 1 ? "active" : "inactive"
-        //             ]
-        //         }
-        //         sx={{
-        //             textTransform: "capitalize",
-        //             "& .MuiChip-label": { lineHeight: "18px" },
-        //         }}
-        //     />
-        // );
-      },
+        // minWidth: 110,
+        field: "is_active",
+        headerName: "Status",
+        renderCell: ({ row }) => {
+          return row.is_active;
+            // return (
+            //     <CustomChip
+            //         skin="light"
+            //         size="small"
+            //         label={row.is_active == 1 ? "Active" : "Inactive"}
+            //         color={
+            //             listStatusObj[
+            //             row.is_active == 1 ? "active" : "inactive"
+            //             ]
+            //         }
+            //         sx={{
+            //             textTransform: "capitalize",
+            //             "& .MuiChip-label": { lineHeight: "18px" },
+            //         }}
+            //     />
+            // );
+        },
     },
-    {
-      type: 'actions',
-      field: 'actions',
-      headerName: 'Actions',
-      align: 'right',
-      headerAlign: 'right',
-      width: 80,
-      flex: 1,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      getActions: (params) => [
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="View"
-          onClick={() => console.info('VIEW', params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:pen-bold" />}
-          label="Edit"
-          onClick={() => handleEditRow(params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
-          icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-          label="Delete"
-          onClick={(e) => {
-            console.log('props: ', params.row.id);
-            const id = [params.row.id];
-            setSelectedRowIds(id);
-            confirmRows.onTrue();
-          }}
-          sx={{ color: 'error.main' }}
-        />,
-      ],
-    },
+    // {
+    //     minWidth: 90,
+    //     sortable: false,
+    //     field: "actions",
+    //     headerName: "Actions",
+    //     renderCell: ({ row }) => <RowOptions id={row.id} title={row.title} />,
+    // },
   ];
 
-  const getTogglableColumns = () =>
-    columns
-      .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
-      .map((column) => column.field);
+  // const getTogglableColumns = () =>
+  //   columns
+  //     .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
+  //     .map((column) => column.field);
 
   return (
     <>
@@ -339,46 +291,20 @@ export default function ModuleListView() {
 
         <Card
           sx={{
-            width: '100%',
             height: { xs: 800, md: 2 },
             flexGrow: { md: 1 },
             display: { md: 'flex' },
             flexDirection: { md: 'column' },
           }}
         >
-          <Stack
-            spacing={{ xs: 1, sm: 2 }}
-            direction="row"
-            useFlexGap
-            justifyContent={'start'}
-            flexWrap="wrap"
-          >
-            <TextField
-              size="large"
-              value={value}
-              sx={{
-                mt: 2,
-                ml: 2,
-                mr: { xs: 2, sm: 0 }, // Conditionally set mb to 0 on smaller screens (< 768px)
-                mb: { xs: 0, sm: -6 }, // Conditionally set mb to 0 on smaller screens (< 768px)
-                width: { xs: "40%", sm: "40%" },
-                zIndex: '200',
-              }}
-              placeholder="Search Module"
-              onChange={(e) => handleFilter(e.target.value)}
-            />
-          </Stack>
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick
             rows={moduleList && moduleList?.data ? moduleList.data : []}
             columns={columns}
             loading={loadingList}
-            columnVisibilityModel={columnVisibilityModel}
-            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-            getRowHeight={() => '150'}
+            getRowHeight={() => 'auto'}
             filterMode="server"
-            filterDebounceMs={150}
             sortingMode="server"
             paginationMode="server"
             pageSizeOptions={[10, 25, 50]}
@@ -408,10 +334,15 @@ export default function ModuleListView() {
             slots={{
               toolbar: () => (
                 <>
-                  <GridToolbarContainer mt="0">
-                    {/* <GridToolbarQuickFilter debounceMs={150} /> */}
+                  <GridToolbarContainer>
+                    {/* <ModuleTableToolbar
+                      filters={filters}
+                      onFilters={handleFilters}
+                      stockOptions={PRODUCT_STOCK_OPTIONS}
+                      publishOptions={PUBLISH_OPTIONS}
+                    /> */}
 
-                    <Box sx={{ flexGrow: 1 }} />
+                    <GridToolbarQuickFilter />
 
                     <Stack
                       spacing={1}
@@ -432,24 +363,30 @@ export default function ModuleListView() {
                       )}
 
                       <GridToolbarColumnsButton />
-                      {/* <GridToolbarFilterButton /> */}
-                      <GridToolbarDensitySelector />
+                      <GridToolbarFilterButton />
                       <GridToolbarExport />
                     </Stack>
                   </GridToolbarContainer>
+
+                  {/* {canReset && (
+                    <ModuleTableFiltersResult
+                      filters={filters}
+                      onFilters={handleFilters}
+                      onResetFilters={handleResetFilters}
+                      results={dataFiltered.length}
+                      sx={{ p: 2.5, pt: 0 }}
+                    />
+                  )} */}
                 </>
               ),
               noRowsOverlay: () => <EmptyContent title="No Data" />,
               noResultsOverlay: () => <EmptyContent title="No results found" />,
             }}
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true,
-              },
-              columnsPanel: {
-                getTogglableColumns,
-              },
-            }}
+            // slotProps={{
+            //   columnsPanel: {
+            //     getTogglableColumns,
+            //   },
+            // }}
           />
         </Card>
       </Container>
@@ -468,32 +405,7 @@ export default function ModuleListView() {
             variant="contained"
             color="error"
             onClick={() => {
-              dispatch(ModuleDeleteApi(selectedRowIds)).then((action) => {
-                if (action.meta.requestStatus === 'fulfilled') {
-                  dispatch(
-                    ModuleListApi({
-                      q: value,
-                      limit: pageSize,
-                      page: page,
-                      sort: sort,
-                      filter: filter,
-                    })
-                  ).then(() => {
-                    const message =
-                      action.payload && action.payload.data && action.payload.data.message
-                        ? action.payload.data.message
-                        : '';
-                    enqueueSnackbar(message || 'Successfully deleted');
-                  });
-                } else if (action.meta.requestStatus === 'rejected') {
-                  const message =
-                    action.payload && action.payload.data && action.payload.data.message
-                      ? action.payload.data.message
-                      : '';
-                  enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
-                  console.log('message: ', message);
-                }
-              });
+              handleDeleteRows();
               confirmRows.onFalse();
             }}
           >

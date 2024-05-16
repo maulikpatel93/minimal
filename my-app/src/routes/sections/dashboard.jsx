@@ -17,6 +17,10 @@ const UserAccountPage = lazy(() => import('src/pages/account/account'));
 const ModuleListPage = lazy(() => import('src/pages/dashboard/role-management/module/list'));
 const ModuleCreatePage = lazy(() => import('src/pages/dashboard/role-management/module/new'));
 const ModuleEditPage = lazy(() => import('src/pages/dashboard/role-management/module/edit'));
+//submodule
+const SubModuleListPage = lazy(() => import('src/pages/dashboard/role-management/submodule/list'));
+const SubModuleCreatePage = lazy(() => import('src/pages/dashboard/role-management/submodule/new'));
+const SubModuleEditPage = lazy(() => import('src/pages/dashboard/role-management/submodule/edit'));
 
 // // TEST RENDER PAGE BY ROLE
 // const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
@@ -41,14 +45,24 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       {
         path: 'role-management',
-        children: [{
-          path: 'modules',
-          children: [
-            { path: 'list', element: <ModuleListPage /> },
-            { path: 'new', element: <ModuleCreatePage /> },
-            { path: ':id/edit', element: <ModuleEditPage /> },
-          ],
-        }],
+        children: [
+          {
+            path: 'modules',
+            children: [
+              { path: 'list', element: <ModuleListPage /> },
+              { path: 'new', element: <ModuleCreatePage /> },
+              { path: ':id/edit', element: <ModuleEditPage /> },
+            ],
+          },
+          {
+            path: 'submodule',
+            children: [
+              { path: 'list', element: <SubModuleListPage /> },
+              { path: 'new', element: <SubModuleCreatePage /> },
+              { path: ':id/edit', element: <SubModuleEditPage /> },
+            ],
+          },
+        ],
       },
       {
         path: 'user',

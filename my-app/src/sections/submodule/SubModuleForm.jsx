@@ -40,7 +40,7 @@ import { position } from 'stylis';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleForm({ currentModule }) {
+export default function SubModuleForm({ currentModule }) {
   const router = useRouter();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();

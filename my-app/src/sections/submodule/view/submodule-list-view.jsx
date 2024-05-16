@@ -62,7 +62,7 @@ const HIDE_COLUMNS = {
 const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 // ----------------------------------------------------------------------
 
-export default function ModuleListView() {
+export default function SubModuleListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const confirmRows = useBoolean();

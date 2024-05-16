@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\GuestController;
 use App\Http\Controllers\Api\v1\ModuleController;
+use App\Http\Controllers\Api\v1\SubModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -65,6 +66,13 @@ Route::prefix('v1')->group(function () {
             Route::get('/role-access', 'roleAccess');
         });
         Route::controller(ModuleController::class)->prefix('module')->name('module.')->group(function () {
+            Route::get('/list', 'list');
+            Route::post('/create', 'create');
+            Route::put('/update/{id}', 'update');
+            Route::delete('/delete', 'delete');
+            Route::get('/detail/{id}', 'detail');
+        });
+        Route::controller(SubModuleController::class)->prefix('submodule')->name('submodule.')->group(function () {
             Route::get('/list', 'list');
             Route::post('/create', 'create');
             Route::put('/update/{id}', 'update');

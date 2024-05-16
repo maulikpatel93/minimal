@@ -8,12 +8,12 @@ import { _userList } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import ModuleForm from '../ModuleForm';
+import ModuleForm from '../SubModuleForm';
 import { useSelector } from 'src/redux/store';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleEditView({ id }) {
+export default function SubModuleEditView({ id }) {
   const settings = useSettingsContext();
   const currentModule = useSelector((state) => state.module.detail);
  

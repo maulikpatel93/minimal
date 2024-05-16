@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Module;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\SubModule;
 
-class ModuleController extends Controller
+class SubModuleController extends Controller
 {
     protected $successStatus = 200;
     protected $badrequestStatus = 400;
@@ -23,7 +23,7 @@ class ModuleController extends Controller
         $qsearch = $request->q;
         $whereLike = $request->q ? explode(' ', $qsearch) : '';
 
-        $query = Module::select('*');
+        $query = SubModule::select('*');
 
         if (!empty($filter) && isset($filter['quickFilterValues'])) {
             $logicOperator = strtoupper($filter['quickFilterLogicOperator']);
@@ -58,15 +58,15 @@ class ModuleController extends Controller
                 }
             });
         }
-        $model = $query->paginate($limit);
-        $successData = $model ? $model : [];
+        $submodel = $query->paginate($limit);
+        $successData = $submodel ? $submodel : [];
 
         return response()->json($successData, $this->successStatus);
     }
-    public function detail(Request $request, $moduleId)
+    public function detail(Request $request, $SubModuleId)
     {
         $requestAll = $request->all();
-        $successData = Module::where('id', $moduleId)->where('is_active', 1)->first();
+        $successData = SubModule::where('id', $SubModuleId)->where('is_active', 1)->first();
         return response()->json($successData, $this->successStatus);
     }
     public function create(Request $request)
@@ -82,24 +82,24 @@ class ModuleController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), $this->errorStatus);
         }
-        $module = new Module();
-        $module->panel = $request->panel;
-        $module->title = $request->title;
-        $module->route = $request->route;
-        $module->icon = $request->icon;
-        $module->access = $request->access ? implode(",",$request->access) : null;
-        $module->is_active = $request->is_active;
-        $module->is_active_at = currentDateTime();
+        $SubModule = new SubModule();
+        $SubModule->panel = $request->panel;
+        $SubModule->title = $request->title;
+        $SubModule->route = $request->route;
+        $SubModule->icon = $request->icon;
+        $SubModule->access = $request->access ? implode(",",$request->access) : null;
+        $SubModule->is_active = $request->is_active;
+        $SubModule->is_active_at = currentDateTime();
         echo '<pre>';
-        print_r($module);
+        print_r($SubModule);
         echo '</pre>';
         dd();
 
-        // $module->save();
-        return response()->json(['message' => 'Module created successfully'], $this->successStatus);
+        // $SubModule->save();
+        return response()->json(['message' => 'SubModule created successfully'], $this->successStatus);
     }
 
-    public function update(Request $request, $moduleId)
+    public function update(Request $request, $SubModuleId)
     {
         $validator = validator()->make($request->all(), [
             'panel' => 'required|in:Backend,Frontend,Common',
@@ -112,32 +112,32 @@ class ModuleController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), $this->errorStatus);
         }
-        $module = Module::find($moduleId);
-        if (!$module) {
-            return response()->json(['message' => 'Module not found'], $this->warningStatus);
+        $SubModule = SubModule::find($SubModuleId);
+        if (!$SubModule) {
+            return response()->json(['message' => 'SubModule not found'], $this->warningStatus);
         }
-        $module->panel = $request->panel;
-        $module->title = $request->title;
-        $module->route = $request->route;
-        $module->icon = $request->icon;
-        $module->access = $request->access ? implode(",",$request->access) : null;
-        $module->is_active = $request->is_active;
-        $module->is_active_at = $request->is_active_at ? $request->is_active_at : null;
-        $module->save();
-        return response()->json(['message' => 'Module updated successfully'], $this->successStatus);
+        $SubModule->panel = $request->panel;
+        $SubModule->title = $request->title;
+        $SubModule->route = $request->route;
+        $SubModule->icon = $request->icon;
+        $SubModule->access = $request->access ? implode(",",$request->access) : null;
+        $SubModule->is_active = $request->is_active;
+        $SubModule->is_active_at = $request->is_active_at ? $request->is_active_at : null;
+        $SubModule->save();
+        return response()->json(['message' => 'SubModule updated successfully'], $this->successStatus);
     }
     public function delete(Request $request)
     {
-        $moduleIds = $request->module_id;
-        // echo '<pre>'; print_r($moduleIds); echo '</pre>';dd();
+        $SubModuleIds = $request->SubModule_id;
+        // echo '<pre>'; print_r($SubModuleIds); echo '</pre>';dd();
 
-        if (empty($moduleIds) || array_filter($moduleIds) === []) {
-            return response()->json(['message' => 'Invalid or empty module IDs provided'], $this->warningStatus);
+        if (empty($SubModuleIds) || array_filter($SubModuleIds) === []) {
+            return response()->json(['message' => 'Invalid or empty SubModule IDs provided'], $this->warningStatus);
         }
 
-        Module::whereIn('id', $moduleIds)->delete();
+        SubModule::whereIn('id', $SubModuleIds)->delete();
 
-        // return response()->json([$moduleIds], $this->successStatus);
+        // return response()->json([$SubModuleIds], $this->successStatus);
         return response()->json(['message' => 'SuccessFully Deleted'], $this->successStatus);
     }
 
