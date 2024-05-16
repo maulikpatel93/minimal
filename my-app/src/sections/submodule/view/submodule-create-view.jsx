@@ -4,7 +4,7 @@ import { paths } from 'src/routes/paths';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import ModuleForm from '../SubModuleForm';
+import SubModuleForm from '../SubModuleForm';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +21,8 @@ export default function SubModuleCreateView() {
             href: paths.dashboard.root,
           },
           {
-            name: 'Module',
-            href: paths.dashboard.roleManagement.module.list,
+            name: 'SubModule',
+            href: paths.dashboard.roleManagement.submodule.list,
           },
           { name: 'Create' },
         ]}
@@ -31,7 +31,7 @@ export default function SubModuleCreateView() {
         }}
       />
 
-      <ModuleForm />
+      <SubModuleForm />
     </Container>
   );
 }

@@ -20,7 +20,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function SubModuleCard({ user }) {
+export default function RolePermissionCard({ user }) {
   const theme = useTheme();
 
   const { name, coverUrl, role, totalFollowers, totalPosts, avatarUrl, totalFollowing } = user;
@@ -119,6 +119,6 @@ export default function SubModuleCard({ user }) {
   );
 }
 
-SubModuleCard.propTypes = {
+RolePermissionCard.propTypes = {
   user: PropTypes.object,
 };

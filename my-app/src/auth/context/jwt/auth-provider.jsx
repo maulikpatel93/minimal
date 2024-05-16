@@ -69,10 +69,6 @@ export function AuthProvider({ children }) {
       // const cookies = document.cookie.split(';');
       // const csrfCookie = cookies.find(cookie => cookie.trim().startsWith('XSRF-TOKEN='));
       // const csrfToken = csrfCookie ? csrfCookie.split('=')[1] : null;
-      // console.log('hello', csrfToken);
-      // if (!csrfToken) {
-      //   console.log('hello', csrfToken);
-      // }
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {

@@ -78,8 +78,6 @@ export default function ModuleListView() {
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
-
-  console.log('selectedRowIds: ', selectedRowIds);
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
   const [addUserOpen, setAddUserOpen] = useState(false);
@@ -283,7 +281,6 @@ export default function ModuleListView() {
           icon={<Iconify icon="solar:trash-bin-trash-bold" />}
           label="Delete"
           onClick={(e) => {
-            console.log('props: ', params.row.id);
             const id = [params.row.id];
             setSelectedRowIds(id);
             confirmRows.onTrue();
@@ -491,7 +488,6 @@ export default function ModuleListView() {
                       ? action.payload.data.message
                       : '';
                   enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
-                  console.log('message: ', message);
                 }
               });
               confirmRows.onFalse();

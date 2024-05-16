@@ -63,6 +63,18 @@ class ModuleController extends Controller
 
         return response()->json($successData, $this->successStatus);
     }
+    public function moduleDropDownList(){
+        $modules = Module::select('id', 'title')->where('is_active', 1)->get();
+        
+        $dropdownList = $modules->map(function($module) {
+            return [
+                'value' => $module->id,
+                'label' => $module->title
+            ];
+        })->toArray();
+    
+        return response()->json($dropdownList,$this->successStatus);
+    }
     public function detail(Request $request, $moduleId)
     {
         $requestAll = $request->all();
@@ -89,11 +101,9 @@ class ModuleController extends Controller
         $module->icon = $request->icon;
         $module->access = $request->access ? implode(",",$request->access) : null;
         $module->is_active = $request->is_active;
+        $moduleCount = Module::count();
+        $module->position = $moduleCount + 1;
         $module->is_active_at = currentDateTime();
-        echo '<pre>';
-        print_r($module);
-        echo '</pre>';
-        dd();
 
         // $module->save();
         return response()->json(['message' => 'Module created successfully'], $this->successStatus);

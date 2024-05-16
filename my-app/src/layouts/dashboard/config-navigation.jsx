@@ -52,7 +52,6 @@ const ICONS = {
 export function useNavData() {
   const { t } = useTranslate();
   const isRolePermissions = useSelector((state) => state.rolepermission.isRolePermissions);
-  // console.log('isRolePermissions: ', JSON.stringify(isRolePermissions, null, 2));
   // const data = useMemo(
   //   () => [
   //     // OVERVIEW

@@ -9,13 +9,13 @@ import { _userList } from 'src/_mock';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSelector } from 'src/redux/store';
-import SubModuleForm from '../SubModuleForm';
+import RolePermissionForm from '../RolePermissionForm';
 
 // ----------------------------------------------------------------------
 
-export default function SubModuleEditView({ id }) {
+export default function RolePermissionEditView({ id }) {
   const settings = useSettingsContext();
-  const currentModule = useSelector((state) => state.submodule.detail);
+  const currentModule = useSelector((state) => state.rolepermission.isRolePermissionDetail);
  
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -27,8 +27,8 @@ export default function SubModuleEditView({ id }) {
             href: paths.dashboard.root,
           },
           {
-            name: 'SubModule',
-            href: paths.dashboard.roleManagement.submodule.list,
+            name: 'RolePermission',
+            href: paths.dashboard.roleManagement.rolepermission.list,
           },
           { name: 'Edit' },
         ]}
@@ -37,11 +37,11 @@ export default function SubModuleEditView({ id }) {
         }}
       />
 
-      <SubModuleForm currentModule={currentModule} />
+      <RolePermissionForm currentModule={currentModule} />
     </Container>
   );
 }
 
-SubModuleEditView.propTypes = {
+RolePermissionEditView.propTypes = {
   id: PropTypes.string,
 };

@@ -35,17 +35,26 @@ import { useTranslation } from 'react-i18next';
 import { Chip, Divider, MenuItem } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { PANEL_OPTIONS } from 'src/_data/map/_module';
-import { ModuleCreateApi, ModuleUpdateApi } from 'src/redux/slices/moduleSlice';
+import { SubModuleCreateApi, SubModuleUpdateApi } from 'src/redux/slices/subModuleSlice';
 import { position } from 'stylis';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleForm({ currentModule }) {
+export default function RolePermissionForm({ currentModule }) {
+  console.log('currentModule: ', currentModule);
   const router = useRouter();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const access = currentModule ? currentModule.access.split(',') : [];
+  const access = currentModule ? currentModule.permissions.split(',') : [];
+  console.log('access: ', access);
   const dispatch = useDispatch();
+  const ModuleDropDownList = useSelector((state) => state.rolepermission.isRolePermissionDropdownList);
+  console.log('ModuleDropDownListTwo: ', ModuleDropDownList);
+  const ModuleDropDownData = ModuleDropDownList && ModuleDropDownList.modules	&& ModuleDropDownList.modules.length > 0 ? ModuleDropDownList.modules : [];
+  console.log('ModuleDropDownData: ', ModuleDropDownData);
+  const RoleDropDownData = ModuleDropDownList && ModuleDropDownList.roles	&& ModuleDropDownList.roles.length > 0 ? ModuleDropDownList.roles : [];
+  const TabDropDownData = ModuleDropDownList && ModuleDropDownList.tabs	&& ModuleDropDownList.tabs.length > 0 ? ModuleDropDownList.tabs : [];
+  const SubModuleDropDownData = ModuleDropDownList && ModuleDropDownList.submodules	&& ModuleDropDownList.submodules.length > 0 ? ModuleDropDownList.submodules : [];
   const NewModuleSchema = Yup.object().shape({
     // title: Yup.string().required(t('title is required')),
     // panel: Yup.string().required(t('panel is required')),
@@ -58,12 +67,12 @@ export default function ModuleForm({ currentModule }) {
   const defaultValues = useMemo(
     () => ({
       id: currentModule?.id || '',
-      title: currentModule?.title || '',
-      panel: currentModule?.panel || '',
-      route: currentModule?.route || '',
-      icon: currentModule?.icon || '',
-      access: currentModule?.access.split(',') || [],
-      is_active: currentModule?.is_active === 1 || true,
+      module_id: currentModule?.module_id || '',
+      sub_module_id:currentModule?.sub_module_id || '',
+      tab_id: currentModule?.tab_id || '',
+      role_id: currentModule?.role_id || '',
+      module_type: currentModule?.module_type || '',
+      permissions: currentModule?.permissions.split(',') || [],
     }),
     [currentModule]
   );
@@ -87,11 +96,11 @@ export default function ModuleForm({ currentModule }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(data && data.id){
-        const action = await dispatch(ModuleUpdateApi(data));
+      if (data && data.id) {
+        const action = await dispatch(SubModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
           enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
-          router.push(paths.dashboard.roleManagement.module.list);
+          router.push(paths.dashboard.roleManagement.submodule.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -105,17 +114,18 @@ export default function ModuleForm({ currentModule }) {
                 message: errorMessage, // Provide the error message
               });
             });
-  
+
             // Open the dialog with the error message
             // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
             enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
           }
         }
-      }else{
-        const action = await dispatch(ModuleCreateApi(data));
+      } else {
+        const action = await dispatch(SubModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
           enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
+          router.push(paths.dashboard.roleManagement.submodule.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -130,7 +140,7 @@ export default function ModuleForm({ currentModule }) {
                 message: errorMessage, // Provide the error message
               });
             });
-  
+
             // Open the dialog with the error message
             // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
@@ -139,7 +149,7 @@ export default function ModuleForm({ currentModule }) {
         }
       }
       // await new Promise((resolve) => setTimeout(resolve, 500));
-      // dispatch(ModuleUpdateApi(data));
+      // dispatch(SubModuleUpdateApi(data));
       // reset();
       // enqueueSnackbar(currentModule ? 'Update success!' : 'Create success!');
       // router.push(paths.dashboard.user.list);
@@ -163,20 +173,37 @@ export default function ModuleForm({ currentModule }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="title" label={t('title')} />
-              <RHFTextField name="icon" label={t('icon')} />
-              <RHFTextField name="route" label={t('route')} />
-              <RHFSelect name="panel" label={t('panel')}>
-                {PANEL_OPTIONS.map((panel) => (
-                  <MenuItem key={panel.value} value={panel.value}>
-                    {t(panel.label)}
+             <RHFTextField name="module_type" label={t('Module Type')} />
+              <RHFSelect name="module_id" label={t('Module')}>
+                {ModuleDropDownData.map((module) => (
+                  <MenuItem key={module.value} value={module.value}>
+                    {t(module.label)}
                   </MenuItem>
                 ))}
               </RHFSelect>
-            </Box>
-            <Box sx={{ mt:3 }}>
+              <RHFSelect name="sub_module_id" label={t('Sub Module')}>
+                {SubModuleDropDownData.map((module) => (
+                  <MenuItem key={module.value} value={module.value}>
+                    {t(module.label)}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="tab_id" label={t('Tab')}>
+                {TabDropDownData.map((module) => (
+                  <MenuItem key={module.value} value={module.value}>
+                    {t(module.label)}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
+              <RHFSelect name="role_id" label={t('Role')}>
+                {RoleDropDownData.map((module) => (
+                  <MenuItem key={module.value} value={module.value}>
+                    {t(module.label)}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
               <RHFAutocomplete
-                name="access"
+                name="permissions"
                 label={t('Access')}
                 placeholder={t('+ Access')}
                 multiple
@@ -203,27 +230,14 @@ export default function ModuleForm({ currentModule }) {
                   ))
                 }
               />
+              
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Stack alignItems="flex-start" sx={{ mt: 3 }}>
-              <RHFSwitch
-                name="is_active"
-                labelPlacement="start"
-                label={
-                  <>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {t('is active')}
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
-            </Stack>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentModule ? 'Create Module' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!currentModule ? 'Create SubModule' : 'Save Changes'}
+                </LoadingButton>
+              </Stack>
             </Box>
           </Card>
         </Grid>
@@ -232,6 +246,6 @@ export default function ModuleForm({ currentModule }) {
   );
 }
 
-ModuleForm.propTypes = {
+RolePermissionForm.propTypes = {
   currentModule: PropTypes.object,
 };

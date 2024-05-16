@@ -26,7 +26,6 @@ const TableHeader = (props) => {
   // }
 
   // const handleCancelDelete = () => {
-  //     console.log('optvalue', selectedValue);
   //     setSelectedValue('Actions');
   //     setOpenDialog(false);
   // };

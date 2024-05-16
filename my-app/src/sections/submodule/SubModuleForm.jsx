@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import { Chip, Divider, MenuItem } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { PANEL_OPTIONS } from 'src/_data/map/_module';
-import { ModuleCreateApi, ModuleUpdateApi } from 'src/redux/slices/moduleSlice';
+import { SubModuleCreateApi, SubModuleUpdateApi } from 'src/redux/slices/subModuleSlice';
 import { position } from 'stylis';
 
 // ----------------------------------------------------------------------
@@ -46,6 +46,8 @@ export default function SubModuleForm({ currentModule }) {
   const { enqueueSnackbar } = useSnackbar();
   const access = currentModule ? currentModule.access.split(',') : [];
   const dispatch = useDispatch();
+  const ModuleDropDownList = useSelector((state) => state.module.moduleListDropDown);
+  const ModuleDropDownData = ModuleDropDownList && ModuleDropDownList.length > 0 ? ModuleDropDownList : [];
   const NewModuleSchema = Yup.object().shape({
     // title: Yup.string().required(t('title is required')),
     // panel: Yup.string().required(t('panel is required')),
@@ -60,6 +62,7 @@ export default function SubModuleForm({ currentModule }) {
       id: currentModule?.id || '',
       title: currentModule?.title || '',
       panel: currentModule?.panel || '',
+      module_id:currentModule?.module_id || '',
       route: currentModule?.route || '',
       icon: currentModule?.icon || '',
       access: currentModule?.access.split(',') || [],
@@ -86,20 +89,18 @@ export default function SubModuleForm({ currentModule }) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log('data: ', data);
     try {
-      if(data && data.id){
-        const action = await dispatch(ModuleUpdateApi(data));
+      if (data && data.id) {
+        const action = await dispatch(SubModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
           enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
-          router.push(paths.dashboard.roleManagement.module.list);
+          router.push(paths.dashboard.roleManagement.submodule.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
           const message = action.payload.message;
           const data = action.payload.data;
           if (status === 422 && data) {
-            console.log("STATUS422")
             Object.keys(data).forEach((field) => {
               const errorMessage = data[field].join(', '); // Join the error messages for the field
               setError(field, {
@@ -107,17 +108,18 @@ export default function SubModuleForm({ currentModule }) {
                 message: errorMessage, // Provide the error message
               });
             });
-  
+
             // Open the dialog with the error message
             // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
             enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
           }
         }
-      }else{
-        const action = await dispatch(ModuleCreateApi(data));
+      } else {
+        const action = await dispatch(SubModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
           enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
+          router.push(paths.dashboard.roleManagement.submodule.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -132,7 +134,7 @@ export default function SubModuleForm({ currentModule }) {
                 message: errorMessage, // Provide the error message
               });
             });
-  
+
             // Open the dialog with the error message
             // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
@@ -141,7 +143,7 @@ export default function SubModuleForm({ currentModule }) {
         }
       }
       // await new Promise((resolve) => setTimeout(resolve, 500));
-      // dispatch(ModuleUpdateApi(data));
+      // dispatch(SubModuleUpdateApi(data));
       // reset();
       // enqueueSnackbar(currentModule ? 'Update success!' : 'Create success!');
       // router.push(paths.dashboard.user.list);
@@ -175,8 +177,13 @@ export default function SubModuleForm({ currentModule }) {
                   </MenuItem>
                 ))}
               </RHFSelect>
-            </Box>
-            <Box sx={{ mt:3 }}>
+              <RHFSelect name="module_id" label={t('Module')}>
+                {ModuleDropDownData.map((module) => (
+                  <MenuItem key={module.value} value={module.value}>
+                    {t(module.label)}
+                  </MenuItem>
+                ))}
+              </RHFSelect>
               <RHFAutocomplete
                 name="access"
                 label={t('Access')}
@@ -207,25 +214,25 @@ export default function SubModuleForm({ currentModule }) {
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Stack alignItems="flex-start" sx={{ mt: 3 }}>
-              <RHFSwitch
-                name="is_active"
-                labelPlacement="start"
-                label={
-                  <>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {t('is active')}
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
-            </Stack>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentModule ? 'Create Module' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+              <Stack alignItems="flex-start" sx={{ mt: 3 }}>
+                <RHFSwitch
+                  name="is_active"
+                  labelPlacement="start"
+                  label={
+                    <>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {t('is active')}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                />
+              </Stack>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!currentModule ? 'Create SubModule' : 'Save Changes'}
+                </LoadingButton>
+              </Stack>
             </Box>
           </Card>
         </Grid>
@@ -234,6 +241,6 @@ export default function SubModuleForm({ currentModule }) {
   );
 }
 
-ModuleForm.propTypes = {
+SubModuleForm.propTypes = {
   currentModule: PropTypes.object,
 };

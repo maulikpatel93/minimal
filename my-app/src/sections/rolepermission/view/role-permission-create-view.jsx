@@ -1,47 +1,37 @@
-import PropTypes from 'prop-types';
-
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { _userList } from 'src/_mock';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { useSelector } from 'src/redux/store';
-import SubModuleForm from '../SubModuleForm';
+import RolePermissionForm from '../RolePermissionForm';
 
 // ----------------------------------------------------------------------
 
-export default function SubModuleEditView({ id }) {
+export default function RolePermissionCreateView() {
   const settings = useSettingsContext();
-  const currentModule = useSelector((state) => state.submodule.detail);
- 
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Edit"
+        heading="Create a new RolePermission"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'SubModule',
-            href: paths.dashboard.roleManagement.submodule.list,
+            name: 'RolePermission',
+            href: paths.dashboard.roleManagement.rolepermission.list,
           },
-          { name: 'Edit' },
+          { name: 'Create' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <SubModuleForm currentModule={currentModule} />
+      <RolePermissionForm />
     </Container>
   );
 }
-
-SubModuleEditView.propTypes = {
-  id: PropTypes.string,
-};

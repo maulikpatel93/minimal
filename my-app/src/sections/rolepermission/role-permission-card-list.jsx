@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 
-import ModuleCard from './submodule-card';
+import ModuleCard from './role-permission-card';
 
 // ----------------------------------------------------------------------
 
-export default function SubModuleCardList({ users }) {
+export default function RolePermissionCardList({ users }) {
   return (
     <Box
       gap={3}
@@ -24,6 +24,6 @@ export default function SubModuleCardList({ users }) {
   );
 }
 
-SubModuleCardList.propTypes = {
+RolePermissionCardList.propTypes = {
   users: PropTypes.array,
 };

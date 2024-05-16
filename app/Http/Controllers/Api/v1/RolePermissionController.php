@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Module;
+use App\Models\Role;
+use App\Models\RolePermission;
 use App\Models\SubModule;
+use App\Models\Tab;
 
-class SubModuleController extends Controller
+class RolePermissionController extends Controller
 {
     protected $successStatus = 200;
     protected $badrequestStatus = 400;
@@ -22,8 +26,9 @@ class SubModuleController extends Controller
         $filter = $request->filter;
         $qsearch = $request->q;
         $whereLike = $request->q ? explode(' ', $qsearch) : '';
+        
 
-        $query = SubModule::select('*')->with('module:id,title');
+        $query = RolePermission::select('*')->with(['module:id,title','role:id,name','tab:id,title','subModule:id,title']);
 
         if (!empty($filter) && isset($filter['quickFilterValues'])) {
             $logicOperator = strtoupper($filter['quickFilterLogicOperator']);
@@ -58,15 +63,15 @@ class SubModuleController extends Controller
                 }
             });
         }
-        $submodel = $query->paginate($limit);
-        $successData = $submodel ? $submodel : [];
+        $rolepermission = $query->paginate($limit);
+        $successData = $rolepermission ? $rolepermission : [];
 
         return response()->json($successData, $this->successStatus);
     }
-    public function detail(Request $request, $SubModuleId)
+    public function detail(Request $request, $RolePerMisssionId)
     {
         $requestAll = $request->all();
-        $successData = SubModule::where('id', $SubModuleId)->where('is_active', 1)->first();
+        $successData = RolePermission::where('id', $RolePerMisssionId)->first();
         return response()->json($successData, $this->successStatus);
     }
     public function create(Request $request)
@@ -139,5 +144,44 @@ class SubModuleController extends Controller
         // return response()->json([$SubModuleIds], $this->successStatus);
         return response()->json(['message' => 'SuccessFully Deleted'], $this->successStatus);
     }
-
+    public function multiDropDown(){
+        $modules = Module::select('id', 'title')->where('is_active', 1)->get();
+        $moduleDropdown = $modules->map(function($module) {
+            return [
+                'value' => $module->id,
+                'label' => $module->title
+            ];
+        })->toArray();
+    
+        $submodules = SubModule::select('id', 'title')->where('is_active', 1)->get();
+        $submoduleDropdown = $submodules->map(function($submodule) {
+            return [
+                'value' => $submodule->id,
+                'label' => $submodule->title
+            ];
+        })->toArray();
+    
+        $tabs = Tab::select('id', 'title')->where('is_active', 1)->get();
+        $tabDropdown = $tabs->map(function($tab) {
+            return [
+                'value' => $tab->id,
+                'label' => $tab->title
+            ];
+        })->toArray();
+    
+        $roles = Role::select('id', 'name')->where('is_active', 1)->get();
+        $roleDropdown = $roles->map(function($role) {
+            return [
+                'value' => $role->id,
+                'label' => $role->name
+            ];
+        })->toArray();
+    
+        return response()->json([
+            'modules' => $moduleDropdown,
+            'submodules' => $submoduleDropdown,
+            'tabs' => $tabDropdown,
+            'roles' => $roleDropdown
+        ], $this->successStatus);
+    }
 }

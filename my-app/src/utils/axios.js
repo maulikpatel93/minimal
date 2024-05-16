@@ -8,7 +8,6 @@ const axiosInstance = axios.create({ baseURL: HOST_API, withCredentials: true, x
 
 axiosInstance.interceptors.response.use(
   (res) => {
-    // console.log('resAXIO: ', res);
 
     return res
   },

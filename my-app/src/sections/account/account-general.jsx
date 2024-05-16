@@ -112,7 +112,6 @@ export default function AccountGeneral() {
   // const handleDrop = useCallback(
   //   (acceptedFiles) => {
   //     const file = acceptedFiles[0];
-  //     console.log('file: ', file);
 
   //     // Store the selected file in state
   //     setValue(file);

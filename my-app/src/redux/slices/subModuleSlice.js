@@ -55,7 +55,6 @@ export const SubModuleDetailApi = createAsyncThunk("submodule/detail", async (fo
 });
 
 export const SubModuleDeleteApi = createAsyncThunk("submodule/delete", async (formValues, thunkAPI) => {
-    console.log('formValues: ', formValues);
     try {
         const urlParams = new URLSearchParams();
         formValues.forEach(value => {
@@ -75,7 +74,6 @@ export const SubModuleDeleteApi = createAsyncThunk("submodule/delete", async (fo
 
 
 // export const SubModuleDeleteApi = createAsyncThunk("submodule/delete", async (formValues, thunkAPI) => {
-//     console.log('formValues: ', formValues);
 //     try {
 //         const resposedata = await axios.delete(API_URL + `afterlogin/submodule/delete`, { data: formValues })
 //             .then((response) => HandleResponse(thunkAPI, response, "afterlogin/submodule/delete"))
@@ -162,7 +160,6 @@ export const subModuleSlice = createSlice({
             .addCase(SubModuleDeleteApi.fulfilled, (state, action) => {
                 // if (action.payload) {
                 //     const deletedIds = action.payload.flat().map(id => id.toString()); // Flattening the array of arrays and converting IDs to strings
-                //     console.log('deletedIds: ', JSON.stringify(deletedIds,null,2));
                 //     if (deletedIds && state.list.data && state.list.data.length > 0) {
                 //         state.list.data = state.list.data.filter(submodule => !deletedIds.includes(submodule.id.toString()));
                 //     }

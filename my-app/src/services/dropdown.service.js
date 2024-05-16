@@ -14,7 +14,6 @@ const usersroleoption = (values) => {
     // const token = jwt.sign(payload, VITE_JWT_SECRET);
     // const token = jwt.sign({ foo: 'bar' }, VITE_JWT_SECRET, { algorithm: 'HS256', allowInsecureKeySizes: true })
     // const token = jwt.sign({x:"!22"}, VITE_JWT_SECRET);
-    // console.log('token', token);
     // const formData1 = new FormData();
     // formData1.append('access_token', token)
     return axios.get(API_URL + action, {

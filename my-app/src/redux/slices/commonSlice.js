@@ -13,7 +13,6 @@ export const commonSlice = createSlice({
   reducers: {
     reset: () => initialState,
     openModal: (state, action) => {
-        console.log('action: ', action.payload);
         state.isOpenModal = true;
         state.IsModalTitle = action.payload.title;
         state.IsModalDescription = action.payload.description;

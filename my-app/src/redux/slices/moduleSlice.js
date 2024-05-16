@@ -18,6 +18,18 @@ export const ModuleListApi = createAsyncThunk("module/list", async (formValues, 
     }
 });
 
+export const ModuleDropdownListApi = createAsyncThunk("module/dropdown/list", async (formValues, thunkAPI) => {
+    try {
+        const resposedata = await axios.get(API_URL + `afterlogin/module/dropdown/list`)
+            .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/dropdown/list"))
+            .catch((error) => HandleError(thunkAPI, error, "afterlogin/module/dropdown/list"));
+        return resposedata;
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+
 export const ModuleUpdateApi = createAsyncThunk("module/update", async (formValues, thunkAPI) => {
     try {
         const resposedata = await axios.put(API_URL + `afterlogin/module/update/${formValues?.id}`, formValues)
@@ -55,7 +67,6 @@ export const ModuleDetailApi = createAsyncThunk("module/detail", async (formValu
 });
 
 export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
-    console.log('formValues: ', formValues);
     try {
         const urlParams = new URLSearchParams();
         formValues.forEach(value => {
@@ -75,7 +86,6 @@ export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValu
 
 
 // export const ModuleDeleteApi = createAsyncThunk("module/delete", async (formValues, thunkAPI) => {
-//     console.log('formValues: ', formValues);
 //     try {
 //         const resposedata = await axios.delete(API_URL + `afterlogin/module/delete`, { data: formValues })
 //             .then((response) => HandleResponse(thunkAPI, response, "afterlogin/module/delete"))
@@ -94,7 +104,8 @@ const initialState = {
     update: "",
     delete: "",
     detail: "",
-    loading: { list: false, update: false, delete: false, detail: false,create:false }
+    moduleListDropDown:[],
+    loading: { list: false, update: false, delete: false, detail: false,create:false,dropdown:false }
 };
 
 export const moduleSlice = createSlice({
@@ -118,6 +129,19 @@ export const moduleSlice = createSlice({
                 state.loading.list = false
 
             })
+            //Module dropdown list with value(id) and label(name)
+            .addCase(ModuleDropdownListApi.pending, (state) => {
+                state.loading.dropdown = true;
+            })
+            .addCase(ModuleDropdownListApi.fulfilled, (state, action) => {
+                state.moduleListDropDown = action.payload;
+                state.loading.dropdown = false;
+            })
+            .addCase(ModuleDropdownListApi.rejected, (state) => {
+                state.moduleListDropDown = [];
+                state.loading.dropdown = false;
+
+            })
             //ModuleDetail
             .addCase(ModuleDetailApi.pending, (state) => {
                 state.loading.detail = true;
@@ -131,7 +155,6 @@ export const moduleSlice = createSlice({
                 state.loading.detail = false;
 
             })
-
             //ModuleUpdateApi
             .addCase(ModuleUpdateApi.pending, (state, action) => {
                 state.loading.update = true;
@@ -162,7 +185,6 @@ export const moduleSlice = createSlice({
             .addCase(ModuleDeleteApi.fulfilled, (state, action) => {
                 // if (action.payload) {
                 //     const deletedIds = action.payload.flat().map(id => id.toString()); // Flattening the array of arrays and converting IDs to strings
-                //     console.log('deletedIds: ', JSON.stringify(deletedIds,null,2));
                 //     if (deletedIds && state.list.data && state.list.data.length > 0) {
                 //         state.list.data = state.list.data.filter(module => !deletedIds.includes(module.id.toString()));
                 //     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\GuestController;
 use App\Http\Controllers\Api\v1\ModuleController;
+use App\Http\Controllers\Api\v1\RolePermissionController;
 use App\Http\Controllers\Api\v1\SubModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -71,6 +72,7 @@ Route::prefix('v1')->group(function () {
             Route::put('/update/{id}', 'update');
             Route::delete('/delete', 'delete');
             Route::get('/detail/{id}', 'detail');
+            Route::get('/dropdown/list', 'moduleDropDownList');
         });
         Route::controller(SubModuleController::class)->prefix('submodule')->name('submodule.')->group(function () {
             Route::get('/list', 'list');
@@ -78,6 +80,15 @@ Route::prefix('v1')->group(function () {
             Route::put('/update/{id}', 'update');
             Route::delete('/delete', 'delete');
             Route::get('/detail/{id}', 'detail');
+        });
+        Route::controller(RolePermissionController::class)->prefix('role-permission')->name('role-permission.')->group(function () {
+            Route::get('/list', 'list');
+            Route::post('/create', 'create');
+            Route::put('/update/{id}', 'update');
+            Route::delete('/delete', 'delete');
+            Route::get('/detail/{id}', 'detail');
+            //Role Dropdown all in 1 to get module:[],submodule:[],tab:[],role:[];
+            Route::get('/dropdown/list', 'multiDropDown');
         });
     });
 });

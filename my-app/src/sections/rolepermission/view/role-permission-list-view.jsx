@@ -38,12 +38,12 @@ import { Icon } from '@iconify/react';
 //   RenderCellModule,
 //   RenderCellCreatedAt,
 // } from '../module-table-row';
-import { SubModuleListApi,SubModuleDeleteApi,SubModuleDetailApi } from 'src/redux/slices/subModuleSlice';
+import {  } from 'src/redux/slices/subModuleSlice';
+import { RolePermissionListApi,RolePermissionDetailApi,RolePermissionDeleteApi,RolePermissionDropdownListApi } from 'src/redux/slices/rolePermissionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, TextField, Typography } from '@mui/material';
 import TableHeader from './TableHeader';
 import { useTranslation } from 'react-i18next';
-import { ModuleDropdownListApi } from 'src/redux/slices/moduleSlice';
 
 // ----------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ const HIDE_COLUMNS = {
 const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 // ----------------------------------------------------------------------
 
-export default function SubModuleListView() {
+export default function RolePermissionListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const confirmRows = useBoolean();
@@ -84,14 +84,15 @@ export default function SubModuleListView() {
   const [addUserOpen, setAddUserOpen] = useState(false);
 
   const dispatch = useDispatch();
-  const subModuleList = useSelector((state) => state.submodule.list);
-  const loadingList = useSelector((state) => state.submodule.loading.list);
-  const totalRows = subModuleList ? subModuleList.total : 0;
-  const currentPage = subModuleList ? subModuleList.current_page : 1;
+  const rolePermissionList = useSelector((state) => state.rolepermission.isRolePermissionList);
+  const isApiStatus = useSelector((state) => state.rolepermission.isApiStatus);
+  const loadingList = isApiStatus && isApiStatus.RolePermissionListApi === "loading";
+  const totalRows = rolePermissionList ? rolePermissionList.total : 0;
+  const currentPage = rolePermissionList ? rolePermissionList.current_page : 1;
 
   useEffect(() => {
     dispatch(
-      SubModuleListApi({
+      RolePermissionListApi({
         q: value,
         limit: pageSize,
         page: page + 1,
@@ -148,10 +149,10 @@ export default function SubModuleListView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      dispatch(SubModuleDetailApi({ id: id })).then(action => {
+      dispatch(RolePermissionDetailApi({ id: id })).then(action => {
         if(action.meta.requestStatus === "fulfilled"){
-          dispatch(ModuleDropdownListApi()).then(module=>{
-            router.push(paths.dashboard.roleManagement.submodule.edit(id));
+          dispatch(RolePermissionDropdownListApi()).then(module=>{
+            router.push(paths.dashboard.roleManagement.rolepermission.edit(id));
           })
         }else if(action.meta.requestStatus === "rejected"){
           enqueueSnackbar(t('Data not found'));
@@ -163,95 +164,95 @@ export default function SubModuleListView() {
 
   const handleViewRow = useCallback(
     (id) => {
-      router.push(paths.dashboard.roleManagement.submodule.details(id));
+      router.push(paths.dashboard.roleManagement.rolepermission.details(id));
     },
     [router]
   );
 
   const columns = [
     {
-      field: 'title',
-      headerName: 'Title',
+      field: 'module',
+      headerName: 'Module',
       flex: 1,
       minWidth: 180,
       hideable: false,
-      renderCell: (params) => (
+      renderCell: ({row}) => (
         <Stack spacing={2} direction="row" alignItems="center" sx={{ minWidth: 0 }}>
           <Typography component="span" variant="body2" noWrap>
-            {params.row.title}
+            {row && row.module && row.module.title ? row.module.title : ""}
           </Typography>
         </Stack>
       ),
     },
     {
-      field: 'route',
-      headerName: 'Route',
+      field: 'submodule',
+      headerName: 'Submodule',
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
-            {row.route}
+            {row && row.sub_module && row.sub_module.title ? row.sub_module.title : ""}
           </Typography>
         );
       },
     },
     {
-      field: 'icon',
-      headerName: 'Icon',
+      field: 'tab',
+      headerName: 'Tab',
       width: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="body2">
-            {row.icon}
+            {row && row.tab && row.tab.title ? row.tab.title : ""}
           </Typography>
         );
       },
     },
     {
-      field: 'panel',
-      headerName: 'Panel',
+      field: 'role',
+      headerName: 'Role',
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
-            {row.panel}
+            {row && row.role && row.role.name ? row.role.name : ""}
           </Typography>
         );
       },
     },
     {
-      field: 'module',
-      headerName: 'Module',
+      field: 'module_type',
+      headerName: 'Module Type',
       flex: 1,
       width: 50,
       renderCell: ({ row }) => {
         return (
           <Typography noWrap variant="icon">
-            {row.module.title}
+            {row && row.module_type ? row.module_type : ""}
           </Typography>
         );
       },
     },
-    {
-      field: 'is_active',
-      headerName: 'Status',
-      flex: 1,
-      width: 50,
-      renderCell: ({ row }) => {
-        // return row.is_active;
-        return (
-          <>
-            {row.is_active === 1 ? (
-              <Icon icon="bi:check-circle-fill" style={{ color: '#198754' }} />
-            ) : (
-              <Icon icon="bi:x-circle-fill" style={{ color: '#dc3545' }} />
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   field: 'is_active',
+    //   headerName: 'Status',
+    //   flex: 1,
+    //   width: 50,
+    //   renderCell: ({ row }) => {
+    //     // return row.is_active;
+    //     return (
+    //       <>
+    //         {row.is_active === 1 ? (
+    //           <Icon icon="bi:check-circle-fill" style={{ color: '#198754' }} />
+    //         ) : (
+    //           <Icon icon="bi:x-circle-fill" style={{ color: '#dc3545' }} />
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       type: 'actions',
       field: 'actions',
@@ -311,7 +312,7 @@ export default function SubModuleListView() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'SubModule',
+              name: 'RolePermission',
               // href: paths.dashboard.roleManagement.submodule.root,
             },
             { name: 'List' },
@@ -322,8 +323,8 @@ export default function SubModuleListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
               onClick={()=>{
-                dispatch(ModuleDropdownListApi()).then(module=>{
-                  router.push(paths.dashboard.roleManagement.submodule.new);
+                dispatch(RolePermissionDropdownListApi()).then(module=>{
+                  router.push(paths.dashboard.roleManagement.rolepermission.new);
                 })
               }}
             >
@@ -372,7 +373,7 @@ export default function SubModuleListView() {
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick
-            rows={subModuleList && subModuleList?.data ? subModuleList.data : []}
+            rows={rolePermissionList && rolePermissionList?.data ? rolePermissionList.data : []}
             columns={columns}
             loading={loadingList}
             columnVisibilityModel={columnVisibilityModel}
@@ -469,10 +470,10 @@ export default function SubModuleListView() {
             variant="contained"
             color="error"
             onClick={() => {
-              dispatch(SubModuleDeleteApi(selectedRowIds)).then((action) => {
+              dispatch(RolePermissionDeleteApi(selectedRowIds)).then((action) => {
                 if (action.meta.requestStatus === 'fulfilled') {
                   dispatch(
-                    SubModuleListApi({
+                    RolePermissionListApi({
                       q: value,
                       limit: pageSize,
                       page: page,
