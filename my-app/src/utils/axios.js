@@ -4,11 +4,20 @@ import { HOST_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+const axiosInstance = axios.create({ baseURL: HOST_API, withCredentials: true, xsrfCookieName: "XSRF-TOKEN", xsrfHeaderName: 'X-XSRF-TOKEN' });
 
 axiosInstance.interceptors.response.use(
-  (res) => res,
-  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+  (res) => {
+
+    return res
+  },
+  (error) => {
+    return Promise.reject(({
+      status:error.response?.status, 
+      data:error.response?.data, 
+      message:error.response?.message
+     }) || 'Something went wrong');
+  }
 );
 
 export default axiosInstance;
@@ -30,9 +39,10 @@ export const endpoints = {
   kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    register: '/api/auth/register',
+    me: 'afterlogin/auth/me',
+    login: 'beforelogin/guest/login',
+    register: 'beforelogin/guest/register',
+    update:'afterlogin/auth/update',
   },
   mail: {
     list: '/api/mail/list',

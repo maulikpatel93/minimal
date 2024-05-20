@@ -12,6 +12,9 @@ import Header from './header';
 import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
 import NavHorizontal from './nav-horizontal';
+import { useDispatch } from 'react-redux';
+import { useEffect, useLayoutEffect } from 'react';
+import { rolePermissionApi } from 'src/redux/slices/rolePermissionSlice';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +34,12 @@ export default function DashboardLayout({ children }) {
   const renderHorizontal = <NavHorizontal />;
 
   const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} />;
+  
+  const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    dispatch(rolePermissionApi())
+  }, [])
 
   if (isHorizontal) {
     return (

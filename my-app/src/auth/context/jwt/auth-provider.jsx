@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
-import { useMemo, useEffect, useReducer, useCallback } from 'react';
-
+import { useEffect, useReducer, useCallback, useMemo } from 'react';
+// utils
 import axios, { endpoints } from 'src/utils/axios';
-
+//
 import { AuthContext } from './auth-context';
-import { setSession, isValidToken } from './utils';
+import { isValidToken, setSession } from './utils';
 
 // ----------------------------------------------------------------------
-/**
- * NOTE:
- * We only build demo at basic level.
- * Customer will need to do some extra handling yourself if you want to extend the logic and other features...
- */
+
+// NOTE:
+// We only build demo at basic level.
+// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
+
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -38,6 +38,12 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
+  if (action.type === 'USERUPDATE') {
+    return {
+      ...state,
+      user: action.payload.user,
+    };
+  }
   if (action.type === 'LOGOUT') {
     return {
       ...state,
@@ -56,11 +62,21 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
+      // Fetch CSRF token cookie
+      await axios.get('/sanctum/csrf-cookie');
+      // const csrfToken = response1.data.csrf_token;
+      // Extract CSRF token from cookies
+      // const cookies = document.cookie.split(';');
+      // const csrfCookie = cookies.find(cookie => cookie.trim().startsWith('XSRF-TOKEN='));
+      // const csrfToken = csrfCookie ? csrfCookie.split('=')[1] : null;
       const accessToken = sessionStorage.getItem(STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
-
+        
+        // const csrfToken = response1.data.csrf_token;
+        // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+      
         const response = await axios.get(endpoints.auth.me);
 
         const { user } = response.data;
@@ -68,10 +84,7 @@ export function AuthProvider({ children }) {
         dispatch({
           type: 'INITIAL',
           payload: {
-            user: {
-              ...user,
-              accessToken,
-            },
+            user,
           },
         });
       } else {
@@ -113,24 +126,33 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        user: {
-          ...user,
-          accessToken,
-        },
+        user,
       },
     });
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
+  const register = useCallback(async ( first_name, last_name, email, password, role_id, profile_image,phone_number,country_code, email_verified_at, status, email_otp, phone_otp ) => {
     const data = {
-      email,
-      password,
-      firstName,
-      lastName,
+        first_name,
+        last_name,
+        email,
+        password,
+        role_id,
+        profile_image,
+        phone_number,
+        country_code,
+        email_verified_at,
+        status,
+        email_otp,
+        phone_otp
     };
 
-    const response = await axios.post(endpoints.auth.register, data);
+    const response = await axios.post(endpoints.auth.register, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     const { accessToken, user } = response.data;
 
@@ -139,10 +161,33 @@ export function AuthProvider({ children }) {
     dispatch({
       type: 'REGISTER',
       payload: {
-        user: {
-          ...user,
-          accessToken,
-        },
+        user,
+      },
+    });
+  }, []);
+  const authToken = sessionStorage.getItem(STORAGE_KEY);
+  const userupdate = useCallback(async ( first_name, last_name, email, profile_image,phone_number,country_code) => {
+    const data = {
+        first_name,
+        last_name,
+        email,
+        profile_image,
+        phone_number,
+        country_code,
+    };
+
+    const response = await axios.post(endpoints.auth.update, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const { user } = response.data;
+
+    dispatch({
+      type: 'USERUPDATE',
+      payload: {
+        user,
       },
     });
   }, []);
@@ -172,8 +217,9 @@ export function AuthProvider({ children }) {
       login,
       register,
       logout,
+      userupdate
     }),
-    [login, logout, register, state.user, status]
+    [login, logout, register,userupdate, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

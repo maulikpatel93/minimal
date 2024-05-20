@@ -60,11 +60,19 @@ export const tokenExpired = (exp) => {
 export const setSession = (accessToken) => {
   if (accessToken) {
     sessionStorage.setItem('accessToken', accessToken);
-
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    const decode = jwtDecode(accessToken);
+    const accessKey = decode.accessToken
+    const exp = decode.exp
+    axios.defaults.headers.common.Authorization = `Bearer ${accessKey}`;
+    // axios.defaults.withCredentials = true;
+    // axios.defaults.withXSRFToken = true;
+    
+    // Enable sending XSRF token with the request
+    // axios.defaults.xsrfHeaderName = 'X-CSRF-TOKEN'; // Set the XSRF token header name
+    // axios.defaults.xsrfCookieName = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Set the name of the cookie where the XSRF token is stored
 
     // This function below will handle when token is expired
-    const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+    // const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
     tokenExpired(exp);
   } else {
     sessionStorage.removeItem('accessToken');

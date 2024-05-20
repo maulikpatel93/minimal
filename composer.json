@@ -6,7 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "firebase/php-jwt": "^6.10",
         "laravel/framework": "^11.0",
+        "laravel/reverb": "@beta",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9"
     },
     "require-dev": {
@@ -23,7 +26,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Http/Helpers/db_helper.php",
+            "app/Http/Helpers/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -1,5 +1,6 @@
 {
   "app": "app",
+  "dashboard": "dashboard",
   "job": "job",
   "user": "user",
   "list": "list",

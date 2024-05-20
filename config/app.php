@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    //Extra added configuration parameter
+    'jwt_secret' => env('JWT_SECRET', ''),
+    'local_timezone' => env('LOCAL_TIMEZONE', 'Asia/Kolkata'),
+    'google_api_key' => env('GOOGLE_API_KEY', ''),
+    'apiPerPage' => env('PAGE_SIZE', '10')
 ];

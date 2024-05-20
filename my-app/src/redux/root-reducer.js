@@ -1,48 +1,102 @@
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import storage from 'redux-persist/lib/storage';
 // slices
-import mailReducer from './slices/mail';
-import chatReducer from './slices/chat';
-import kanbanReducer from './slices/kanban';
-import productReducer from './slices/product';
-import calendarReducer from './slices/calendar';
+import checkoutReducer from './slices/checkoutSlice';
+import dropdownReducer from './slices/dropdownSlice';
+import authReducer from './slices/authSlice';
+import profileReducer from './slices/profileSlice';
+import commonReducer from './slices/commonSlice';
+import rolePermissionReducer from './slices/rolePermissionSlice';
+import moduleReducer from './slices/moduleSlice';
+import subModuleReducer from './slices/subModuleSlice';
+import tabReducer from './slices/tabSlice';
 
-// ----------------------------------------------------------------------
+// // ----------------------------------------------------------------------
 
-export const createNoopStorage = () => ({
-  getItem(_key) {
-    return Promise.resolve(null);
+const persistConfigs = [
+  {
+    key: 'checkout',
+    storage,
+    keyPrefix: 'eventmanage-',
   },
-  setItem(_key, value) {
-    return Promise.resolve(value);
+  {
+    key: 'dropdown',
+    storage,
+    keyPrefix: 'eventmanage-',
   },
-  removeItem(_key) {
-    return Promise.resolve();
+  {
+    key: 'auth',
+    storage,
+    keyPrefix: 'eventmanage-',
   },
-});
+  {
+    key: 'profile',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'common',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'rolepermission',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'module',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'submodule',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  {
+    key: 'tab',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
+  // Add more persist configurations as needed...
+];
 
-export const storage =
-  typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
-
-export const rootPersistConfig = {
-  key: 'root',
-  storage,
-  keyPrefix: 'redux-',
-  whitelist: [],
+// Define an array of reducers
+const reducers = {
+  checkout: checkoutReducer,
+  dropdown:dropdownReducer,
+  auth:authReducer,
+  profile:profileReducer,
+  common:commonReducer,
+  rolepermission:rolePermissionReducer,
+  module:moduleReducer,
+  submodule:subModuleReducer,
+  tab:tabReducer,
 };
 
-const productPersistConfig = {
-  key: 'product',
-  storage,
-  keyPrefix: 'redux-',
-  whitelist: ['checkout'],
-};
+// Combine all reducers into a single reducer
+const rootReducer = combineReducers(
+  Object.keys(reducers).reduce((acc, key, index) => {
+    acc[key] = persistReducer(persistConfigs[index], reducers[key]);
+    return acc;
+  }, {})
+);
 
-export const rootReducer = combineReducers({
-  mail: mailReducer,
-  chat: chatReducer,
-  kanban: kanbanReducer,
-  calendar: calendarReducer,
-  product: persistReducer(productPersistConfig, productReducer),
-});
+export default rootReducer;
+
+// const checkoutPersistConfig = {
+//   key: 'checkout',
+//   storage,
+//   keyPrefix: 'redux-',
+// };
+// const dropdownPersistConfig = {
+//   key: 'dropdown',
+//   storage,
+//   keyPrefix: 'redux-',
+// };
+
+// export const rootReducer = combineReducers({
+//   checkout: persistReducer(checkoutPersistConfig, checkoutReducer),
+// });

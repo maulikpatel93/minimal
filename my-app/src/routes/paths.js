@@ -10,7 +10,7 @@ const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
   AUTH: '/auth',
-  AUTH_DEMO: '/auth-demo',
+  // AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
 };
 
@@ -52,136 +52,49 @@ export const paths = {
   },
   // AUTH
   auth: {
-    amplify: {
-      login: `${ROOTS.AUTH}/amplify/login`,
-      verify: `${ROOTS.AUTH}/amplify/verify`,
-      register: `${ROOTS.AUTH}/amplify/register`,
-      newPassword: `${ROOTS.AUTH}/amplify/new-password`,
-      forgotPassword: `${ROOTS.AUTH}/amplify/forgot-password`,
-    },
     jwt: {
-      login: `${ROOTS.AUTH}/jwt/login`,
-      register: `${ROOTS.AUTH}/jwt/register`,
-    },
-    firebase: {
-      login: `${ROOTS.AUTH}/firebase/login`,
-      verify: `${ROOTS.AUTH}/firebase/verify`,
-      register: `${ROOTS.AUTH}/firebase/register`,
-      forgotPassword: `${ROOTS.AUTH}/firebase/forgot-password`,
-    },
-    auth0: {
-      login: `${ROOTS.AUTH}/auth0/login`,
-    },
-    supabase: {
-      login: `${ROOTS.AUTH}/supabase/login`,
-      verify: `${ROOTS.AUTH}/supabase/verify`,
-      register: `${ROOTS.AUTH}/supabase/register`,
-      newPassword: `${ROOTS.AUTH}/supabase/new-password`,
-      forgotPassword: `${ROOTS.AUTH}/supabase/forgot-password`,
+      login: `${ROOTS.AUTH}/login`,
+      register: `${ROOTS.AUTH}/register`,
     },
   },
-  authDemo: {
-    classic: {
-      login: `${ROOTS.AUTH_DEMO}/classic/login`,
-      register: `${ROOTS.AUTH_DEMO}/classic/register`,
-      forgotPassword: `${ROOTS.AUTH_DEMO}/classic/forgot-password`,
-      newPassword: `${ROOTS.AUTH_DEMO}/classic/new-password`,
-      verify: `${ROOTS.AUTH_DEMO}/classic/verify`,
-    },
-    modern: {
-      login: `${ROOTS.AUTH_DEMO}/modern/login`,
-      register: `${ROOTS.AUTH_DEMO}/modern/register`,
-      forgotPassword: `${ROOTS.AUTH_DEMO}/modern/forgot-password`,
-      newPassword: `${ROOTS.AUTH_DEMO}/modern/new-password`,
-      verify: `${ROOTS.AUTH_DEMO}/modern/verify`,
-    },
-  },
+  
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
-    mail: `${ROOTS.DASHBOARD}/mail`,
-    chat: `${ROOTS.DASHBOARD}/chat`,
-    blank: `${ROOTS.DASHBOARD}/blank`,
-    kanban: `${ROOTS.DASHBOARD}/kanban`,
-    calendar: `${ROOTS.DASHBOARD}/calendar`,
-    fileManager: `${ROOTS.DASHBOARD}/file-manager`,
-    permission: `${ROOTS.DASHBOARD}/permission`,
-    general: {
-      app: `${ROOTS.DASHBOARD}/app`,
-      ecommerce: `${ROOTS.DASHBOARD}/ecommerce`,
-      analytics: `${ROOTS.DASHBOARD}/analytics`,
-      banking: `${ROOTS.DASHBOARD}/banking`,
-      booking: `${ROOTS.DASHBOARD}/booking`,
-      file: `${ROOTS.DASHBOARD}/file`,
+    roleManagement :{
+      root: `${ROOTS.DASHBOARD}/role-management`,
+      module: {
+        root: `${ROOTS.DASHBOARD}/role-management/module`,
+        new: `${ROOTS.DASHBOARD}/role-management/modules/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/modules/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/modules/${id}/edit`,
+      },
+      submodule: {
+        root: `${ROOTS.DASHBOARD}/role-management/submodule`,
+        new: `${ROOTS.DASHBOARD}/role-management/submodule/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/submodule/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/submodule/${id}/edit`,
+      },
+      tab: {
+        root: `${ROOTS.DASHBOARD}/role-management/tab`,
+        new: `${ROOTS.DASHBOARD}/role-management/tab/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/tab/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/tab/${id}/edit`,
+      },
+      rolepermission: {
+        root: `${ROOTS.DASHBOARD}/role-management/role-permission`,
+        new: `${ROOTS.DASHBOARD}/role-management/role-permission/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/role-permission/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/role-permission/${id}/edit`,
+      },
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       list: `${ROOTS.DASHBOARD}/user/list`,
-      cards: `${ROOTS.DASHBOARD}/user/cards`,
       profile: `${ROOTS.DASHBOARD}/user/profile`,
       account: `${ROOTS.DASHBOARD}/user/account`,
-      edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
-      demo: {
-        edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
-      },
-    },
-    product: {
-      root: `${ROOTS.DASHBOARD}/product`,
-      new: `${ROOTS.DASHBOARD}/product/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/product/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/product/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/product/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/product/${MOCK_ID}/edit`,
-      },
-    },
-    invoice: {
-      root: `${ROOTS.DASHBOARD}/invoice`,
-      new: `${ROOTS.DASHBOARD}/invoice/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/invoice/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/invoice/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}/edit`,
-      },
-    },
-    post: {
-      root: `${ROOTS.DASHBOARD}/post`,
-      new: `${ROOTS.DASHBOARD}/post/new`,
-      details: (title) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}`,
-      edit: (title) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}`,
-        edit: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}/edit`,
-      },
-    },
-    order: {
-      root: `${ROOTS.DASHBOARD}/order`,
-      details: (id) => `${ROOTS.DASHBOARD}/order/${id}`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/order/${MOCK_ID}`,
-      },
-    },
-    job: {
-      root: `${ROOTS.DASHBOARD}/job`,
-      new: `${ROOTS.DASHBOARD}/job/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/job/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/job/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/job/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/job/${MOCK_ID}/edit`,
-      },
-    },
-    tour: {
-      root: `${ROOTS.DASHBOARD}/tour`,
-      new: `${ROOTS.DASHBOARD}/tour/new`,
-      details: (id) => `${ROOTS.DASHBOARD}/tour/${id}`,
-      edit: (id) => `${ROOTS.DASHBOARD}/tour/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
-      },
+      edit: (id) => `${ROOTS.DASHBOARD}/user/${id}/edit`
     },
   },
 };

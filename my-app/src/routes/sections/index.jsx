@@ -33,7 +33,7 @@ export default function Router() {
 
     // Auth routes
     ...authRoutes,
-    ...authDemoRoutes,
+    // ...authDemoRoutes,
 
     // Dashboard routes
     ...dashboardRoutes,

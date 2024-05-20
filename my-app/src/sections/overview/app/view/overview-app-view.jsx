@@ -21,23 +21,25 @@ import AppAreaInstalled from '../app-area-installed';
 import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
 import AppTopInstalledCountries from '../app-top-installed-countries';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function OverviewAppView() {
-  const { user } = useMockedUser();
+  const { user } = useAuthContext();
 
   const theme = useTheme();
 
   const settings = useSettingsContext();
+  const UserName = user && (user.first_name && user.last_name) ? user.first_name +" "+ user.last_name : "";
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <AppWelcome
-            title={`Welcome back 👋 \n ${user?.displayName}`}
-            description="If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything."
+            title={`Welcome back 👋 \n ${UserName}`}
+            description={'Elevate your catering & event decorating business with our wedding manager platform. Streamline operations & showcase your services effortlessly.'}
             img={<SeoIllustration />}
             action={
               <Button variant="contained" color="primary">
