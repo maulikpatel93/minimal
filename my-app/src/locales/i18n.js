@@ -28,7 +28,7 @@ i18n
     },
     lng,
     fallbackLng: 'en',
-    debug: false,
+    debug: true,
     ns: ['translations'],
     defaultNS: 'translations',
     interpolation: {

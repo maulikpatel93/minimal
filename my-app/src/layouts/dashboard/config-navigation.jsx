@@ -52,66 +52,39 @@ const ICONS = {
 export function useNavData() {
   const { t } = useTranslate();
   const isRolePermissions = useSelector((state) => state.rolepermission.isRolePermissions);
-  // const data = useMemo(
-  //   () => [
-  //     // OVERVIEW
-  //     // ----------------------------------------------------------------------
-  //     {
-  //       subheader: t(''),
-  //       items: [
-  //         {
-  //           title: t('dashboard'),
-  //           path: paths.dashboard.root,
-  //           icon: ICONS.dashboard,
-  //         },
-  //       ],
-  //     },
-  //      {
-  //       // subheader: t(''),
-  //       items: [
-  //         // USER
-  //         {
-  //           title: t('Admin Managements'),
-  //           path: paths.dashboard.user.root,
-  //           icon: ICONS.user,
-  //           children: [
-  //             { title: t('Modules'), path: paths.dashboard.user.root },
-  //             { title: t('Sub Modules'), path: paths.dashboard.user.cards },
-  //             { title: t('Role Permission'), path: paths.dashboard.user.list },
-  //           ],
-  //         },
-  //       ]
-  //      },
-  //     ],[t]
-  //   )
+
   const data = useMemo(() => {
     if (!isRolePermissions || !isRolePermissions.modules) return [];
 
     const navItems = [];
 
     isRolePermissions.modules.forEach((module) => {
-        const module_route = !module.module_route && module.sub_modules ? module?.module_title.replace(/\s+/g, "-").toLowerCase() : module.module_route
-        const path = (module.module_route === "dashboard") ? `/${module.module_route}` : `${paths.dashboard.root}/${module_route}`
-        const item = {
-          items: [
-            {
-              title: t(module.module_title),
-              path: path,
-              icon: module.module_icon ? icon(module.module_icon) : null,
-            },
-          ],
-        };
-  
-        if (module.sub_modules && module.module_route != "dashboard") {
-          const sub_module_path = `${paths.dashboard.root}/${module?.module_title.replace(/\s+/g, "-").toLowerCase()}`;
-          item.items[0].children = [];
-          module.sub_modules.forEach((subModule) => {
-            item.items[0].children.push({
-              title: t(subModule.sub_module_title),
-              path: `${sub_module_path}/${subModule.sub_module_route}`,
-            });
+      const module_route = !module.module_route && module.sub_modules ? module?.module_title.replace(/\s+/g, "-").toLowerCase() : module.module_route
+      const path = (module.module_route === "dashboard") ? `/${module.module_route}` : `${paths.dashboard.root}/${module_route}`
+
+      const title = module.module_title.toLowerCase().replace(/ /g, '-')
+
+      const item = {
+        items: [
+          {
+            title: t(`${title}.title`),
+            path: path,
+            icon: module.module_icon ? icon(module.module_icon) : null,
+          },
+        ],
+      };
+
+      if (module.sub_modules && module.module_route != "dashboard") {
+        const sub_module_path = `${paths.dashboard.root}/${module?.module_title.replace(/\s+/g, "-").toLowerCase()}`;
+        item.items[0].children = [];
+        module.sub_modules.forEach((subModule) => {
+          const titleSub = subModule.sub_module_title.toLowerCase().replace(/ /g, '-')
+          item.items[0].children.push({
+            title: t(`${title}.${titleSub}.title`),
+            path: `${sub_module_path}/${subModule.sub_module_route}`,
           });
-        }
+        });
+      }
       navItems.push(item);
     });
     return navItems;

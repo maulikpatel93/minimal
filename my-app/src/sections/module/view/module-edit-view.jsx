@@ -16,7 +16,7 @@ import { useSelector } from 'src/redux/store';
 export default function ModuleEditView({ id }) {
   const settings = useSettingsContext();
   const currentModule = useSelector((state) => state.module.detail);
- 
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

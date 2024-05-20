@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
-import { Dialog, DialogContent, DialogTitle, DialogActions } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, DialogActions, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 
@@ -70,13 +70,35 @@ const TableHeader = (props) => {
   // };
   return (
     <>
-      <TextField
+      <Stack
+        spacing={{ xs: 1, sm: 2 }}
+        direction="row"
+        useFlexGap
+        justifyContent={'start'}
+        flexWrap="wrap"
+      >
+        <TextField
           size="small"
           value={value}
-          sx={{ mr: 6, mb: 2 }}
-          placeholder="Search User"
+          sx={{
+            mt: 2,
+            ml: 2,
+            mr: { xs: 2, sm: 0 }, // Conditionally set mb to 0 on smaller screens (< 768px)
+            mb: { xs: 0, sm: -6 }, // Conditionally set mb to 0 on smaller screens (< 768px)
+            width: { xs: '40%', sm: '40%' },
+            zIndex: '200',
+          }}
+          placeholder="Search Module"
           onChange={(e) => handleFilter(e.target.value)}
         />
+      </Stack>
+      {/* <TextField
+        size="small"
+        value={value}
+        sx={{ mr: 6, mb: 2 }}
+        placeholder="Search User"
+        onChange={(e) => handleFilter(e.target.value)}
+      /> */}
     </>
   );
 };

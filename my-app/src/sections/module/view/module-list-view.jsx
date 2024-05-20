@@ -41,7 +41,7 @@ import { Icon } from '@iconify/react';
 import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, TextField, Typography } from '@mui/material';
-import TableHeader from './TableHeader';
+import TableHeader from './table-header';
 import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
@@ -147,10 +147,10 @@ export default function ModuleListView() {
 
   const handleEditRow = useCallback(
     (id) => {
-      dispatch(ModuleDetailApi({ id: id })).then(action => {
-        if(action.meta.requestStatus === "fulfilled"){
+      dispatch(ModuleDetailApi({ id: id })).then((action) => {
+        if (action.meta.requestStatus === 'fulfilled') {
           router.push(paths.dashboard.roleManagement.module.edit(id));
-        }else if(action.meta.requestStatus === "rejected"){
+        } else if (action.meta.requestStatus === 'rejected') {
           enqueueSnackbar(t('Data not found'));
         }
       });
@@ -158,17 +158,10 @@ export default function ModuleListView() {
     [router]
   );
 
-  const handleViewRow = useCallback(
-    (id) => {
-      router.push(paths.dashboard.roleManagement.module.details(id));
-    },
-    [router]
-  );
-
   const columns = [
     {
       field: 'title',
-      headerName: 'Title',
+      headerName: t('title'),
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -182,7 +175,7 @@ export default function ModuleListView() {
     },
     {
       field: 'route',
-      headerName: 'Route',
+      headerName: t('route'),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -195,7 +188,7 @@ export default function ModuleListView() {
     },
     {
       field: 'icon',
-      headerName: 'Icon',
+      headerName: t('icon'),
       width: 120,
       renderCell: ({ row }) => {
         return (
@@ -207,7 +200,7 @@ export default function ModuleListView() {
     },
     {
       field: 'panel',
-      headerName: 'Panel',
+      headerName: t('panel'),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -220,7 +213,7 @@ export default function ModuleListView() {
     },
     {
       field: 'is_active',
-      headerName: 'Status',
+      headerName: t('status'),
       flex: 1,
       width: 50,
       renderCell: ({ row }) => {
@@ -255,7 +248,7 @@ export default function ModuleListView() {
     {
       type: 'actions',
       field: 'actions',
-      headerName: 'Actions',
+      headerName: t('actions'),
       align: 'right',
       headerAlign: 'right',
       width: 80,
@@ -266,20 +259,14 @@ export default function ModuleListView() {
       getActions: (params) => [
         <GridActionsCellItem
           showInMenu
-          icon={<Iconify icon="solar:eye-bold" />}
-          label="View"
-          onClick={() => console.info('VIEW', params.row.id)}
-        />,
-        <GridActionsCellItem
-          showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
-          label="Edit"
+          label={t('edit')}
           onClick={() => handleEditRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-          label="Delete"
+          label={t('delete')}
           onClick={(e) => {
             const id = [params.row.id];
             setSelectedRowIds(id);
@@ -309,12 +296,12 @@ export default function ModuleListView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
+            { name: t('dashboard'), href: paths.dashboard.root },
             {
-              name: 'Module',
-              // href: paths.dashboard.roleManagement.module.root,
+              name: t('module'),
+              href: paths.dashboard.roleManagement.module.list,
             },
-            { name: 'List' },
+            { name: t('list') },
           ]}
           action={
             <Button
@@ -323,7 +310,7 @@ export default function ModuleListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Module
+              {t('new module')}
             </Button>
           }
           sx={{
@@ -343,28 +330,7 @@ export default function ModuleListView() {
             flexDirection: { md: 'column' },
           }}
         >
-          <Stack
-            spacing={{ xs: 1, sm: 2 }}
-            direction="row"
-            useFlexGap
-            justifyContent={'start'}
-            flexWrap="wrap"
-          >
-            <TextField
-              size="large"
-              value={value}
-              sx={{
-                mt: 2,
-                ml: 2,
-                mr: { xs: 2, sm: 0 }, // Conditionally set mb to 0 on smaller screens (< 768px)
-                mb: { xs: 0, sm: -6 }, // Conditionally set mb to 0 on smaller screens (< 768px)
-                width: { xs: "40%", sm: "40%" },
-                zIndex: '200',
-              }}
-              placeholder="Search Module"
-              onChange={(e) => handleFilter(e.target.value)}
-            />
-          </Stack>
+          <TableHeader handleFilter={handleFilter} value={value} />
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick

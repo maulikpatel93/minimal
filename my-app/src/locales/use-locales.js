@@ -26,12 +26,12 @@ export function useTranslate() {
   const { t, i18n, ready } = useTranslation();
 
   const settings = useSettingsContext();
-  useEffect(() => {
-    i18n.init({
-      debug:true
-    })
-  }, [i18n]);
-  
+  // useEffect(() => {
+  //   i18n.init({
+  //     debug:true
+  //   })
+  // }, [i18n]);
+
 
   const onChangeLang = useCallback(
     (newlang) => {
