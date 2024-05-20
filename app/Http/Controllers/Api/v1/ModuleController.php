@@ -25,55 +25,89 @@ class ModuleController extends Controller
 
         $query = Module::select('*');
 
-        if (!empty($filter) && isset($filter['quickFilterValues'])) {
-            $logicOperator = strtoupper($filter['quickFilterLogicOperator']);
+        // Get filters from the request
+        $filters = $request->input('filters', []);
 
-            // Set the initial logic operator based on the quickFilterLogicOperator value
-            if ($logicOperator === 'AND') {
-                $query->where(function ($query) use ($filter) {
-                    foreach ($filter['quickFilterValues'] as $value) {
-                        $query->where(function ($query) use ($value) {
-                            $query->where('title', 'like', '%' . $value . '%')
-                                ->orWhere('route', 'like', '%' . $value . '%');
-                        });
-                    }
-                });
-            } elseif ($logicOperator === 'OR') {
-                $query->where(function ($query) use ($filter) {
-                    foreach ($filter['quickFilterValues'] as $value) {
-                        $query->orWhere('title', 'like', '%' . $value . '%')
-                            ->orWhere('route', 'like', '%' . $value . '%');
-                    }
-                });
-            }
+        // Apply status filter if provided and not set to 'all'
+        if (isset($filters['status']['value']) && $filters['status']['value'] !== 'all') {
+            $query->where('is_active', $filters['status']['value']);
         }
-        if($qsearch && $whereLike){
-            $query->where(function ($q) use ($whereLike) {
-                if ($whereLike) {
-                    $q->where('title', "like", "%" . $whereLike[0] . "%");
-                    foreach ($whereLike as $k => $v) {
-                        $q->orWhere('title', "like", "%" . $v . "%");
-                        $q->orWhere('route', "like", "%" . $v . "%");
-                    }
-                }
+
+        // Apply name or route filter using a nested orWhere
+        if (!empty($filters['q'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('title', 'like', $filters['q'] . '%')
+                    ->orWhere('route', 'like', $filters['q'] . '%');
             });
         }
-        $model = $query->paginate($limit);
-        $successData = $model ? $model : [];
 
+        // Get filter items from the request
+        $filterItems = $request->input('filter.items', []);
+
+        foreach ($filterItems as $filter) {
+            $field = isset($filter['field']) ? $filter['field'] : null;
+            $operator = isset($filter['operator']) ? $filter['operator'] : null;
+            $value = isset($filter['value']) ? $filter['value'] : null;
+
+            switch ($operator) {
+                case 'contains':
+                    $query->where($field, 'like', '%' . $value . '%');
+                    break;
+
+                case 'equals':
+                    $query->where($field, '=', $value);
+                    break;
+
+                case 'startsWith':
+                    $query->where($field, 'like', $value . '%');
+                    break;
+
+                case 'endsWith':
+                    $query->where($field, 'like', '%' . $value);
+                    break;
+
+                case 'isEmpty':
+                    $query->whereNull($field)->orWhere($field, '');
+                    break;
+
+                case 'isNotEmpty':
+                    $query->whereNotNull($field)->where($field, '!=', '');
+                    break;
+
+                case 'isAnyOf':
+                    $query->whereIn($field, (array) $value);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // Apply sorting
+        $sorts = $request->input('sort', []);
+        foreach ($sorts as $sort) {
+            $field = $sort['field'];
+            $direction = $sort['sort'];
+            $query->orderBy($field, $direction);
+        }
+
+        $model = $query->paginate($limit);
+
+        $successData = $model ? $model : [];
         return response()->json($successData, $this->successStatus);
     }
-    public function moduleDropDownList(){
+    public function moduleDropDownList()
+    {
         $modules = Module::select('id', 'title')->where('is_active', 1)->get();
-        
-        $dropdownList = $modules->map(function($module) {
+
+        $dropdownList = $modules->map(function ($module) {
             return [
                 'value' => $module->id,
                 'label' => $module->title
             ];
         })->toArray();
-    
-        return response()->json($dropdownList,$this->successStatus);
+
+        return response()->json($dropdownList, $this->successStatus);
     }
     public function detail(Request $request, $moduleId)
     {
@@ -99,7 +133,7 @@ class ModuleController extends Controller
         $module->title = $request->title;
         $module->route = $request->route;
         $module->icon = $request->icon;
-        $module->access = $request->access ? implode(",",$request->access) : null;
+        $module->access = $request->access ? implode(",", $request->access) : null;
         $module->is_active = $request->is_active;
         $moduleCount = Module::count();
         $module->position = $moduleCount + 1;
@@ -130,7 +164,7 @@ class ModuleController extends Controller
         $module->title = $request->title;
         $module->route = $request->route;
         $module->icon = $request->icon;
-        $module->access = $request->access ? implode(",",$request->access) : null;
+        $module->access = $request->access ? implode(",", $request->access) : null;
         $module->is_active = $request->is_active;
         $module->is_active_at = $request->is_active_at ? $request->is_active_at : null;
         $module->save();
@@ -150,5 +184,4 @@ class ModuleController extends Controller
         // return response()->json([$moduleIds], $this->successStatus);
         return response()->json(['message' => 'SuccessFully Deleted'], $this->successStatus);
     }
-
 }

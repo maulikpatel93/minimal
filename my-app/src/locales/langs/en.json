@@ -1,5 +1,22 @@
 {
   "app": "app",
+  "search": "Search...",
+  "status": "Status",
+  "print": "Print",
+  "import": "Import",
+  "export": "Export",
+  "results-found": "Results found",
+  "error-messages": {
+    "no-data": "No data",
+    "no-results-found": "No results found",
+    "no-data-record": "No data record",
+    "error": "Something went wrong"
+  },
+  "success-messages": {
+    "deleted": "Deleted successfully",
+    "created": "Created successfully",
+    "updated": "Updated successfully"
+  },
   "dashboard": {
     "title": "Dashboard"
   },
@@ -7,6 +24,7 @@
     "title": "Role Management",
     "modules": {
       "title": "Modules",
+      "list": "List",
       "columns": {
         "title": "Title",
         "route": "Route",
@@ -14,10 +32,22 @@
         "panel": "Panel",
         "status": "Status",
         "actions": "Actions"
+      },
+      "button": {
+        "new": "New Module",
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View",
+        "create": "Create Module",
+        "update": "Save Changes"
+      },
+      "messages": {
+        "delete-confirmation": "Are you sure you want to delete <strong>{{count}}</strong> items?"
       }
     },
     "sub-modules": {
       "title": "Sub Modules",
+      "list": "List",
       "columns": {
         "title": "Title",
         "route": "Route",
@@ -29,6 +59,19 @@
     },
     "tabs": {
       "title": "Tabs",
+      "list": "List",
+      "columns": {
+        "title": "Title",
+        "route": "Route",
+        "icon": "Icon",
+        "panel": "Panel",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "role-permissions": {
+      "title": "Role permissions",
+      "list": "List",
       "columns": {
         "title": "Title",
         "route": "Route",

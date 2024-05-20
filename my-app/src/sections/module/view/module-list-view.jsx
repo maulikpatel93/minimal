@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
@@ -7,13 +6,11 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import {
   DataGrid,
-  GridToolbarExport,
   GridActionsCellItem,
   GridToolbarContainer,
-  GridToolbarQuickFilter,
-  GridToolbarFilterButton,
   GridToolbarColumnsButton,
   GridToolbarDensitySelector,
+  GridToolbarFilterButton,
 } from '@mui/x-data-grid';
 
 import { paths } from 'src/routes/paths';
@@ -29,8 +26,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { Icon } from '@iconify/react';
-// import ModuleTableToolbar from '../module-table-toolbar';
-// import ModuleTableFiltersResult from '../module-table-filters-result';
+import ModuleTableToolbar from '../module-table-toolbar';
+import ModuleTableFiltersResult from '../module-table-filters-result';
 // import {
 //   RenderCellStock,
 //   RenderCellPrice,
@@ -40,20 +37,28 @@ import { Icon } from '@iconify/react';
 // } from '../module-table-row';
 import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, Tab, Tabs, TextField, Typography, alpha } from '@mui/material';
 import TableHeader from './table-header';
 import { useTranslation } from 'react-i18next';
+import { isEqual } from 'lodash';
+import { RenderCellCreatedAt, RenderCellStatus } from '../module-table-row';
 
 // ----------------------------------------------------------------------
 
-const PUBLISH_OPTIONS = [
-  { value: 'published', label: 'Published' },
-  { value: 'draft', label: 'Draft' },
+const STATUS_OPTIONS = [
+  { value: "all", label: 'All' },
+  { value: 1, label: 'Active' },
+  { value: 0, label: 'InActive' },
+];
+
+const STATUS_OPTIONS_INLINE = [
+  { value: 1, label: 'Active' },
+  { value: 0, label: 'InActive' },
 ];
 
 const defaultFilters = {
-  publish: [],
-  stock: [],
+  q: '',
+  status: { value: "all", label: 'All' },
 };
 
 const HIDE_COLUMNS = {
@@ -70,17 +75,18 @@ export default function ModuleListView() {
   const router = useRouter();
 
   const settings = useSettingsContext();
+
   const { t } = useTranslation();
 
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
-  const [value, setValue] = useState('');
-  const [status, setStatus] = useState('');
-  const [pageSize, setPageSize] = useState(10);
-  const [page, setPage] = useState(0);
+
+  // const [status, setStatus] = useState('');
+  const [pageSize, setPageSize] = useState(1);
+  const [page, setPage] = useState(1);
   const [selectedRowIds, setSelectedRowIds] = useState([]);
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
-  const [addUserOpen, setAddUserOpen] = useState(false);
+  const [filters, setFilters] = useState(defaultFilters);
 
   const dispatch = useDispatch();
   const moduleList = useSelector((state) => state.module.list);
@@ -91,59 +97,29 @@ export default function ModuleListView() {
   useEffect(() => {
     dispatch(
       ModuleListApi({
-        q: value,
         limit: pageSize,
-        page: page + 1,
+        page: page,
         sort: sort,
         filter: filter,
+        filters: filters,
       })
     );
-  }, [dispatch, value, pageSize, page, sort, filter]);
+  }, [dispatch, pageSize, page, sort, filters, filter]);
 
-  const handleFilter = useCallback((val) => {
-    setValue(val);
+
+  const canReset = !isEqual(defaultFilters, filters);
+
+  const handleFilters = useCallback((name, value) => {
+    setPage(1)
+    setFilters((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   }, []);
 
-  const handleStatusChange = useCallback((e) => {
-    setStatus(e.target.value);
+  const handleResetFilters = useCallback(() => {
+    setFilters(defaultFilters);
   }, []);
-
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen);
-
-  // useEffect(() => {
-  //   if (modules.length) {
-  //     setTableData(modules);
-  //   }
-  // }, [modules]);
-
-  // const dataFiltered = applyFilter({
-  //   inputData: tableData,
-  //   filters,
-  // });
-
-  // const canReset = !isEqual(defaultFilters, filters);
-
-  // const handleFilters = useCallback((name, value) => {
-  //   setFilters((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  // }, []);
-
-  // const handleResetFilters = useCallback(() => {
-  //   setFilters(defaultFilters);
-  // }, []);
-
-  // const handleDeleteRow = useCallback(
-  //   (id) => {
-  //     const deleteRow = tableData.filter((row) => row.id !== id);
-
-  //     enqueueSnackbar('Delete success!');
-
-  //     setTableData(deleteRow);
-  //   },
-  //   [enqueueSnackbar, tableData]
-  // );
 
   const handleEditRow = useCallback(
     (id) => {
@@ -151,7 +127,7 @@ export default function ModuleListView() {
         if (action.meta.requestStatus === 'fulfilled') {
           router.push(paths.dashboard.roleManagement.module.edit(id));
         } else if (action.meta.requestStatus === 'rejected') {
-          enqueueSnackbar(t('Data not found'));
+          enqueueSnackbar(t(`error-messages.no-data-record`));
         }
       });
     },
@@ -161,7 +137,7 @@ export default function ModuleListView() {
   const columns = [
     {
       field: 'title',
-      headerName: t('title'),
+      headerName: t(`role-management.modules.columns.title`),
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -175,7 +151,7 @@ export default function ModuleListView() {
     },
     {
       field: 'route',
-      headerName: t('route'),
+      headerName: t(`role-management.modules.columns.route`),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -188,7 +164,7 @@ export default function ModuleListView() {
     },
     {
       field: 'icon',
-      headerName: t('icon'),
+      headerName: t(`role-management.modules.columns.icon`),
       width: 120,
       renderCell: ({ row }) => {
         return (
@@ -200,7 +176,7 @@ export default function ModuleListView() {
     },
     {
       field: 'panel',
-      headerName: t('panel'),
+      headerName: t(`role-management.modules.columns.panel`),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -213,42 +189,29 @@ export default function ModuleListView() {
     },
     {
       field: 'is_active',
-      headerName: t('status'),
+      headerName: t(`role-management.modules.columns.status`),
       flex: 1,
       width: 50,
-      renderCell: ({ row }) => {
-        // return row.is_active;
-        return (
-          <>
-            {row.is_active === 1 ? (
-              <Icon icon="bi:check-circle-fill" style={{ color: '#198754' }} />
-            ) : (
-              <Icon icon="bi:x-circle-fill" style={{ color: '#dc3545' }} />
-            )}
-          </>
-        );
-        // return (
-        //     <CustomChip
-        //         skin="light"
-        //         size="small"
-        //         label={row.is_active == 1 ? "Active" : "Inactive"}
-        //         color={
-        //             listStatusObj[
-        //             row.is_active == 1 ? "active" : "inactive"
-        //             ]
-        //         }
-        //         sx={{
-        //             textTransform: "capitalize",
-        //             "& .MuiChip-label": { lineHeight: "18px" },
-        //         }}
-        //     />
-        // );
+      sortable: false,
+      filterable: false,
+      type: 'singleSelect',
+      editable: true,
+      valueOptions: STATUS_OPTIONS_INLINE,
+      onchange: (e) => {
+        console.log('eddd', e);
       },
+      renderCell: (params) => <RenderCellStatus params={params} />,
+    },
+    {
+      field: 'created_at',
+      headerName: 'Create at',
+      width: 160,
+      renderCell: (params) => <RenderCellCreatedAt params={params} />,
     },
     {
       type: 'actions',
       field: 'actions',
-      headerName: t('actions'),
+      headerName: t(`role-management.modules.columns.actions`),
       align: 'right',
       headerAlign: 'right',
       width: 80,
@@ -260,13 +223,13 @@ export default function ModuleListView() {
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:pen-bold" />}
-          label={t('edit')}
+          label={t(`role-management.modules.button.edit`)}
           onClick={() => handleEditRow(params.row.id)}
         />,
         <GridActionsCellItem
           showInMenu
           icon={<Iconify icon="solar:trash-bin-trash-bold" />}
-          label={t('delete')}
+          label={t(`role-management.modules.button.delete`)}
           onClick={(e) => {
             const id = [params.row.id];
             setSelectedRowIds(id);
@@ -283,6 +246,7 @@ export default function ModuleListView() {
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
+  console.log(filters);
   return (
     <>
       <Container
@@ -294,14 +258,14 @@ export default function ModuleListView() {
         }}
       >
         <CustomBreadcrumbs
-          heading="List"
+          heading={t(`role-management.modules.list`)}
           links={[
-            { name: t('dashboard'), href: paths.dashboard.root },
+            { name: t(`dashboard.title`), href: paths.dashboard.root },
             {
-              name: t('module'),
+              name: t(`role-management.modules.title`),
               href: paths.dashboard.roleManagement.module.list,
             },
-            { name: t('list') },
+            { name: t(`role-management.modules.list`) },
           ]}
           action={
             <Button
@@ -310,7 +274,7 @@ export default function ModuleListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              {t('new module')}
+              {t(`role-management.modules.button.new`)}
             </Button>
           }
           sx={{
@@ -330,7 +294,22 @@ export default function ModuleListView() {
             flexDirection: { md: 'column' },
           }}
         >
-          <TableHeader handleFilter={handleFilter} value={value} />
+          <ModuleTableToolbar
+            filters={filters}
+            onFilters={handleFilters}
+            statusOptions={STATUS_OPTIONS}
+          />
+          {canReset && (
+            <ModuleTableFiltersResult
+              filters={filters}
+              onFilters={handleFilters}
+              //
+              onResetFilters={handleResetFilters}
+              //
+              // results={dataFiltered.length}
+              sx={{ p: 2.5, pt: 0 }}
+            />
+          )}
           <DataGrid
             checkboxSelection
             disableRowSelectionOnClick
@@ -339,7 +318,8 @@ export default function ModuleListView() {
             loading={loadingList}
             columnVisibilityModel={columnVisibilityModel}
             onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-            getRowHeight={() => '150'}
+            // getRowHeight={() => '150'}
+            autoHeight
             filterMode="server"
             filterDebounceMs={150}
             sortingMode="server"
@@ -354,7 +334,7 @@ export default function ModuleListView() {
             }}
             rowSelectionModel={selectedRowIds}
             onPaginationModelChange={(newPageSize) => {
-              const cNewPage = newPageSize.page;
+              const cNewPage = newPageSize.page + 1;
               const cPageSize = newPageSize.pageSize;
               setPageSize(cPageSize);
               setPage(cNewPage);
@@ -366,16 +346,14 @@ export default function ModuleListView() {
               setSort(newOnSortModelChange);
             }}
             onFilterModelChange={(newOnFilterModelChange) => {
+              setPage(1);
               setFilter(newOnFilterModelChange);
             }}
             slots={{
               toolbar: () => (
                 <>
                   <GridToolbarContainer mt="0">
-                    {/* <GridToolbarQuickFilter debounceMs={150} /> */}
-
                     <Box sx={{ flexGrow: 1 }} />
-
                     <Stack
                       spacing={1}
                       flexGrow={1}
@@ -390,24 +368,22 @@ export default function ModuleListView() {
                           startIcon={<Iconify icon="solar:trash-bin-trash-bold" />}
                           onClick={confirmRows.onTrue}
                         >
-                          Delete ({selectedRowIds.length})
+                          {t(`role-management.modules.button.delete`)} ({selectedRowIds.length})
                         </Button>
                       )}
-
                       <GridToolbarColumnsButton />
-                      {/* <GridToolbarFilterButton /> */}
                       <GridToolbarDensitySelector />
-                      <GridToolbarExport />
+                      <GridToolbarFilterButton />
                     </Stack>
                   </GridToolbarContainer>
                 </>
               ),
-              noRowsOverlay: () => <EmptyContent title="No Data" />,
-              noResultsOverlay: () => <EmptyContent title="No results found" />,
+              noRowsOverlay: () => <EmptyContent title={t(`error-messages.no-data`)} />,
+              noResultsOverlay: () => <EmptyContent title={t(`error-messages.no-results-found`)} />,
             }}
             slotProps={{
               toolbar: {
-                showQuickFilter: true,
+                showQuickFilter: false,
               },
               columnsPanel: {
                 getTogglableColumns,
@@ -420,10 +396,10 @@ export default function ModuleListView() {
       <ConfirmDialog
         open={confirmRows.value}
         onClose={confirmRows.onFalse}
-        title="Delete"
+        title={t(`role-management.modules.button.delete`)}
         content={
           <>
-            Are you sure want to delete <strong> {selectedRowIds.length} </strong> items?
+            <p dangerouslySetInnerHTML={{ __html: t(`role-management.modules.messages.delete-confirmation`, { count: selectedRowIds.length }) }} />
           </>
         }
         action={
@@ -435,31 +411,28 @@ export default function ModuleListView() {
                 if (action.meta.requestStatus === 'fulfilled') {
                   dispatch(
                     ModuleListApi({
-                      q: value,
                       limit: pageSize,
-                      page: page,
-                      sort: sort,
-                      filter: filter,
+                      page: 1
                     })
                   ).then(() => {
                     const message =
                       action.payload && action.payload.data && action.payload.data.message
                         ? action.payload.data.message
                         : '';
-                    enqueueSnackbar(message || 'Successfully deleted');
+                    enqueueSnackbar(message || t(`success-messages.deleted`));
                   });
                 } else if (action.meta.requestStatus === 'rejected') {
                   const message =
                     action.payload && action.payload.data && action.payload.data.message
                       ? action.payload.data.message
                       : '';
-                  enqueueSnackbar(message || 'Something went wrong', { variant: 'error' });
+                  enqueueSnackbar(message || t(`error-messages.error`), { variant: 'error' });
                 }
               });
               confirmRows.onFalse();
             }}
           >
-            Delete
+            {t(`role-management.modules.button.delete`)}
           </Button>
         }
       />

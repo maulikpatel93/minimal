@@ -1,106 +1,106 @@
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
-
-import Select from '@mui/material/Select';
+import { useCallback } from 'react';
+// @mui
+import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
+
+import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
+import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
-
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+// components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { Checkbox } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleTableToolbar({
-  filters,
-  onFilters,
-  //
-  stockOptions,
-  publishOptions,
-}) {
+export default function ModuleTableToolbar({ filters, onFilters, statusOptions }) {
   const popover = usePopover();
 
-  const [stock, setStock] = useState(filters.stock);
+  const { t } = useTranslation();
 
-  const [publish, setPublish] = useState(filters.publish);
+  const handleFilterName = useCallback(
+    (event) => {
+      onFilters('q', event.target.value);
+    },
+    [onFilters]
+  );
 
-  const handleChangeStock = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setStock(typeof value === 'string' ? value.split(',') : value);
-  }, []);
-
-  const handleChangePublish = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setPublish(typeof value === 'string' ? value.split(',') : value);
-  }, []);
-
-  const handleCloseStock = useCallback(() => {
-    onFilters('stock', stock);
-  }, [onFilters, stock]);
-
-  const handleClosePublish = useCallback(() => {
-    onFilters('publish', publish);
-  }, [onFilters, publish]);
-
+  const handleFilterStatus = useCallback(
+    (event) => {
+      const selectedOption = event.target.value;
+      onFilters('status', selectedOption);
+    },
+    [onFilters]
+  );
   return (
     <>
-      <FormControl
+      <Stack
+        spacing={2}
+        alignItems={{ xs: 'flex-end', md: 'center' }}
+        direction={{
+          xs: 'column',
+          md: 'row',
+        }}
         sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
+          p: 2.5,
+          pr: { xs: 2.5, md: 1 },
         }}
       >
-        <InputLabel>Stock</InputLabel>
-
-        <Select
-          multiple
-          value={stock}
-          onChange={handleChangeStock}
-          input={<OutlinedInput label="Stock" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          onClose={handleCloseStock}
-          sx={{ textTransform: 'capitalize' }}
+        <FormControl
+          sx={{
+            flexShrink: 0,
+            width: { xs: 1, md: 200 },
+          }}
         >
-          {stockOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Checkbox disableRipple size="small" checked={stock.includes(option.value)} />
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <InputLabel>{t(`status`)}</InputLabel>
 
-      <FormControl
-        sx={{
-          flexShrink: 0,
-          width: { xs: 1, md: 200 },
-        }}
-      >
-        <InputLabel>Publish</InputLabel>
+          <Select
+            value={filters.status}
+            onChange={handleFilterStatus}
+            input={<OutlinedInput label="Status" />}
+            renderValue={(selected) => {
+              const option = statusOptions.find(opt => opt.value === selected.value);
+              return option ? option.label : '';
+            }}
+            MenuProps={{
+              PaperProps: {
+                sx: { maxHeight: 240 },
+              },
+            }}
+          >
+            {statusOptions.map((option) => (
+              <MenuItem key={option.value} value={option}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+          <TextField
+            fullWidth
+            value={filters.q}
+            onChange={handleFilterName}
+            placeholder={t(`search`)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-        <Select
-          multiple
-          value={publish}
-          onChange={handleChangePublish}
-          input={<OutlinedInput label="Publish" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          onClose={handleClosePublish}
-          sx={{ textTransform: 'capitalize' }}
-        >
-          {publishOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              <Checkbox disableRipple size="small" checked={publish.includes(option.value)} />
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <IconButton onClick={popover.onOpen}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </Stack>
+      </Stack>
 
       <CustomPopover
         open={popover.open}
@@ -114,7 +114,7 @@ export default function ModuleTableToolbar({
           }}
         >
           <Iconify icon="solar:printer-minimalistic-bold" />
-          Print
+          {t(`print`)}
         </MenuItem>
 
         <MenuItem
@@ -123,7 +123,7 @@ export default function ModuleTableToolbar({
           }}
         >
           <Iconify icon="solar:import-bold" />
-          Import
+          {t(`import`)}
         </MenuItem>
 
         <MenuItem
@@ -132,7 +132,7 @@ export default function ModuleTableToolbar({
           }}
         >
           <Iconify icon="solar:export-bold" />
-          Export
+          {t(`export`)}
         </MenuItem>
       </CustomPopover>
     </>
@@ -142,6 +142,5 @@ export default function ModuleTableToolbar({
 ModuleTableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
-  publishOptions: PropTypes.array,
-  stockOptions: PropTypes.array,
+  statusOptions: PropTypes.array,
 };
