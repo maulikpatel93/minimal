@@ -197,9 +197,6 @@ export default function ModuleListView() {
       type: 'singleSelect',
       editable: true,
       valueOptions: STATUS_OPTIONS_INLINE,
-      onchange: (e) => {
-        console.log('eddd', e);
-      },
       renderCell: (params) => <RenderCellStatus params={params} />,
     },
     {
