@@ -17,7 +17,7 @@ class Tab extends Model
 
     public function submodule()
     {
-        return $this->belongsTo(Submodule::class)->where('is_active', 1);
+        return $this->belongsTo(SubModule::class)->where('is_active', 1);
     }
 
     public function rolePermissions()

@@ -75,6 +75,12 @@ export const paths = {
         list: `${ROOTS.DASHBOARD}/role-management/submodule/list`,
         edit: (id) => `${ROOTS.DASHBOARD}/role-management/submodule/${id}/edit`,
       },
+      tab: {
+        root: `${ROOTS.DASHBOARD}/role-management/tab`,
+        new: `${ROOTS.DASHBOARD}/role-management/tab/new`,
+        list: `${ROOTS.DASHBOARD}/role-management/tab/list`,
+        edit: (id) => `${ROOTS.DASHBOARD}/role-management/tab/${id}/edit`,
+      },
       rolepermission: {
         root: `${ROOTS.DASHBOARD}/role-management/role-permission`,
         new: `${ROOTS.DASHBOARD}/role-management/role-permission/new`,

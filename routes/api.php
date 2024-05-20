@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\v1\GuestController;
 use App\Http\Controllers\Api\v1\ModuleController;
 use App\Http\Controllers\Api\v1\RolePermissionController;
 use App\Http\Controllers\Api\v1\SubModuleController;
+use App\Http\Controllers\Api\v1\TabController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -89,6 +90,15 @@ Route::prefix('v1')->group(function () {
             Route::get('/detail/{id}', 'detail');
             //Role Dropdown all in 1 to get module:[],submodule:[],tab:[],role:[];
             Route::get('/dropdown/list', 'multiDropDown');
+        });
+        Route::controller(TabController::class)->prefix('tab')->name('tab.')->group(function () {
+            Route::get('/list', 'list');
+            Route::post('/create', 'create');
+            Route::put('/update/{id}', 'update');
+            Route::delete('/delete', 'delete');
+            Route::get('/detail/{id}', 'detail');
+            //Role Dropdown all in 1 to get module:[],submodule:[],tab:[],role:[];
+            // Route::get('/dropdown/list', 'multiDropDown');
         });
     });
 });

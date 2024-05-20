@@ -21,6 +21,10 @@ const ModuleEditPage = lazy(() => import('src/pages/dashboard/role-management/mo
 const SubModuleListPage = lazy(() => import('src/pages/dashboard/role-management/submodule/list'));
 const SubModuleCreatePage = lazy(() => import('src/pages/dashboard/role-management/submodule/new'));
 const SubModuleEditPage = lazy(() => import('src/pages/dashboard/role-management/submodule/edit'));
+//Tab
+const TabListPage = lazy(() => import('src/pages/dashboard/role-management/tab/list'));
+const TabCreatePage = lazy(() => import('src/pages/dashboard/role-management/tab/new'));
+const TabEditPage = lazy(() => import('src/pages/dashboard/role-management/tab/edit'));
 //rolepermission
 const RolePermissionListPage = lazy(() => import('src/pages/dashboard/role-management/rolepermission/list'));
 const RolePermissionCreatePage = lazy(() => import('src/pages/dashboard/role-management/rolepermission/new'));
@@ -64,6 +68,14 @@ export const dashboardRoutes = [
               { path: 'list', element: <SubModuleListPage /> },
               { path: 'new', element: <SubModuleCreatePage /> },
               { path: ':id/edit', element: <SubModuleEditPage /> },
+            ],
+          },
+          {
+            path: 'tab',
+            children: [
+              { path: 'list', element: <TabListPage /> },
+              { path: 'new', element: <TabCreatePage /> },
+              { path: ':id/edit', element: <TabEditPage /> },
             ],
           },
           {

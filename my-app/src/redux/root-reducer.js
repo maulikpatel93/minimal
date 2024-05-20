@@ -10,6 +10,7 @@ import commonReducer from './slices/commonSlice';
 import rolePermissionReducer from './slices/rolePermissionSlice';
 import moduleReducer from './slices/moduleSlice';
 import subModuleReducer from './slices/subModuleSlice';
+import tabReducer from './slices/tabSlice';
 
 // // ----------------------------------------------------------------------
 
@@ -54,6 +55,11 @@ const persistConfigs = [
     storage,
     keyPrefix: 'eventmanage-',
   },
+  {
+    key: 'tab',
+    storage,
+    keyPrefix: 'eventmanage-',
+  },
   // Add more persist configurations as needed...
 ];
 
@@ -67,6 +73,7 @@ const reducers = {
   rolepermission:rolePermissionReducer,
   module:moduleReducer,
   submodule:subModuleReducer,
+  tab:tabReducer,
 };
 
 // Combine all reducers into a single reducer
