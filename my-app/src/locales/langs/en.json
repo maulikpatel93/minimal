@@ -25,6 +25,26 @@
     "modules": {
       "title": "Modules",
       "list": "List",
+      "create" :{
+        "Create a new module": "Create a new module",
+        "Dashboard": "Dashboard",
+        "Module": "Module",
+        "Create": "Create",
+        "title is required": "Title is required",
+        "panel is required": "Panel is required",
+        "Must have at least 1 access": "Must have at least 1 access",
+        "Title": "Title",
+        "Icon": "Icon",
+        "Route": "Route",
+        "Panel": "Panel",
+        "Backend": "Backend",
+        "Frontend": "Frontend",
+        "Common": "Common",
+        "Access": "Access",
+        "+ Access": "+ Access",
+        "Is Active": "Is Active",
+        "Create Module": "Create Module"
+      },
       "columns": {
         "title": "Title",
         "route": "Route",
@@ -45,7 +65,7 @@
         "delete-confirmation": "Are you sure you want to delete <strong>{{count}}</strong> items?"
       }
     },
-    "sub-modules": {
+    "submodules": {
       "title": "Sub Modules",
       "list": "List",
       "columns": {
@@ -57,7 +77,7 @@
         "actions": "Actions"
       }
     },
-    "tabs": {
+    "tab": {
       "title": "Tabs",
       "list": "List",
       "columns": {

@@ -1,0 +1,86 @@
+{
+    "app": "એપ્લિકેશન",
+    "search": "શોધો...",
+    "status": "સ્થિતિ",
+    "print": "છાપો",
+    "import": "આયાત",
+    "export": "નિકાસ",
+    "results-found": "પરિણામો મળ્યા",
+    "error-messages": {
+      "no-data": "ડેટા નથી",
+      "no-results-found": "કોઈ પરિણામો મળ્યા નથી",
+      "no-data-record": "કોઈ ડેટા રેકોર્ડ નથી",
+      "error": "કાંઈક ખોટું થયું"
+    },
+    "success-messages": {
+      "deleted": "સફળતાપૂર્વક કાઢી નાખ્યું",
+      "created": "સફળતાપૂર્વક બનાવ્યું",
+      "updated": "સફળતાપૂર્વક અપડેટ કર્યું"
+    },
+    "dashboard": {
+      "title": "ડેશબોર્ડ"
+    },
+    "role-management": {
+      "title": "ભૂમિકા વ્યવસ્થાપન",
+      "modules": {
+        "title": "મોડ્યુલ્સ",
+        "list": "યાદી",
+        "columns": {
+          "title": "શીર્ષક",
+          "route": "માર્ગ",
+          "icon": "આઇકન",
+          "panel": "પેનલ",
+          "status": "સ્થિતિ",
+          "actions": "ક્રિયાઓ"
+        },
+        "button": {
+          "new": "નવું મોડ્યુલ",
+          "edit": "સંપાદિત કરો",
+          "delete": "કાઢી નાખો",
+          "view": "જુઓ",
+          "create": "મોડ્યુલ બનાવો",
+          "update": "ફેરફાર સંગ્રહો"
+        },
+        "messages": {
+          "delete-confirmation": "શું તમે ખરેખર <strong>{{count}}</strong> વસ્તુઓ કાઢી નાખવા માંગો છો?"
+        }
+      },
+      "submodules": {
+        "title": "ઉપમોડ્યુલ્સ",
+        "list": "યાદી",
+        "columns": {
+          "title": "શીર્ષક",
+          "route": "માર્ગ",
+          "icon": "આઇકન",
+          "panel": "પેનલ",
+          "status": "સ્થિતિ",
+          "actions": "ક્રિયાઓ"
+        }
+      },
+      "tab": {
+        "title": "ટૅબ્સ",
+        "list": "યાદી",
+        "columns": {
+          "title": "શીર્ષક",
+          "route": "માર્ગ",
+          "icon": "આઇકન",
+          "panel": "પેનલ",
+          "status": "સ્થિતિ",
+          "actions": "ક્રિયાઓ"
+        }
+      },
+      "role-permissions": {
+        "title": "ભૂમિકા પરવાનગીઓ",
+        "list": "યાદી",
+        "columns": {
+          "title": "શીર્ષક",
+          "route": "માર્ગ",
+          "icon": "આઇકન",
+          "panel": "પેનલ",
+          "status": "સ્થિતિ",
+          "actions": "ક્રિયાઓ"
+        }
+      }
+    }
+  }
+  

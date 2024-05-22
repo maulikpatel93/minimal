@@ -1,0 +1,86 @@
+{
+    "app": "ऐप",
+    "search": "खोजें...",
+    "status": "स्थिति",
+    "print": "प्रिंट",
+    "import": "आयात",
+    "export": "निर्यात",
+    "results-found": "परिणाम मिले",
+    "error-messages": {
+      "no-data": "कोई डेटा नहीं",
+      "no-results-found": "कोई परिणाम नहीं मिला",
+      "no-data-record": "कोई डेटा रिकॉर्ड नहीं",
+      "error": "कुछ गलत हो गया"
+    },
+    "success-messages": {
+      "deleted": "सफलतापूर्वक हटाया गया",
+      "created": "सफलतापूर्वक बनाया गया",
+      "updated": "सफलतापूर्वक अपडेट किया गया"
+    },
+    "dashboard": {
+      "title": "डैशबोर्ड"
+    },
+    "role-management": {
+      "title": "भूमिका प्रबंधन",
+      "modules": {
+        "title": "मॉड्यूल",
+        "list": "सूची",
+        "columns": {
+          "title": "शीर्षक",
+          "route": "मार्ग",
+          "icon": "आइकन",
+          "panel": "पैनल",
+          "status": "स्थिति",
+          "actions": "क्रियाएँ"
+        },
+        "button": {
+          "new": "नया मॉड्यूल",
+          "edit": "संपादित करें",
+          "delete": "हटाएं",
+          "view": "देखें",
+          "create": "मॉड्यूल बनाएं",
+          "update": "परिवर्तन सहेजें"
+        },
+        "messages": {
+          "delete-confirmation": "क्या आप वाकई <strong>{{count}}</strong> वस्तुओं को हटाना चाहते हैं?"
+        }
+      },
+      "submodules": {
+        "title": "उप मॉड्यूल",
+        "list": "सूची",
+        "columns": {
+          "title": "शीर्षक",
+          "route": "मार्ग",
+          "icon": "आइकन",
+          "panel": "पैनल",
+          "status": "स्थिति",
+          "actions": "क्रियाएँ"
+        }
+      },
+      "tab": {
+        "title": "टैब",
+        "list": "सूची",
+        "columns": {
+          "title": "शीर्षक",
+          "route": "मार्ग",
+          "icon": "आइकन",
+          "panel": "पैनल",
+          "status": "स्थिति",
+          "actions": "क्रियाएँ"
+        }
+      },
+      "role-permissions": {
+        "title": "भूमिका अनुमतियाँ",
+        "list": "सूची",
+        "columns": {
+          "title": "शीर्षक",
+          "route": "मार्ग",
+          "icon": "आइकन",
+          "panel": "पैनल",
+          "status": "स्थिति",
+          "actions": "क्रियाएँ"
+        }
+      }
+    }
+  }
+  

@@ -1,54 +1,105 @@
 {
   "app": "application",
-  "job": "emploi",
-  "user": "utilisateur",
-  "list": "liste",
-  "edit": "modifier",
-  "shop": "boutique",
-  "blog": "blog",
-  "post": "article",
-  "mail": "courrier",
-  "chat": "discussion",
-  "file": "fichier",
-  "tour": "visite",
-  "cards": "cartes",
-  "blank": "vide",
-  "order": "commande",
-  "lists": "listes",
-  "create": "créer",
-  "kanban": "tableau",
-  "general": "général",
-  "banking": "bancaire",
-  "booking": "réservation",
-  "profile": "profil",
-  "account": "compte",
-  "product": "produit",
-  "invoice": "facture",
-  "details": "détails",
-  "checkout": "paiement",
-  "calendar": "calendrier",
-  "overview": "aperçu",
-  "analytics": "analytics",
-  "ecommerce": "e-commerce",
-  "management": "gestion",
-  "menu_level": "niveau de menu",
-  "item_label": "étiquette de l'élément",
-  "description": "description",
-  "other_cases": "autres cas",
-  "item_caption": "légende de l'élément",
-  "file_manager": "Gestionnaire de fichiers",
-  "menu_level_1a": "niveau de menu 1a",
-  "menu_level_1b": "niveau de menu 1b",
-  "menu_level_2a": "niveau de menu 2a",
-  "menu_level_2b": "niveau de menu 2b",
-  "menu_level_3a": "niveau de menu 3a",
-  "menu_level_3b": "niveau de menu 4b",
-  "item_disabled": "élément désactivé",
-  "item_by_roles": "élément par rôles",
-  "item_external_link": "lien externe de l'élément",
-  "only_admin_can_see_this_item": "Seul l'administrateur peut voir cet élément",
-  "upgrade_to_pro": "Passer à la version Pro",
-  "demo": {
-    "title": "France"
+  "search": "Rechercher...",
+  "status": "Statut",
+  "print": "Imprimer",
+  "import": "Importer",
+  "export": "Exporter",
+  "results-found": "Résultats trouvés",
+  "error-messages": {
+    "no-data": "Aucune donnée",
+    "no-results-found": "Aucun résultat trouvé",
+    "no-data-record": "Aucun enregistrement trouvé",
+    "error": "Quelque chose s'est mal passé"
+  },
+  "success-messages": {
+    "deleted": "Supprimé avec succès",
+    "created": "Créé avec succès",
+    "updated": "Mis à jour avec succès"
+  },
+  "dashboard": {
+    "title": "Tableau de bord"
+  },
+  "role-management": {
+    "title": "Gestion des rôles",
+    "modules": {
+      "title": "Modules",
+      "list": "Liste",
+      "create": {
+        "Create a new module": "Créer un nouveau module",
+        "Dashboard": "Tableau de bord",
+        "Module": "Module",
+        "Create": "Créer",
+        "title is required": "Le titre est requis",
+        "panel is required": "Le panneau est requis",
+        "Must have at least 1 access": "Doit avoir au moins 1 accès",
+        "Title": "Titre",
+        "Icon": "Icône",
+        "Route": "Route",
+        "Panel": "Panneau",
+        "Backend": "Backend",
+        "Frontend": "Frontend",
+        "Common": "Commun",
+        "Access": "Accès",
+        "+ Access": "+ Accès",
+        "Is Active": "Est actif",
+        "Create Module": "Créer un module"
+      },
+      "columns": {
+        "title": "Titre",
+        "route": "Route",
+        "icon": "Icône",
+        "panel": "Panneau",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "button": {
+        "new": "Nouveau module",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "view": "Vue",
+        "create": "Créer un module",
+        "update": "Enregistrer les modifications"
+      },
+      "messages": {
+        "delete-confirmation": "Êtes-vous sûr de vouloir supprimer <strong>{{count}}</strong> éléments ?"
+      }
+    },
+    "submodules": {
+      "title": "Sous-modules",
+      "list": "Liste",
+      "columns": {
+        "title": "Titre",
+        "route": "Route",
+        "icon": "Icône",
+        "panel": "Panneau",
+        "status": "Statut",
+        "actions": "Actions"
+      }
+    },
+    "tab": {
+      "title": "Onglets",
+      "list": "Liste",
+      "columns": {
+        "title": "Titre",
+        "route": "Route",
+        "icon": "Icône",
+        "panel": "Panneau",
+        "status": "Statut",
+        "actions": "Actions"
+      }
+    },
+    "role-permissions": {
+      "title": "Permissions des rôles",
+      "list": "Liste",
+      "columns": {
+        "title": "Titre",
+        "route": "Route",
+        "icon": "Icône",
+        "panel": "Panneau",
+        "status": "Statut",
+        "actions": "Actions"
+      }
+    }
   }
 }

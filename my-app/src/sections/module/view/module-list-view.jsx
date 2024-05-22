@@ -28,13 +28,6 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { Icon } from '@iconify/react';
 import ModuleTableToolbar from '../module-table-toolbar';
 import ModuleTableFiltersResult from '../module-table-filters-result';
-// import {
-//   RenderCellStock,
-//   RenderCellPrice,
-//   RenderCellPublish,
-//   RenderCellModule,
-//   RenderCellCreatedAt,
-// } from '../module-table-row';
 import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Tab, Tabs, TextField, Typography, alpha } from '@mui/material';

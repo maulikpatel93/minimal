@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useMemo, useCallback } from 'react';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -13,23 +12,10 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
-import { fData } from 'src/utils/format-number';
-
-import { countries } from 'src/assets/data';
-
-import Label from 'src/components/label';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSwitch,
-  RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
-  RHFSelect,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete, RHFSelect } from 'src/components/hook-form';
 import { useDispatch, useSelector } from 'src/redux/store';
 import { useTranslation } from 'react-i18next';
 import { Chip, Divider, MenuItem } from '@mui/material';
@@ -47,12 +33,12 @@ export default function ModuleForm({ currentModule }) {
   const access = currentModule ? currentModule.access.split(',') : [];
   const dispatch = useDispatch();
   const NewModuleSchema = Yup.object().shape({
-    // title: Yup.string().required(t('title is required')),
-    // panel: Yup.string().required(t('panel is required')),
-    // access: Yup.array().min(1, t('Must have at least 1 access')),
-    // route: Yup.string().trim(),
-    // icon: Yup.string().trim(),
-    // is_active: Yup.boolean(),
+    title: Yup.string().required(t('title is required')),
+    panel: Yup.string().required(t('panel is required')),
+    access: Yup.array().min(1, t('Must have at least 1 access')),
+    route: Yup.string().trim(),
+    icon: Yup.string().trim(),
+    is_active: Yup.boolean(),
   });
 
   const defaultValues = useMemo(
@@ -90,7 +76,7 @@ export default function ModuleForm({ currentModule }) {
       if(data && data.id){
         const action = await dispatch(ModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
+          enqueueSnackbar(t('Module Updated Successfully'), { variant: 'success' });
           router.push(paths.dashboard.roleManagement.module.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
@@ -99,51 +85,38 @@ export default function ModuleForm({ currentModule }) {
           const data = action.payload.data;
           if (status === 422 && data) {
             Object.keys(data).forEach((field) => {
-              const errorMessage = data[field].join(', '); // Join the error messages for the field
+              const errorMessage = data[field].join(', ');
               setError(field, {
-                type: 'manual', // Set the error type as 'manual'
-                message: errorMessage, // Provide the error message
+                type: 'manual',
+                message: errorMessage,
               });
             });
-  
-            // Open the dialog with the error message
-            // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
-            enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
+            enqueueSnackbar(action.payload || t('An error occurred'), { variant: 'error' });
           }
         }
       }else{
         const action = await dispatch(ModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
+          enqueueSnackbar(t('Module Created Successfully'), { variant: 'success' });
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
           const message = action.payload.message;
           const data = action.payload.data;
           if (status === 422 && data) {
-            // Construct the error message to display in the dialog
             Object.keys(data).forEach((field) => {
-              const errorMessage = data[field].join(', '); // Join the error messages for the field
+              const errorMessage = data[field].join(', ');
               setError(field, {
-                type: 'manual', // Set the error type as 'manual'
-                message: errorMessage, // Provide the error message
+                type: 'manual',
+                message: errorMessage,
               });
             });
-  
-            // Open the dialog with the error message
-            // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
-            enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
+            enqueueSnackbar(action.payload || t('An error occurred'), { variant: 'error' });
           }
         }
       }
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      // dispatch(ModuleUpdateApi(data));
-      // reset();
-      // enqueueSnackbar(currentModule ? 'Update success!' : 'Create success!');
-      // router.push(paths.dashboard.user.list);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -163,10 +136,10 @@ export default function ModuleForm({ currentModule }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="title" label={t('title')} />
-              <RHFTextField name="icon" label={t('icon')} />
-              <RHFTextField name="route" label={t('route')} />
-              <RHFSelect name="panel" label={t('panel')}>
+              <RHFTextField name="title" label={t('Title')} />
+              <RHFTextField name="icon" label={t('Icon')} />
+              <RHFTextField name="route" label={t('Route')} />
+              <RHFSelect name="panel" label={t('Panel')}>
                 {PANEL_OPTIONS.map((panel) => (
                   <MenuItem key={panel.value} value={panel.value}>
                     {t(panel.label)}
@@ -174,7 +147,7 @@ export default function ModuleForm({ currentModule }) {
                 ))}
               </RHFSelect>
             </Box>
-            <Box sx={{ mt:3 }}>
+            <Box sx={{ mt: 3 }}>
               <RHFAutocomplete
                 name="access"
                 label={t('Access')}
@@ -205,25 +178,25 @@ export default function ModuleForm({ currentModule }) {
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Stack alignItems="flex-start" sx={{ mt: 3 }}>
-              <RHFSwitch
-                name="is_active"
-                labelPlacement="start"
-                label={
-                  <>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {t('is active')}
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
-            </Stack>
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentModule ? 'Create Module' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+              <Stack alignItems="flex-start" sx={{ mt: 3 }}>
+                <RHFSwitch
+                  name="is_active"
+                  labelPlacement="start"
+                  label={
+                    <>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {t('Is Active')}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                />
+              </Stack>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!currentModule ? t('Create Module') : t('Save Changes')}
+                </LoadingButton>
+              </Stack>
             </Box>
           </Card>
         </Grid>

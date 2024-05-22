@@ -63,6 +63,7 @@ export function useNavData() {
       const path = (module.module_route === "dashboard") ? `/${module.module_route}` : `${paths.dashboard.root}/${module_route}`
 
       const title = module.module_title.toLowerCase().replace(/ /g, '-')
+      console.log('title: ', title);
 
       const item = {
         items: [
@@ -78,6 +79,7 @@ export function useNavData() {
         const sub_module_path = `${paths.dashboard.root}/${module?.module_title.replace(/\s+/g, "-").toLowerCase()}`;
         item.items[0].children = [];
         module.sub_modules.forEach((subModule) => {
+          console.log('subModule: ', subModule);
           const titleSub = subModule.sub_module_title.toLowerCase().replace(/ /g, '-')
           item.items[0].children.push({
             title: t(`${title}.${titleSub}.title`),
