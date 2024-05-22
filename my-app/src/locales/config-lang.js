@@ -6,6 +6,8 @@ import {
   enUS as enUSAdapter,
   zhCN as zhCNAdapter,
   arSA as arSAAdapter,
+  hi as hiINAdapter,
+  gu as guINAdapter,
 } from 'date-fns/locale';
 
 // date pickers (MUI)
@@ -32,6 +34,12 @@ import {
   arSD as arSDDataGrid,
 } from '@mui/x-data-grid';
 
+// import gu as guInAdapter from './date-fns/locale/gu';
+
+import { guINPickers } from '../locales/x-date-pickers/guINPickers';  // Custom date picker locale
+import { guINCore } from '../locales/material/guINCore';  // Custom core locale
+import { guINDataGrid } from '../locales/x-data-grid/guINDataGrid';  // Custom data grid locale
+
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
 
@@ -45,6 +53,28 @@ export const allLangs = [
     numberFormat: {
       code: 'en-US',
       currency: 'USD',
+    },
+  },
+  {
+    label: 'Hindi',
+    value: 'hi',
+    systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
+    adapterLocale: hiINAdapter,
+    icon: 'flagpack:gb-nir',
+    numberFormat: {
+      code: 'hi-IN',
+      currency: 'INR',
+    },
+  },
+  {
+    label: 'Gujarati',
+    value: 'gu',
+    systemValue: merge(guINPickers, guINDataGrid, guINCore),
+    adapterLocale: guINAdapter,
+    icon: 'flagpack:gb-nir',
+    numberFormat: {
+      code: 'gu-IN',
+      currency: 'INR',
     },
   },
   {

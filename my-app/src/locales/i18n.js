@@ -10,8 +10,8 @@ import translationFr from './langs/fr.json';
 import translationVi from './langs/vi.json';
 import translationCn from './langs/cn.json';
 import translationAr from './langs/ar.json';
-import translationGj from './langs/gj.json';
-import translationHn from './langs/hn.json';
+import translationGu from './langs/gu.json';
+import translationHi from './langs/hi.json';
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +27,8 @@ i18n
       vi: { translations: translationVi },
       cn: { translations: translationCn },
       ar: { translations: translationAr },
-      gj: { translations: translationGj },
-      hn: { translations: translationHn },
+      gu: { translations: translationGu },
+      hi: { translations: translationHi },
     },
     lng,
     fallbackLng: 'en',

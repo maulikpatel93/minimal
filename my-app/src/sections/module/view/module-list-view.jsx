@@ -35,6 +35,7 @@ import TableHeader from './table-header';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import { RenderCellCreatedAt, RenderCellStatus } from '../module-table-row';
+import { guINDataGrid } from 'src/locales/x-data-grid/guINDataGrid';
 
 // ----------------------------------------------------------------------
 
@@ -301,6 +302,7 @@ export default function ModuleListView() {
             />
           )}
           <DataGrid
+            localeText={guINDataGrid}
             checkboxSelection
             disableRowSelectionOnClick
             rows={moduleList && moduleList?.data ? moduleList.data : []}
