@@ -39,6 +39,9 @@ import {
 import { guINPickers } from '../locales/x-date-pickers/guINPickers';  // Custom date picker locale
 import { guINCore } from '../locales/material/guINCore';  // Custom core locale
 import { guINDataGrid } from '../locales/x-data-grid/guINDataGrid';  // Custom data grid locale
+import { hiINDataGrid } from './x-data-grid/hiINDataGrid';
+import { hiINPickers } from './x-date-pickers/hiINPickers';
+import { hiINCore } from './material/hiINCore';
 
 // PLEASE REMOVE `LOCAL STORAGE` WHEN YOU CHANGE SETTINGS.
 // ----------------------------------------------------------------------
@@ -49,7 +52,7 @@ export const allLangs = [
     value: 'en',
     systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
     adapterLocale: enUSAdapter,
-    icon: 'flagpack:gb-nir',
+    icon: 'flagpack:us',
     numberFormat: {
       code: 'en-US',
       currency: 'USD',
@@ -58,9 +61,9 @@ export const allLangs = [
   {
     label: 'Hindi',
     value: 'hi',
-    systemValue: merge(enUSDate, enUSDataGrid, enUSCore),
+    systemValue: merge(hiINPickers, hiINDataGrid, hiINCore),
     adapterLocale: hiINAdapter,
-    icon: 'flagpack:gb-nir',
+    icon: 'flagpack:in',
     numberFormat: {
       code: 'hi-IN',
       currency: 'INR',
@@ -71,56 +74,56 @@ export const allLangs = [
     value: 'gu',
     systemValue: merge(guINPickers, guINDataGrid, guINCore),
     adapterLocale: guINAdapter,
-    icon: 'flagpack:gb-nir',
+    icon: 'flagpack:in',
     numberFormat: {
       code: 'gu-IN',
       currency: 'INR',
     },
   },
-  {
-    label: 'French',
-    value: 'fr',
-    systemValue: merge(frFRDate, frFRDataGrid, frFRCore),
-    adapterLocale: frFRAdapter,
-    icon: 'flagpack:fr',
-    numberFormat: {
-      code: 'fr-Fr',
-      currency: 'EUR',
-    },
-  },
-  {
-    label: 'Vietnamese',
-    value: 'vi',
-    systemValue: merge(viVNDate, viVNDataGrid, viVNCore),
-    adapterLocale: viVNAdapter,
-    icon: 'flagpack:vn',
-    numberFormat: {
-      code: 'vi-VN',
-      currency: 'VND',
-    },
-  },
-  {
-    label: 'Chinese',
-    value: 'cn',
-    systemValue: merge(zhCNDate, zhCNDataGrid, zhCNCore),
-    adapterLocale: zhCNAdapter,
-    icon: 'flagpack:cn',
-    numberFormat: {
-      code: 'zh-CN',
-      currency: 'CNY',
-    },
-  },
-  {
-    label: 'Arabic',
-    value: 'ar',
-    systemValue: merge(arSDDataGrid, arSACore),
-    adapterLocale: arSAAdapter,
-    icon: 'flagpack:sa',
-    numberFormat: {
-      code: 'ar',
-      currency: 'AED',
-    },
-  },
+  // {
+  //   label: 'French',
+  //   value: 'fr',
+  //   systemValue: merge(frFRDate, frFRDataGrid, frFRCore),
+  //   adapterLocale: frFRAdapter,
+  //   icon: 'flagpack:fr',
+  //   numberFormat: {
+  //     code: 'fr-Fr',
+  //     currency: 'EUR',
+  //   },
+  // },
+  // {
+  //   label: 'Vietnamese',
+  //   value: 'vi',
+  //   systemValue: merge(viVNDate, viVNDataGrid, viVNCore),
+  //   adapterLocale: viVNAdapter,
+  //   icon: 'flagpack:vn',
+  //   numberFormat: {
+  //     code: 'vi-VN',
+  //     currency: 'VND',
+  //   },
+  // },
+  // {
+  //   label: 'Chinese',
+  //   value: 'cn',
+  //   systemValue: merge(zhCNDate, zhCNDataGrid, zhCNCore),
+  //   adapterLocale: zhCNAdapter,
+  //   icon: 'flagpack:cn',
+  //   numberFormat: {
+  //     code: 'zh-CN',
+  //     currency: 'CNY',
+  //   },
+  // },
+  // {
+  //   label: 'Arabic',
+  //   value: 'ar',
+  //   systemValue: merge(arSDDataGrid, arSACore),
+  //   adapterLocale: arSAAdapter,
+  //   icon: 'flagpack:sa',
+  //   numberFormat: {
+  //     code: 'ar',
+  //     currency: 'AED',
+  //   },
+  // },
 ];
 
 export const defaultLang = allLangs[0]; // English

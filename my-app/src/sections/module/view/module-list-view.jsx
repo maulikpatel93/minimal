@@ -36,24 +36,8 @@ import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import { RenderCellCreatedAt, RenderCellStatus } from '../module-table-row';
 import { guINDataGrid } from 'src/locales/x-data-grid/guINDataGrid';
-
-// ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [
-  { value: "all", label: 'All' },
-  { value: 1, label: 'Active' },
-  { value: 0, label: 'InActive' },
-];
-
-const STATUS_OPTIONS_INLINE = [
-  { value: 1, label: 'Active' },
-  { value: 0, label: 'InActive' },
-];
-
-const defaultFilters = {
-  q: '',
-  status: { value: "all", label: 'All' },
-};
+import { useLocales, useTranslate } from 'src/locales';
+import { hiINDataGrid } from 'src/locales/x-data-grid/hiINDataGrid';
 
 const HIDE_COLUMNS = {
   id: false,
@@ -62,18 +46,29 @@ const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 // ----------------------------------------------------------------------
 
 export default function ModuleListView() {
+  const { t } = useTranslation();
+  const STATUS_OPTIONS = [
+    { value: "all", label: t('role-management.modules.columns.dropdown.All') },
+    { value: 1, label: t('role-management.modules.columns.dropdown.Active') },
+    { value: 0, label: t('role-management.modules.columns.dropdown.InActive') },
+  ];
+  
+  const STATUS_OPTIONS_INLINE = [
+    { value: 1, label: t('Active') },
+    { value: 0, label: t('InActive') },
+  ];
+  
+  const defaultFilters = {
+    q: '',
+    status: { value: "all", label: t('All') },
+  };
+  const { currentLang } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
-
   const confirmRows = useBoolean();
-
   const router = useRouter();
-
   const settings = useSettingsContext();
 
-  const { t } = useTranslation();
-
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(HIDE_COLUMNS);
-
   // const [status, setStatus] = useState('');
   const [pageSize, setPageSize] = useState(1);
   const [page, setPage] = useState(1);
@@ -81,12 +76,13 @@ export default function ModuleListView() {
   const [sort, setSort] = useState([]);
   const [filter, setFilter] = useState([]);
   const [filters, setFilters] = useState(defaultFilters);
-
   const dispatch = useDispatch();
   const moduleList = useSelector((state) => state.module.list);
   const loadingList = useSelector((state) => state.module.loading.list);
   const totalRows = moduleList ? moduleList.total : 0;
   const currentPage = moduleList ? moduleList.current_page : 1;
+
+  
 
   useEffect(() => {
     dispatch(
@@ -195,7 +191,7 @@ export default function ModuleListView() {
     },
     {
       field: 'created_at',
-      headerName: 'Create at',
+      headerName: t(`role-management.modules.columns.created_at`),
       width: 160,
       renderCell: (params) => <RenderCellCreatedAt params={params} />,
     },
@@ -237,7 +233,6 @@ export default function ModuleListView() {
       .filter((column) => !HIDE_COLUMNS_TOGGLABLE.includes(column.field))
       .map((column) => column.field);
 
-  console.log(filters);
   return (
     <>
       <Container
@@ -302,7 +297,7 @@ export default function ModuleListView() {
             />
           )}
           <DataGrid
-            localeText={guINDataGrid}
+            localeText={currentLang && currentLang.value == "gu" ? guINDataGrid : currentLang && currentLang.value == "hi" ? hiINDataGrid : ""}
             checkboxSelection
             disableRowSelectionOnClick
             rows={moduleList && moduleList?.data ? moduleList.data : []}

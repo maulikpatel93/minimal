@@ -41,17 +41,13 @@ import { position } from 'stylis';
 // ----------------------------------------------------------------------
 
 export default function RolePermissionForm({ currentModule }) {
-  console.log('currentModule: ', currentModule);
   const router = useRouter();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const access = currentModule ? currentModule.permissions.split(',') : [];
-  console.log('access: ', access);
   const dispatch = useDispatch();
   const ModuleDropDownList = useSelector((state) => state.rolepermission.isRolePermissionDropdownList);
-  console.log('ModuleDropDownListTwo: ', ModuleDropDownList);
   const ModuleDropDownData = ModuleDropDownList && ModuleDropDownList.modules	&& ModuleDropDownList.modules.length > 0 ? ModuleDropDownList.modules : [];
-  console.log('ModuleDropDownData: ', ModuleDropDownData);
   const RoleDropDownData = ModuleDropDownList && ModuleDropDownList.roles	&& ModuleDropDownList.roles.length > 0 ? ModuleDropDownList.roles : [];
   const TabDropDownData = ModuleDropDownList && ModuleDropDownList.tabs	&& ModuleDropDownList.tabs.length > 0 ? ModuleDropDownList.tabs : [];
   const SubModuleDropDownData = ModuleDropDownList && ModuleDropDownList.submodules	&& ModuleDropDownList.submodules.length > 0 ? ModuleDropDownList.submodules : [];

@@ -31,7 +31,13 @@
           "icon": "આઇકન",
           "panel": "પેનલ",
           "status": "સ્થિતિ",
-          "actions": "ક્રિયાઓ"
+          "actions": "ક્રિયાઓ",
+          "created_at": "બનાવેલી તારીખ",
+          "dropdown": {
+            "All": "બધા",
+            "Active": "સક્રિય",
+            "InActive": "નક્રિય"
+          }
         },
         "button": {
           "new": "નવું મોડ્યુલ",

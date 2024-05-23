@@ -51,7 +51,13 @@
         "icon": "Icon",
         "panel": "Panel",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "created_at": "Created At",
+        "dropdown": {
+          "All": "All",
+          "Active": "Active",
+          "InActive": "In Active"
+        }
       },
       "button": {
         "new": "New Module",
