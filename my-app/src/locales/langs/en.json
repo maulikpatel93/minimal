@@ -1,5 +1,5 @@
 {
-  "app": "app",
+  "app": "Application",
   "search": "Search...",
   "status": "Status",
   "print": "Print",
@@ -10,7 +10,7 @@
     "no-data": "No data",
     "no-results-found": "No results found",
     "no-data-record": "No data record",
-    "error": "Something went wrong"
+    "error": "An error occurred"
   },
   "success-messages": {
     "deleted": "Deleted successfully",
@@ -25,25 +25,29 @@
     "modules": {
       "title": "Modules",
       "list": "List",
-      "create" :{
-        "Create a new module": "Create a new module",
-        "Dashboard": "Dashboard",
-        "Module": "Module",
-        "Create": "Create",
-        "title is required": "Title is required",
-        "panel is required": "Panel is required",
-        "Must have at least 1 access": "Must have at least 1 access",
-        "Title": "Title",
-        "Icon": "Icon",
-        "Route": "Route",
-        "Panel": "Panel",
-        "Backend": "Backend",
-        "Frontend": "Frontend",
-        "Common": "Common",
-        "Access": "Access",
-        "+ Access": "+ Access",
-        "Is Active": "Is Active",
-        "Create Module": "Create Module"
+      "created_at": "Created At",
+      "title is required": "Title is required",
+      "panel is required": "Panel is required",
+      "Must have at least 1 access": "Must have at least 1 access",
+      "Module Updated Successfully": "Module Updated Successfully",
+      "An error occurred": "An error occurred",
+      "Module Created Successfully": "Module Created Successfully",
+      "Title": "Title",
+      "Icon": "Icon",
+      "Route": "Route",
+      "Panel": "Panel",
+      "Access": "Access",
+      "+ Access" : "+ Access",
+      "Is Active": "Is Active",
+      "Create Module": "Create Module",
+      "Save Changes": "Save Changes",
+      "edit": "Edit",
+      "edit_module":"Edit Module",
+      "create": {
+        "dashboard": "Dashboard",
+        "module": "Module",
+        "create": "Create",
+        "create_new_module": "Create New Module"
       },
       "columns": {
         "title": "Title",
@@ -56,7 +60,7 @@
         "dropdown": {
           "All": "All",
           "Active": "Active",
-          "InActive": "In Active"
+          "InActive": "InActive"
         }
       },
       "button": {
@@ -72,7 +76,7 @@
       }
     },
     "submodules": {
-      "title": "Sub Modules",
+      "title": "Submodules",
       "list": "List",
       "columns": {
         "title": "Title",
@@ -96,7 +100,7 @@
       }
     },
     "role-permissions": {
-      "title": "Role permissions",
+      "title": "Role Permissions",
       "list": "List",
       "columns": {
         "title": "Title",

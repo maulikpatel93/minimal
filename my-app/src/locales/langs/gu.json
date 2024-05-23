@@ -1,92 +1,115 @@
 {
-    "app": "એપ્લિકેશન",
-    "search": "શોધો...",
-    "status": "સ્થિતિ",
-    "print": "છાપો",
-    "import": "આયાત",
-    "export": "નિકાસ",
-    "results-found": "પરિણામો મળ્યા",
-    "error-messages": {
-      "no-data": "ડેટા નથી",
-      "no-results-found": "કોઈ પરિણામો મળ્યા નથી",
-      "no-data-record": "કોઈ ડેટા રેકોર્ડ નથી",
-      "error": "કાંઈક ખોટું થયું"
-    },
-    "success-messages": {
-      "deleted": "સફળતાપૂર્વક કાઢી નાખ્યું",
-      "created": "સફળતાપૂર્વક બનાવ્યું",
-      "updated": "સફળતાપૂર્વક અપડેટ કર્યું"
-    },
-    "dashboard": {
-      "title": "ડેશબોર્ડ"
-    },
-    "role-management": {
-      "title": "ભૂમિકા વ્યવસ્થાપન",
-      "modules": {
-        "title": "મોડ્યુલ્સ",
-        "list": "યાદી",
-        "columns": {
-          "title": "શીર્ષક",
-          "route": "માર્ગ",
-          "icon": "આઇકન",
-          "panel": "પેનલ",
-          "status": "સ્થિતિ",
-          "actions": "ક્રિયાઓ",
-          "created_at": "બનાવેલી તારીખ",
-          "dropdown": {
-            "All": "બધા",
-            "Active": "સક્રિય",
-            "InActive": "નક્રિય"
-          }
-        },
-        "button": {
-          "new": "નવું મોડ્યુલ",
-          "edit": "સંપાદિત કરો",
-          "delete": "કાઢી નાખો",
-          "view": "જુઓ",
-          "create": "મોડ્યુલ બનાવો",
-          "update": "ફેરફાર સંગ્રહો"
-        },
-        "messages": {
-          "delete-confirmation": "શું તમે ખરેખર <strong>{{count}}</strong> વસ્તુઓ કાઢી નાખવા માંગો છો?"
+  "app": "એપ્લિકેશન",
+  "search": "શોધો...",
+  "status": "સ્થિતિ",
+  "print": "છાપો",
+  "import": "આયાત",
+  "export": "નિકાસ",
+  "results-found": "પરિણામો મળ્યા",
+  "error-messages": {
+    "no-data": "ડેટા નથી",
+    "no-results-found": "કોઈ પરિણામો મળ્યા નથી",
+    "no-data-record": "કોઈ ડેટા રેકોર્ડ નથી",
+    "error": "કાંઈક ખોટું થયું"
+  },
+  "success-messages": {
+    "deleted": "સફળતાપૂર્વક કાઢી નાખ્યું",
+    "created": "સફળતાપૂર્વક બનાવ્યું",
+    "updated": "સફળતાપૂર્વક અપડેટ કર્યું"
+  },
+  "dashboard": {
+    "title": "ડેશબોર્ડ"
+  },
+  "role-management": {
+    "title": "ભૂમિકા વ્યવસ્થાપન",
+    "modules": {
+      "title": "મોડ્યુલ્સ",
+      "list": "યાદી",
+      "created_at": "બનાવેલી તારીખ",
+      "title is required": "શીર્ષક જરૂરી છે",
+      "panel is required": "પેનલ જરૂરી છે",
+      "Must have at least 1 access": "ઓળખ ઓછામાં ઓછી 1 હોવી જોઈએ",
+      "Module Updated Successfully": "મોડ્યુલ સફળતાપૂર્વક અપડેટ કરાઈ ગઈ",
+      "An error occurred": "કોઈ ભૂલ આવી",
+      "Module Created Successfully": "મોડ્યુલ સફળતાપૂર્વક બનાવ્યું",
+      "Title": "શીર્ષક",
+      "Icon": "ચિહ્ન",
+      "Route": "માર્ગ",
+      "Panel": "પેનલ",
+      "Access": "પ્રવેશ",
+      "+ Access" : "+ પ્રવેશ",
+      "Is Active": "સક્રિય છે",
+      "Create Module": "મોડ્યુલ બનાવો",
+      "Save Changes": "ફેરફારો સાચવો",
+      "edit": "સંપાદન",
+      "edit_module":"સંપાદન મોડ્યુલ",
+      "create": {
+        "dashboard": "ડેશબોર્ડ",
+        "module": "મોડ્યુલ",
+        "create": "બનાવો",
+        "create_new_module": "નવું મોડ્યુલ બનાવો"
+      },
+      "columns": {
+        "title": "શીર્ષક",
+        "route": "માર્ગ",
+        "icon": "આઇકન",
+        "panel": "પેનલ",
+        "status": "સ્થિતિ",
+        "actions": "ક્રિયાઓ",
+        "created_at": "બનાવેલી તારીખ",
+        "dropdown": {
+          "All": "બધા",
+          "Active": "સક્રિય",
+          "InActive": "નક્રિય"
         }
       },
-      "submodules": {
-        "title": "ઉપમોડ્યુલ્સ",
-        "list": "યાદી",
-        "columns": {
-          "title": "શીર્ષક",
-          "route": "માર્ગ",
-          "icon": "આઇકન",
-          "panel": "પેનલ",
-          "status": "સ્થિતિ",
-          "actions": "ક્રિયાઓ"
-        }
+      "button": {
+        "new": "નવું મોડ્યુલ",
+        "edit": "સંપાદિત કરો",
+        "delete": "કાઢી નાખો",
+        "view": "જુઓ",
+        "create": "મોડ્યુલ બનાવો",
+        "update": "ફેરફાર સંગ્રહો"
       },
-      "tab": {
-        "title": "ટૅબ્સ",
-        "list": "યાદી",
-        "columns": {
-          "title": "શીર્ષક",
-          "route": "માર્ગ",
-          "icon": "આઇકન",
-          "panel": "પેનલ",
-          "status": "સ્થિતિ",
-          "actions": "ક્રિયાઓ"
-        }
-      },
-      "role-permissions": {
-        "title": "ભૂમિકા પરવાનગીઓ",
-        "list": "યાદી",
-        "columns": {
-          "title": "શીર્ષક",
-          "route": "માર્ગ",
-          "icon": "આઇકન",
-          "panel": "પેનલ",
-          "status": "સ્થિતિ",
-          "actions": "ક્રિયાઓ"
-        }
+      "messages": {
+        "delete-confirmation": "શું તમે ખરેખર <strong>{{count}}</strong> વસ્તુઓ કાઢી નાખવા માંગો છો?"
+      }
+    },
+    "submodules": {
+      "title": "ઉપમોડ્યુલ્સ",
+      "list": "યાદી",
+      "columns": {
+        "title": "શીર્ષક",
+        "route": "માર્ગ",
+        "icon": "આઇકન",
+        "panel": "પેનલ",
+        "status": "સ્થિતિ",
+        "actions": "ક્રિયાઓ"
+      }
+    },
+    "tab": {
+      "title": "ટૅબ્સ",
+      "list": "યાદી",
+      "columns": {
+        "title": "શીર્ષક",
+        "route": "માર્ગ",
+        "icon": "આઇકન",
+        "panel": "પેનલ",
+        "status": "સ્થિતિ",
+        "actions": "ક્રિયાઓ"
+      }
+    },
+    "role-permissions": {
+      "title": "ભૂમિકા પરવાનગીઓ",
+      "list": "યાદી",
+      "columns": {
+        "title": "શીર્ષક",
+        "route": "માર્ગ",
+        "icon": "આઇકન",
+        "panel": "પેનલ",
+        "status": "સ્થિતિ",
+        "actions": "ક્રિયાઓ"
       }
     }
   }
-  
+}

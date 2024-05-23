@@ -1,93 +1,115 @@
 {
-    "app": "ऐप",
-    "search": "खोजें...",
-    "status": "स्थिति",
-    "print": "प्रिंट",
-    "import": "आयात",
-    "export": "निर्यात",
-    "results-found": "परिणाम मिले",
-    "error-messages": {
-      "no-data": "कोई डेटा नहीं",
-      "no-results-found": "कोई परिणाम नहीं मिला",
-      "no-data-record": "कोई डेटा रिकॉर्ड नहीं",
-      "error": "कुछ गलत हो गया"
-    },
-    "success-messages": {
-      "deleted": "सफलतापूर्वक हटाया गया",
-      "created": "सफलतापूर्वक बनाया गया",
-      "updated": "सफलतापूर्वक अपडेट किया गया"
-    },
-    "dashboard": {
-      "title": "डैशबोर्ड"
-    },
-    "role-management": {
-      "title": "भूमिका प्रबंधन",
-      "modules": {
-        "title": "मॉड्यूल",
-        "list": "सूची",
-        "create_at" : "LalLa",
-        "columns": {
-          "title": "शीर्षक",
-          "route": "मार्ग",
-          "icon": "आइकन",
-          "panel": "पैनल",
-          "status": "स्थिति",
-          "actions": "क्रियाएँ",
-          "created_at": "निर्मित तिथि",
-          "dropdown": {
-            "All": "सभी",
-            "Active": "सक्रिय",
-            "InActive": "निष्क्रिय"
-          }
-        },
-        "button": {
-          "new": "नया मॉड्यूल",
-          "edit": "संपादित करें",
-          "delete": "हटाएं",
-          "view": "देखें",
-          "create": "मॉड्यूल बनाएं",
-          "update": "परिवर्तन सहेजें"
-        },
-        "messages": {
-          "delete-confirmation": "क्या आप वाकई <strong>{{count}}</strong> वस्तुओं को हटाना चाहते हैं?"
+  "app": "ऐप",
+  "search": "खोजें...",
+  "status": "स्थिति",
+  "print": "प्रिंट",
+  "import": "आयात",
+  "export": "निर्यात",
+  "results-found": "परिणाम मिले",
+  "error-messages": {
+    "no-data": "कोई डेटा नहीं",
+    "no-results-found": "कोई परिणाम नहीं मिला",
+    "no-data-record": "कोई डेटा रिकॉर्ड नहीं",
+    "error": "कुछ गलत हो गया"
+  },
+  "success-messages": {
+    "deleted": "सफलतापूर्वक हटाया गया",
+    "created": "सफलतापूर्वक बनाया गया",
+    "updated": "सफलतापूर्वक अपडेट किया गया"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड"
+  },
+  "role-management": {
+    "title": "भूमिका प्रबंधन",
+    "modules": {
+      "title": "मॉड्यूल",
+      "list": "सूची",
+      "created_at": "બનાવેલું",
+      "title is required": "शीर्षक आवश्यक है",
+      "panel is required": "पैनल आवश्यक है",
+      "Must have at least 1 access": "कम से कम 1 पहुँच होनी चाहिए",
+      "Module Updated Successfully": "मॉड्यूल सफलतापूर्वक अपडेट किया गया",
+      "An error occurred": "कुछ गलत हो गया है",
+      "Module Created Successfully": "मॉड्यूल सफलतापूर्वक बनाया गया",
+      "Title": "शीर्षक",
+      "Icon": "आइकन",
+      "Route": "मार्ग",
+      "Panel": "पैनल",
+      "Access": "पहुँच",
+      "+ Access" : "+ पहुँच",
+      "Is Active": "सक्रिय है",
+      "Create Module": "मॉड्यूल बनाएं",
+      "Save Changes": "परिवर्तन सहेजें",
+      "edit": "संपादन",
+      "edit_module":"संपादन मॉड्यूल",
+      "create": {
+        "dashboard": "डैशबोर्ड",
+        "module": "मॉड्यूल",
+        "create": "बनाएँ",
+        "create_new_module": "नया मॉड्यूल बनाएँ"
+      },
+      "columns": {
+        "title": "शीर्षक",
+        "route": "मार्ग",
+        "icon": "आइकन",
+        "panel": "पैनल",
+        "status": "स्थिति",
+        "actions": "क्रियाएँ",
+        "created_at": "निर्मित तिथि",
+        "dropdown": {
+          "All": "सभी",
+          "Active": "सक्रिय",
+          "InActive": "निष्क्रिय"
         }
       },
-      "submodules": {
-        "title": "उप मॉड्यूल",
-        "list": "सूची",
-        "columns": {
-          "title": "शीर्षक",
-          "route": "मार्ग",
-          "icon": "आइकन",
-          "panel": "पैनल",
-          "status": "स्थिति",
-          "actions": "क्रियाएँ"
-        }
+      "button": {
+        "new": "नया मॉड्यूल",
+        "edit": "संपादित करें",
+        "delete": "हटाएं",
+        "view": "देखें",
+        "create": "मॉड्यूल बनाएं",
+        "update": "परिवर्तन सहेजें"
       },
-      "tab": {
-        "title": "टैब",
-        "list": "सूची",
-        "columns": {
-          "title": "शीर्षक",
-          "route": "मार्ग",
-          "icon": "आइकन",
-          "panel": "पैनल",
-          "status": "स्थिति",
-          "actions": "क्रियाएँ"
-        }
-      },
-      "role-permissions": {
-        "title": "भूमिका अनुमतियाँ",
-        "list": "सूची",
-        "columns": {
-          "title": "शीर्षक",
-          "route": "मार्ग",
-          "icon": "आइकन",
-          "panel": "पैनल",
-          "status": "स्थिति",
-          "actions": "क्रियाएँ"
-        }
+      "messages": {
+        "delete-confirmation": "क्या आप वाकई <strong>{{count}}</strong> वस्तुओं को हटाना चाहते हैं?"
+      }
+    },
+    "submodules": {
+      "title": "उप मॉड्यूल",
+      "list": "सूची",
+      "columns": {
+        "title": "शीर्षक",
+        "route": "मार्ग",
+        "icon": "आइकन",
+        "panel": "पैनल",
+        "status": "स्थिति",
+        "actions": "क्रियाएँ"
+      }
+    },
+    "tab": {
+      "title": "टैब",
+      "list": "सूची",
+      "columns": {
+        "title": "शीर्षक",
+        "route": "मार्ग",
+        "icon": "आइकन",
+        "panel": "पैनल",
+        "status": "स्थिति",
+        "actions": "क्रियाएँ"
+      }
+    },
+    "role-permissions": {
+      "title": "भूमिका अनुमतियाँ",
+      "list": "सूची",
+      "columns": {
+        "title": "शीर्षक",
+        "route": "मार्ग",
+        "icon": "आइकन",
+        "panel": "पैनल",
+        "status": "स्थिति",
+        "actions": "क्रियाएँ"
       }
     }
   }
-  
+}

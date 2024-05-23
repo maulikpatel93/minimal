@@ -33,9 +33,9 @@ export default function ModuleForm({ currentModule }) {
   const access = currentModule ? currentModule.access.split(',') : [];
   const dispatch = useDispatch();
   const NewModuleSchema = Yup.object().shape({
-    title: Yup.string().required(t('title is required')),
-    panel: Yup.string().required(t('panel is required')),
-    access: Yup.array().min(1, t('Must have at least 1 access')),
+    title: Yup.string().required(t(`role-management.modules.title is required`)),
+    panel: Yup.string().required(t(`role-management.modules.panel is required`)),
+    access: Yup.array().min(1, t(`role-management.modules.Must have at least 1 access`)),
     route: Yup.string().trim(),
     icon: Yup.string().trim(),
     is_active: Yup.boolean(),
@@ -76,7 +76,7 @@ export default function ModuleForm({ currentModule }) {
       if(data && data.id){
         const action = await dispatch(ModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar(t('Module Updated Successfully'), { variant: 'success' });
+          enqueueSnackbar(t(`role-management.modules.Module Updated Successfully`), { variant: 'success' });
           router.push(paths.dashboard.roleManagement.module.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
@@ -92,13 +92,13 @@ export default function ModuleForm({ currentModule }) {
               });
             });
           } else {
-            enqueueSnackbar(action.payload || t('An error occurred'), { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
           }
         }
       }else{
         const action = await dispatch(ModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar(t('Module Created Successfully'), { variant: 'success' });
+          enqueueSnackbar(t(`role-management.modules.Module Created Successfully`), { variant: 'success' });
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -113,7 +113,7 @@ export default function ModuleForm({ currentModule }) {
               });
             });
           } else {
-            enqueueSnackbar(action.payload || t('An error occurred'), { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
           }
         }
       }
@@ -136,10 +136,10 @@ export default function ModuleForm({ currentModule }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="title" label={t('Title')} />
-              <RHFTextField name="icon" label={t('Icon')} />
-              <RHFTextField name="route" label={t('Route')} />
-              <RHFSelect name="panel" label={t('Panel')}>
+              <RHFTextField name="title" label={t(`role-management.modules.Title`)} />
+              <RHFTextField name="icon" label={t(`role-management.modules.Icon`)} />
+              <RHFTextField name="route" label={t(`role-management.modules.Route`)} />
+              <RHFSelect name="panel" label={t(`role-management.modules.Panel`)}>
                 {PANEL_OPTIONS.map((panel) => (
                   <MenuItem key={panel.value} value={panel.value}>
                     {t(panel.label)}
@@ -150,8 +150,8 @@ export default function ModuleForm({ currentModule }) {
             <Box sx={{ mt: 3 }}>
               <RHFAutocomplete
                 name="access"
-                label={t('Access')}
-                placeholder={t('+ Access')}
+                label={t(`role-management.modules.Access`)}
+                placeholder={t(`role-management.modules.+ Access`)}
                 multiple
                 freeSolo
                 options={access.map((option) => option)}
@@ -185,7 +185,7 @@ export default function ModuleForm({ currentModule }) {
                   label={
                     <>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {t('Is Active')}
+                      {t(`role-management.modules.Is Active`)}
                       </Typography>
                     </>
                   }
@@ -194,7 +194,7 @@ export default function ModuleForm({ currentModule }) {
               </Stack>
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentModule ? t('Create Module') : t('Save Changes')}
+                  {!currentModule ? t(`role-management.modules.Create Module`) : t(`role-management.modules.Save Changes`)}
                 </LoadingButton>
               </Stack>
             </Box>

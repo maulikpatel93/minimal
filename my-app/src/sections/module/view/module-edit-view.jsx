@@ -17,17 +17,17 @@ export default function ModuleEditView({ id }) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('Edit')}
+        heading={t('role-management.modules.edit_module')}
         links={[
           {
-            name: t('Dashboard'),
+            name: t('role-management.modules.create.dashboard'),
             href: paths.dashboard.root,
           },
           {
-            name: t('Module'),
+            name: t('role-management.modules.create.module'),
             href: paths.dashboard.roleManagement.module.list,
           },
-          { name: t('Edit') },
+          { name: t('role-management.modules.edit') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
