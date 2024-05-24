@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-export default function ModuleTableToolbar({ filters, onFilters, statusOptions }) {
+export default function SubModuleTableToolbar({ filters, onFilters, statusOptions }) {
   const popover = usePopover();
 
   const { t } = useTranslation();
@@ -139,7 +139,7 @@ export default function ModuleTableToolbar({ filters, onFilters, statusOptions }
   );
 }
 
-ModuleTableToolbar.propTypes = {
+SubModuleTableToolbar.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   statusOptions: PropTypes.array,

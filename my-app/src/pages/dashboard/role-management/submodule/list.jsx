@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import SubModuleListView from 'src/sections/submodule/view/submodule-list-view';
+import { SubModuleListView } from 'src/sections/submodule/view';
 
 // ----------------------------------------------------------------------
 

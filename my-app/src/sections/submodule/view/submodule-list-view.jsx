@@ -26,15 +26,15 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { Icon } from '@iconify/react';
-import ModuleTableToolbar from '../module-table-toolbar';
-import ModuleTableFiltersResult from '../module-table-filters-result';
+import ModuleTableToolbar from '../submodule-table-toolbar';
+import ModuleTableFiltersResult from '../submodule-table-filters-result';
 import { ModuleDeleteApi, ModuleDetailApi, ModuleListApi } from 'src/redux/slices/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Tab, Tabs, TextField, Typography, alpha } from '@mui/material';
 import TableHeader from './table-header';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
-import { RenderCellCreatedAt, RenderCellStatus } from '../module-table-row';
+import { RenderCellCreatedAt, RenderCellStatus } from '../submodule-table-row';
 import { guINDataGrid } from 'src/locales/x-data-grid/guINDataGrid';
 import { useLocales, useTranslate } from 'src/locales';
 import { hiINDataGrid } from 'src/locales/x-data-grid/hiINDataGrid';
@@ -45,7 +45,7 @@ const HIDE_COLUMNS = {
 const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 // ----------------------------------------------------------------------
 
-export default function ModuleListView() {
+export default function SubModuleListView() {
   const { t } = useTranslation();
   const STATUS_OPTIONS = [
     { value: "all", label: t('role-management.modules.columns.dropdown.All') },

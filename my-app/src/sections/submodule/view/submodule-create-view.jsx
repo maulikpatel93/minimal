@@ -2,8 +2,8 @@ import Container from '@mui/material/Container';
 import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import ModuleForm from '../SubModuleForm';
 import { useTranslation } from 'react-i18next';
+import SubModuleForm from '../SubModuleForm';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ export default function SubModuleCreateView() {
         }}
       />
 
-      <ModuleForm />
+      <SubModuleForm />
     </Container>
   );
 }
