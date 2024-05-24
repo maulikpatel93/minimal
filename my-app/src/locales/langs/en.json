@@ -78,13 +78,54 @@
     "submodules": {
       "title": "Submodules",
       "list": "List",
+      "created_at": "Created At",
+      "title is required": "Title is required",
+      "panel is required": "Panel is required",
+      "Must have at least 1 access": "Must have at least 1 access",
+      "Submodule Updated Successfully": "Submodule Updated Successfully",
+      "An error occurred": "An error occurred",
+      "Submodule Created Successfully": "Submodule Created Successfully",
+      "Title": "Title",
+      "Icon": "Icon",
+      "Route": "Route",
+      "Panel": "Panel",
+      "Access": "Access",
+      "+ Access": "+ Access",
+      "Is Active": "Is Active",
+      "Create Submodule": "Create Submodule",
+      "Save Changes": "Save Changes",
+      "edit": "Edit",
+      "edit_submodule": "Edit Submodule",
+      "create": {
+        "dashboard": "Dashboard",
+        "submodule": "Submodule",
+        "create": "Create",
+        "create_new_submodule": "Create New Submodule"
+      },
       "columns": {
         "title": "Title",
         "route": "Route",
         "icon": "Icon",
         "panel": "Panel",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "created_at": "Created At",
+        "dropdown": {
+          "All": "All",
+          "Active": "Active",
+          "InActive": "Inactive"
+        }
+      },
+      "button": {
+        "new": "New Submodule",
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View",
+        "create": "Create Submodule",
+        "update": "Save Changes"
+      },
+      "messages": {
+        "delete-confirmation": "Do you really want to delete <strong>{{count}}</strong> items?"
       }
     },
     "tab": {

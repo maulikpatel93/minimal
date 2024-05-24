@@ -14,7 +14,7 @@ import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export function SubRenderCellPrice({ params }) {
+export function RenderCellPrice({ params }) {
   return <>{fCurrency(params.row.price)}</>;
 }
 
@@ -24,15 +24,15 @@ RenderCellPrice.propTypes = {
   }),
 };
 
-export function RenderCellPublish({ params }) {
+export function RenderCellStatus({ params }) {
   return (
-    <Label variant="soft" color={(params.row.publish === 'published' && 'info') || 'default'}>
-      {params.row.publish}
+    <Label variant="soft" color={(params.row.is_active === 1 && 'info') || 'default'}>
+       {params.row.is_active === 1 ? 'Active' : 'Inactive'}
     </Label>
   );
 }
 
-RenderCellPublish.propTypes = {
+RenderCellStatus.propTypes = {
   params: PropTypes.shape({
     row: PropTypes.object,
   }),
@@ -41,8 +41,8 @@ RenderCellPublish.propTypes = {
 export function RenderCellCreatedAt({ params }) {
   return (
     <ListItemText
-      primary={fDate(params.row.createdAt)}
-      secondary={fTime(params.row.createdAt)}
+      primary={fDate(params.row.created_at)}
+      secondary={fTime(params.row.created_at)}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -59,29 +59,6 @@ RenderCellCreatedAt.propTypes = {
   }),
 };
 
-export function RenderCellStock({ params }) {
-  return (
-    <Stack sx={{ typography: 'caption', color: 'text.secondary' }}>
-      <LinearProgress
-        value={(params.row.available * 100) / params.row.quantity}
-        variant="determinate"
-        color={
-          (params.row.inventoryType === 'out of stock' && 'error') ||
-          (params.row.inventoryType === 'low stock' && 'warning') ||
-          'success'
-        }
-        sx={{ mb: 1, height: 6, maxWidth: 80 }}
-      />
-      {!!params.row.available && params.row.available} {params.row.inventoryType}
-    </Stack>
-  );
-}
-
-RenderCellStock.propTypes = {
-  params: PropTypes.shape({
-    row: PropTypes.object,
-  }),
-};
 
 export function RenderCellModule({ params }) {
   return (

@@ -78,13 +78,54 @@
     "submodules": {
       "title": "ઉપમોડ્યુલ્સ",
       "list": "યાદી",
+      "created_at": "બનાવેલી તારીખ",
+      "title is required": "શીર્ષક જરૂરી છે",
+      "panel is required": "પેનલ જરૂરી છે",
+      "Must have at least 1 access": "ઓળખ ઓછામાં ઓછી 1 જ હોવી જોઈએ",
+      "Submodule Updated Successfully": "ઉપમોડ્યુલ સફળતાપૂર્વક અપડેટ કરાઈ ગઈ",
+      "An error occurred": "કોઈ ભૂલ આવી",
+      "Submodule Created Successfully": "ઉપમોડ્યુલ સફળતાપૂર્વક બનાવ્યું",
+      "Title": "શીર્ષક",
+      "Icon": "ચિહ્ન",
+      "Route": "માર્ગ",
+      "Panel": "પેનલ",
+      "Access": "પ્રવેશ",
+      "+ Access": "+ પ્રવેશ",
+      "Is Active": "સક્રિય છે",
+      "Create Submodule": "ઉપમોડ્યુલ બનાવો",
+      "Save Changes": "ફેરફારો સાચવો",
+      "edit": "સંપાદન",
+      "edit_submodule": "સંપાદન ઉપમોડ્યુલ",
+      "create": {
+        "dashboard": "ડેશબોર્ડ",
+        "submodule": "ઉપમોડ્યુલ",
+        "create": "બનાવો",
+        "create_new_submodule": "નવું ઉપમોડ્યુલ બનાવો"
+      },
       "columns": {
         "title": "શીર્ષક",
         "route": "માર્ગ",
         "icon": "આઇકન",
         "panel": "પેનલ",
         "status": "સ્થિતિ",
-        "actions": "ક્રિયાઓ"
+        "actions": "ક્રિયાઓ",
+        "created_at": "બનાવેલી તારીખ",
+        "dropdown": {
+          "All": "બધા",
+          "Active": "સક્રિય",
+          "InActive": "નક્રિય"
+        }
+      },
+      "button": {
+        "new": "નવું ઉપમોડ્યુલ",
+        "edit": "સંપાદિત કરો",
+        "delete": "કાઢી નાખો",
+        "view": "જુઓ",
+        "create": "ઉપમોડ્યુલ બનાવો",
+        "update": "ફેરફાર સંગ્રહો"
+      },
+      "messages": {
+        "delete-confirmation": "શું તમે ખરેખર <strong>{{count}}</strong> વસ્તુઓ કાઢી નાખવા માંગો છો?"
       }
     },
     "tab": {

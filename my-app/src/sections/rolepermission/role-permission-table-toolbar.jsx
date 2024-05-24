@@ -17,12 +17,13 @@ export default function RolePermissionTableToolbar({
   filters,
   onFilters,
   //
-  stockOptions,
+  // stockOptions,
   publishOptions,
 }) {
   const popover = usePopover();
-
-  const [stock, setStock] = useState(filters.stock);
+  const stockOptions = [];
+  // const [stock, setStock] = useState(filters.stock);
+  const [stock, setStock] = useState([]);
 
   const [publish, setPublish] = useState(filters.publish);
 
@@ -67,7 +68,7 @@ export default function RolePermissionTableToolbar({
           onClose={handleCloseStock}
           sx={{ textTransform: 'capitalize' }}
         >
-          {stockOptions.map((option) => (
+          {stockOptions && stockOptions.length > 0 && stockOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               <Checkbox disableRipple size="small" checked={stock.includes(option.value)} />
               {option.label}
@@ -93,7 +94,7 @@ export default function RolePermissionTableToolbar({
           onClose={handleClosePublish}
           sx={{ textTransform: 'capitalize' }}
         >
-          {publishOptions.map((option) => (
+          {publishOptions && publishOptions.length > 0 && publishOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               <Checkbox disableRipple size="small" checked={publish.includes(option.value)} />
               {option.label}

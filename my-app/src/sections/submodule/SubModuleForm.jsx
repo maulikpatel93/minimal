@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useMemo, useCallback } from 'react';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -13,29 +12,16 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-
-import { fData } from 'src/utils/format-number';
-
-import { countries } from 'src/assets/data';
-
-import Label from 'src/components/label';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFSwitch,
-  RHFTextField,
-  RHFUploadAvatar,
-  RHFAutocomplete,
-  RHFSelect,
-} from 'src/components/hook-form';
+import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete, RHFSelect } from 'src/components/hook-form';
 import { useDispatch, useSelector } from 'src/redux/store';
 import { useTranslation } from 'react-i18next';
 import { Chip, Divider, MenuItem } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { PANEL_OPTIONS } from 'src/_data/map/_module';
-import { SubModuleCreateApi, SubModuleUpdateApi } from 'src/redux/slices/subModuleSlice';
+import { ModuleCreateApi, ModuleUpdateApi } from 'src/redux/slices/moduleSlice';
 import { position } from 'stylis';
 
 // ----------------------------------------------------------------------
@@ -46,15 +32,13 @@ export default function SubModuleForm({ currentModule }) {
   const { enqueueSnackbar } = useSnackbar();
   const access = currentModule ? currentModule.access.split(',') : [];
   const dispatch = useDispatch();
-  const ModuleDropDownList = useSelector((state) => state.module.moduleListDropDown);
-  const ModuleDropDownData = ModuleDropDownList && ModuleDropDownList.length > 0 ? ModuleDropDownList : [];
   const NewModuleSchema = Yup.object().shape({
-    // title: Yup.string().required(t('title is required')),
-    // panel: Yup.string().required(t('panel is required')),
-    // access: Yup.array().min(1, t('Must have at least 1 access')),
-    // route: Yup.string().trim(),
-    // icon: Yup.string().trim(),
-    // is_active: Yup.boolean(),
+    title: Yup.string().required(t(`role-management.modules.title is required`)),
+    panel: Yup.string().required(t(`role-management.modules.panel is required`)),
+    access: Yup.array().min(1, t(`role-management.modules.Must have at least 1 access`)),
+    route: Yup.string().trim(),
+    icon: Yup.string().trim(),
+    is_active: Yup.boolean(),
   });
 
   const defaultValues = useMemo(
@@ -62,7 +46,6 @@ export default function SubModuleForm({ currentModule }) {
       id: currentModule?.id || '',
       title: currentModule?.title || '',
       panel: currentModule?.panel || '',
-      module_id:currentModule?.module_id || '',
       route: currentModule?.route || '',
       icon: currentModule?.icon || '',
       access: currentModule?.access.split(',') || [],
@@ -90,11 +73,11 @@ export default function SubModuleForm({ currentModule }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data && data.id) {
-        const action = await dispatch(SubModuleUpdateApi(data));
+      if(data && data.id){
+        const action = await dispatch(ModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
-          router.push(paths.dashboard.roleManagement.submodule.list);
+          enqueueSnackbar(t(`role-management.modules.Module Updated Successfully`), { variant: 'success' });
+          router.push(paths.dashboard.roleManagement.module.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -102,52 +85,38 @@ export default function SubModuleForm({ currentModule }) {
           const data = action.payload.data;
           if (status === 422 && data) {
             Object.keys(data).forEach((field) => {
-              const errorMessage = data[field].join(', '); // Join the error messages for the field
+              const errorMessage = data[field].join(', ');
               setError(field, {
-                type: 'manual', // Set the error type as 'manual'
-                message: errorMessage, // Provide the error message
+                type: 'manual',
+                message: errorMessage,
               });
             });
-
-            // Open the dialog with the error message
-            // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
-            enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
           }
         }
-      } else {
-        const action = await dispatch(SubModuleCreateApi(data));
+      }else{
+        const action = await dispatch(ModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar('Module Updated Successfully', { variant: 'success' });
-          router.push(paths.dashboard.roleManagement.submodule.list);
+          enqueueSnackbar(t(`role-management.modules.Module Created Successfully`), { variant: 'success' });
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
           const message = action.payload.message;
           const data = action.payload.data;
           if (status === 422 && data) {
-            // Construct the error message to display in the dialog
             Object.keys(data).forEach((field) => {
-              const errorMessage = data[field].join(', '); // Join the error messages for the field
+              const errorMessage = data[field].join(', ');
               setError(field, {
-                type: 'manual', // Set the error type as 'manual'
-                message: errorMessage, // Provide the error message
+                type: 'manual',
+                message: errorMessage,
               });
             });
-
-            // Open the dialog with the error message
-            // dispatch(openModal({ title: 'Validation Error', description: errorMessage }));
           } else {
-            enqueueSnackbar(action.payload || 'An error occurred', { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
           }
         }
       }
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      // dispatch(SubModuleUpdateApi(data));
-      // reset();
-      // enqueueSnackbar(currentModule ? 'Update success!' : 'Create success!');
-      // router.push(paths.dashboard.user.list);
-      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -167,27 +136,22 @@ export default function SubModuleForm({ currentModule }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="title" label={t('title')} />
-              <RHFTextField name="icon" label={t('icon')} />
-              <RHFTextField name="route" label={t('route')} />
-              <RHFSelect name="panel" label={t('panel')}>
+              <RHFTextField name="title" label={t(`role-management.modules.Title`)} />
+              <RHFTextField name="icon" label={t(`role-management.modules.Icon`)} />
+              <RHFTextField name="route" label={t(`role-management.modules.Route`)} />
+              <RHFSelect name="panel" label={t(`role-management.modules.Panel`)}>
                 {PANEL_OPTIONS.map((panel) => (
                   <MenuItem key={panel.value} value={panel.value}>
                     {t(panel.label)}
                   </MenuItem>
                 ))}
               </RHFSelect>
-              <RHFSelect name="module_id" label={t('Module')}>
-                {ModuleDropDownData.map((module) => (
-                  <MenuItem key={module.value} value={module.value}>
-                    {t(module.label)}
-                  </MenuItem>
-                ))}
-              </RHFSelect>
+            </Box>
+            <Box sx={{ mt: 3 }}>
               <RHFAutocomplete
                 name="access"
-                label={t('Access')}
-                placeholder={t('+ Access')}
+                label={t(`role-management.modules.Access`)}
+                placeholder={t(`role-management.modules.+ Access`)}
                 multiple
                 freeSolo
                 options={access.map((option) => option)}
@@ -221,7 +185,7 @@ export default function SubModuleForm({ currentModule }) {
                   label={
                     <>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {t('is active')}
+                      {t(`role-management.modules.Is Active`)}
                       </Typography>
                     </>
                   }
@@ -230,7 +194,7 @@ export default function SubModuleForm({ currentModule }) {
               </Stack>
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentModule ? 'Create SubModule' : 'Save Changes'}
+                  {!currentModule ? t(`role-management.modules.Create Module`) : t(`role-management.modules.Save Changes`)}
                 </LoadingButton>
               </Stack>
             </Box>

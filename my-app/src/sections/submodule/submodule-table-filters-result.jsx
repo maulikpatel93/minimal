@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import Iconify from 'src/components/iconify';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -20,50 +21,37 @@ export default function SubModuleTableFiltersResult({
   results,
   ...other
 }) {
+
+  const { t } = useTranslation();
+
   const handleRemoveKeyword = useCallback(() => {
-    onFilters('name', '');
+    onFilters('q', '');
   }, [onFilters]);
 
   const handleRemoveStatus = useCallback(() => {
     onFilters('status', 'all');
   }, [onFilters]);
 
-  const handleRemoveRole = useCallback(
-    (inputValue) => {
-      const newValue = filters.role.filter((item) => item !== inputValue);
-
-      onFilters('role', newValue);
-    },
-    [filters.role, onFilters]
-  );
-
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
         <strong>{results}</strong>
         <Box component="span" sx={{ color: 'text.secondary', ml: 0.25 }}>
-          results found
+          {t(`results-found`)}
         </Box>
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status?.value !== 'all' && (
           <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip size="small" label={filters.status?.label} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
-        {!!filters.role.length && (
-          <Block label="Role:">
-            {filters.role.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
-            ))}
-          </Block>
-        )}
 
-        {!!filters.name && (
+        {!!filters.q && (
           <Block label="Keyword:">
-            <Chip label={filters.name} size="small" onDelete={handleRemoveKeyword} />
+            <Chip label={filters.q} size="small" onDelete={handleRemoveKeyword} />
           </Block>
         )}
 
@@ -79,7 +67,7 @@ export default function SubModuleTableFiltersResult({
   );
 }
 
-ModuleTableFiltersResult.propTypes = {
+SubModuleTableFiltersResult.propTypes = {
   filters: PropTypes.object,
   onFilters: PropTypes.func,
   onResetFilters: PropTypes.func,

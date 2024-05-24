@@ -76,15 +76,56 @@
       }
     },
     "submodules": {
-      "title": "उप मॉड्यूल",
+      "title": "उपमॉड्यूल्स",
       "list": "सूची",
+      "created_at": "निर्माण की तारीख",
+      "title is required": "शीर्षक आवश्यक है",
+      "panel is required": "पैनल आवश्यक है",
+      "Must have at least 1 access": "कम से कम 1 पहुंच होनी चाहिए",
+      "Submodule Updated Successfully": "उपमॉड्यूल सफलतापूर्वक अपडेट किया गया",
+      "An error occurred": "कोई त्रुटि हुई",
+      "Submodule Created Successfully": "उपमॉड्यूल सफलतापूर्वक बनाया गया",
+      "Title": "शीर्षक",
+      "Icon": "आइकन",
+      "Route": "मार्ग",
+      "Panel": "पैनल",
+      "Access": "पहुंच",
+      "+ Access": "+ पहुंच",
+      "Is Active": "सक्रिय है",
+      "Create Submodule": "उपमॉड्यूल बनाएं",
+      "Save Changes": "परिवर्तनों को सहेजें",
+      "edit": "संपादन",
+      "edit_submodule": "उपमॉड्यूल संपादित करें",
+      "create": {
+        "dashboard": "डैशबोर्ड",
+        "submodule": "उपमॉड्यूल",
+        "create": "बनाएं",
+        "create_new_submodule": "नया उपमॉड्यूल बनाएं"
+      },
       "columns": {
         "title": "शीर्षक",
         "route": "मार्ग",
         "icon": "आइकन",
         "panel": "पैनल",
         "status": "स्थिति",
-        "actions": "क्रियाएँ"
+        "actions": "क्रियाएँ",
+        "created_at": "निर्माण की तारीख",
+        "dropdown": {
+          "All": "सभी",
+          "Active": "सक्रिय",
+          "InActive": "निष्क्रिय"
+        }
+      },
+      "button": {
+        "new": "नया उपमॉड्यूल",
+        "edit": "संपादित करें",
+        "delete": "हटाएं",
+        "view": "देखें",
+        "create": "उपमॉड्यूल बनाएं",
+        "update": "परिवर्तन सहेजें"
+      },
+      "messages": {
+        "delete-confirmation": "क्या आप वाकई <strong>{{count}}</strong> वस्तुओं को हटाना चाहते हैं?"
       }
     },
     "tab": {

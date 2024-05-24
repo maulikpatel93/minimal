@@ -67,7 +67,7 @@ export default function TabTableToolbar({
           onClose={handleCloseStock}
           sx={{ textTransform: 'capitalize' }}
         >
-          {stockOptions.map((option) => (
+          {stockOptions && stockOptions.length > 0 && stockOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               <Checkbox disableRipple size="small" checked={stock.includes(option.value)} />
               {option.label}
@@ -93,7 +93,7 @@ export default function TabTableToolbar({
           onClose={handleClosePublish}
           sx={{ textTransform: 'capitalize' }}
         >
-          {publishOptions.map((option) => (
+          {publishOptions && publishOptions.length > 0 && publishOptions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               <Checkbox disableRipple size="small" checked={publish.includes(option.value)} />
               {option.label}

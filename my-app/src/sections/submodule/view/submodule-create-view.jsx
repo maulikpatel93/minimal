@@ -1,37 +1,37 @@
 import Container from '@mui/material/Container';
-
 import { paths } from 'src/routes/paths';
-
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import SubModuleForm from '../SubModuleForm';
+import ModuleForm from '../SubModuleForm';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 export default function SubModuleCreateView() {
   const settings = useSettingsContext();
+  const { t } = useTranslation();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new module"
+        heading={t('role-management.modules.create.create_new_module')}
         links={[
           {
-            name: 'Dashboard',
+            name: t('role-management.modules.create.dashboard'),
             href: paths.dashboard.root,
           },
           {
-            name: 'SubModule',
-            href: paths.dashboard.roleManagement.submodule.list,
+            name: t('role-management.modules.create.module'),
+            href: paths.dashboard.roleManagement.module.list,
           },
-          { name: 'Create' },
+          { name: t('role-management.modules.create.create') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <SubModuleForm />
+      <ModuleForm />
     </Container>
   );
 }

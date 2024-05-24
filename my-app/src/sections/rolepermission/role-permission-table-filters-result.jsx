@@ -53,7 +53,7 @@ export default function RolePermissionTableFiltersResult({
           </Block>
         )}
 
-        {!!filters.role.length && (
+        {!!filters && filters.role && filters.role.length && (
           <Block label="Role:">
             {filters.role.map((item) => (
               <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
