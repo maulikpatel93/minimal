@@ -38,6 +38,7 @@ import { RenderCellCreatedAt, RenderCellStatus } from '../module-table-row';
 import { guINDataGrid } from 'src/locales/x-data-grid/guINDataGrid';
 import { useLocales, useTranslate } from 'src/locales';
 import { hiINDataGrid } from 'src/locales/x-data-grid/hiINDataGrid';
+import ImportExportModal from 'src/sections/_examples/mui/dialog-view/ImportExportModal';
 
 const HIDE_COLUMNS = {
   id: false,
@@ -81,7 +82,7 @@ export default function ModuleListView() {
   const loadingList = useSelector((state) => state.module.loading.list);
   const totalRows = moduleList ? moduleList.total : 0;
   const currentPage = moduleList ? moduleList.current_page : 1;
-
+  const isOpenModal = useSelector((state) => state.common.isOpenModal);
   
 
   useEffect(() => {
@@ -423,6 +424,7 @@ export default function ModuleListView() {
           </Button>
         }
       />
+      {isOpenModal && <ImportExportModal/>}
     </>
   );
 }

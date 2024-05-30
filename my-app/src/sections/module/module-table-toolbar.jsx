@@ -16,6 +16,9 @@ import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { Checkbox } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { OpenModuleImportToolbar } from 'src/redux/slices/moduleSlice';
+import { openModal } from 'src/redux/slices/commonSlice';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +26,7 @@ export default function ModuleTableToolbar({ filters, onFilters, statusOptions }
   const popover = usePopover();
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const handleFilterName = useCallback(
     (event) => {
@@ -119,7 +123,7 @@ export default function ModuleTableToolbar({ filters, onFilters, statusOptions }
 
         <MenuItem
           onClick={() => {
-            popover.onClose();
+            dispatch(openModal({title:"Import Module",description:"Upload a file or export file file type must be excell",modalFrom:"module_list_view"}));
           }}
         >
           <Iconify icon="solar:import-bold" />

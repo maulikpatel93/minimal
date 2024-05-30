@@ -104,6 +104,7 @@ const initialState = {
     update: "",
     delete: "",
     detail: "",
+    isOpenModuleImportToolbar:"",
     moduleListDropDown:[],
     loading: { list: false, update: false, delete: false, detail: false,create:false,dropdown:false }
 };
@@ -113,6 +114,9 @@ export const moduleSlice = createSlice({
     initialState,
     reducers: {
         reset: () => initialState,
+        OpenModuleImportToolbar:(state,action)=>{
+            state.isOpenModuleImportToolbar = action.payload;
+        }
     },
     extraReducers(builder) {
         builder
@@ -198,5 +202,5 @@ export const moduleSlice = createSlice({
     },
 });
 
-export const { reset } = moduleSlice.actions;
+export const { reset,OpenModuleImportToolbar } = moduleSlice.actions;
 export default moduleSlice.reducer;

@@ -5,6 +5,7 @@ const initialState = {
   isOpenModal: false,
   IsModalTitle:"",
   IsModalDescription:"",
+  IsmodalFrom:""
 };
 
 export const commonSlice = createSlice({
@@ -16,11 +17,13 @@ export const commonSlice = createSlice({
         state.isOpenModal = true;
         state.IsModalTitle = action.payload.title;
         state.IsModalDescription = action.payload.description;
+        state.IsmodalFrom = action.payload.modalFrom;
       },
     closeModal: (state) => {
         state.isOpenModal = false;
         state.IsModalTitle = "";
         state.IsModalDescription = "";
+        state.IsmodalFrom = "";
     },
   }
 });
