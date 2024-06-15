@@ -75,7 +75,9 @@
           "required": "Is Active is requied"
         },
         "actions": "Actions",
-        "created_at": "Created At"
+        "created_at": {
+          "label": "Created At"
+        }
       },
       "button": {
         "new": "New Module",

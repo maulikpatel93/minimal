@@ -128,7 +128,7 @@ export default function ModuleListView() {
   const columns = [
     {
       field: 'title',
-      headerName: t(`role-management.modules.columns.title`),
+      headerName: t(`role-management.modules.columns.title.label`),
       flex: 1,
       minWidth: 180,
       hideable: false,
@@ -142,7 +142,7 @@ export default function ModuleListView() {
     },
     {
       field: 'route',
-      headerName: t(`role-management.modules.columns.route`),
+      headerName: t(`role-management.modules.columns.route.label`),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -155,7 +155,7 @@ export default function ModuleListView() {
     },
     {
       field: 'icon',
-      headerName: t(`role-management.modules.columns.icon`),
+      headerName: t(`role-management.modules.columns.icon.label`),
       width: 120,
       renderCell: ({ row }) => {
         return (
@@ -167,7 +167,7 @@ export default function ModuleListView() {
     },
     {
       field: 'panel',
-      headerName: t(`role-management.modules.columns.panel`),
+      headerName: t(`role-management.modules.columns.panel.label`),
       flex: 1,
       minWidth: 120,
       renderCell: ({ row }) => {
@@ -180,7 +180,7 @@ export default function ModuleListView() {
     },
     {
       field: 'is_active',
-      headerName: t(`role-management.modules.columns.status`),
+      headerName: t(`role-management.modules.columns.status.label`),
       flex: 1,
       width: 50,
       sortable: false,
@@ -192,7 +192,7 @@ export default function ModuleListView() {
     },
     {
       field: 'created_at',
-      headerName: t(`role-management.modules.columns.created_at`),
+      headerName: t(`role-management.modules.columns.created_at.label`),
       width: 160,
       renderCell: (params) => <RenderCellCreatedAt params={params} />,
     },
