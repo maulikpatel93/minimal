@@ -30,6 +30,13 @@
     "Active": "Active",
     "InActive": "InActive"
   },
+  "button": {
+    "new": "New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "cancel": "Cancel"
+  },
   "role-management": {
     "title": "Role Management",
     "modules": {
