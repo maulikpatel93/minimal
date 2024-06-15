@@ -49,19 +49,19 @@ const HIDE_COLUMNS_TOGGLABLE = ['id', 'actions'];
 export default function ModuleListView() {
   const { t } = useTranslation();
   const STATUS_OPTIONS = [
-    { value: "all", label: t('role-management.modules.columns.dropdown.All') },
-    { value: 1, label: t('role-management.modules.columns.dropdown.Active') },
-    { value: 0, label: t('role-management.modules.columns.dropdown.InActive') },
+    { value: "all", label: t('dropdown-options.All') },
+    { value: 1, label: t('dropdown-options.Active') },
+    { value: 0, label: t('dropdown-options.InActive') },
   ];
-  
+
   const STATUS_OPTIONS_INLINE = [
-    { value: 1, label: t('Active') },
-    { value: 0, label: t('InActive') },
+    { value: 1, label: t('dropdown-options.Active') },
+    { value: 0, label: t('dropdown-options.InActive') },
   ];
-  
+
   const defaultFilters = {
     q: '',
-    status: { value: "all", label: t('All') },
+    status: { value: "all", label: t('dropdown-options.All') },
   };
   const { currentLang } = useLocales();
   const { enqueueSnackbar } = useSnackbar();
@@ -83,7 +83,7 @@ export default function ModuleListView() {
   const totalRows = moduleList ? moduleList.total : 0;
   const currentPage = moduleList ? moduleList.current_page : 1;
   const isOpenModal = useSelector((state) => state.common.isOpenModal);
-  
+
 
   useEffect(() => {
     dispatch(
@@ -424,7 +424,7 @@ export default function ModuleListView() {
           </Button>
         }
       />
-      {isOpenModal && <ImportExportModal/>}
+      {isOpenModal && <ImportExportModal />}
     </>
   );
 }

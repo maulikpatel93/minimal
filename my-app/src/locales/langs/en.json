@@ -20,48 +20,62 @@
   "dashboard": {
     "title": "Dashboard"
   },
+  "panel-options": {
+    "Backend": "Backend",
+    "Frontend": "Frontend",
+    "Common": "Common"
+  },
+  "dropdown-options": {
+    "All": "All",
+    "Active": "Active",
+    "InActive": "InActive"
+  },
   "role-management": {
     "title": "Role Management",
     "modules": {
       "title": "Modules",
+      "title2": "Module",
       "list": "List",
-      "created_at": "Created At",
-      "title is required": "Title is required",
-      "panel is required": "Panel is required",
-      "Must have at least 1 access": "Must have at least 1 access",
-      "Module Updated Successfully": "Module Updated Successfully",
-      "An error occurred": "An error occurred",
-      "Module Created Successfully": "Module Created Successfully",
-      "Title": "Title",
-      "Icon": "Icon",
-      "Route": "Route",
-      "Panel": "Panel",
-      "Access": "Access",
-      "+ Access" : "+ Access",
-      "Is Active": "Is Active",
-      "Create Module": "Create Module",
-      "Save Changes": "Save Changes",
-      "edit": "Edit",
-      "edit_module":"Edit Module",
+      "dashboard": "Dashboard",
       "create": {
-        "dashboard": "Dashboard",
-        "module": "Module",
-        "create": "Create",
-        "create_new_module": "Create New Module"
+        "label": "Create",
+        "title": "Create New Module"
+      },
+      "edit": {
+        "label": "Edit",
+        "title": "Edit Module"
       },
       "columns": {
-        "title": "Title",
-        "route": "Route",
-        "icon": "Icon",
-        "panel": "Panel",
-        "status": "Status",
+        "title": {
+          "label": "Title",
+          "required": "Title is requied"
+        },
+        "route": {
+          "label": "Route",
+          "required": "Route is requied"
+        },
+        "icon": {
+          "label": "Icon",
+          "required": "Icon is requied"
+        },
+        "panel": {
+          "label": "Panel",
+          "required": "Panel is requied"
+        },
+        "status": {
+          "label": "Status",
+          "required": "Status is requied"
+        },
+        "access": {
+          "label": "Access",
+          "required": "Access is requied"
+        },
+        "is_active": {
+          "label": "Is Active",
+          "required": "Is Active is requied"
+        },
         "actions": "Actions",
-        "created_at": "Created At",
-        "dropdown": {
-          "All": "All",
-          "Active": "Active",
-          "InActive": "InActive"
-        }
+        "created_at": "Created At"
       },
       "button": {
         "new": "New Module",

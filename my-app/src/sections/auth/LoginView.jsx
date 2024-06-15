@@ -83,7 +83,7 @@ export default function LoginView() {
       // console.error('error',error);
       const status = error?.status
       if (status === 422) {
-        const errorMessages = error?.data?.error || errorResponse.data.error;
+        const errorMessages = error?.data?.error;
         let aggregatedErrorMsg = '';
 
         for (const field in errorMessages) {

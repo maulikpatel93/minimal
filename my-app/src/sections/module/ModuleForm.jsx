@@ -19,10 +19,8 @@ import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete, RHFSelect } fro
 import { useDispatch, useSelector } from 'src/redux/store';
 import { useTranslation } from 'react-i18next';
 import { Chip, Divider, MenuItem } from '@mui/material';
-import Iconify from 'src/components/iconify';
-import { PANEL_OPTIONS } from 'src/_data/map/_module';
 import { ModuleCreateApi, ModuleUpdateApi } from 'src/redux/slices/moduleSlice';
-import { position } from 'stylis';
+import { PANEL_OPTIONS } from 'src/_data/map/_module';
 
 // ----------------------------------------------------------------------
 
@@ -32,10 +30,12 @@ export default function ModuleForm({ currentModule }) {
   const { enqueueSnackbar } = useSnackbar();
   const access = currentModule ? currentModule.access.split(',') : [];
   const dispatch = useDispatch();
+
+
   const NewModuleSchema = Yup.object().shape({
-    title: Yup.string().required(t(`role-management.modules.title is required`)),
-    panel: Yup.string().required(t(`role-management.modules.panel is required`)),
-    access: Yup.array().min(1, t(`role-management.modules.Must have at least 1 access`)),
+    title: Yup.string().required(t(`role-management.modules.columns.title.required`)),
+    panel: Yup.string().required(t(`role-management.modules.columns.panel.required`)),
+    access: Yup.array().min(1, t(`role-management.modules.columns.access.required`)),
     route: Yup.string().trim(),
     icon: Yup.string().trim(),
     is_active: Yup.boolean(),
@@ -73,10 +73,10 @@ export default function ModuleForm({ currentModule }) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if(data && data.id){
-        const action = await dispatch(ModuleUpdateApi(data));
+      if (data && data.id) {
+        const action = dispatch(ModuleUpdateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar(t(`role-management.modules.Module Updated Successfully`), { variant: 'success' });
+          enqueueSnackbar(t(`success-messages.updated`), { variant: 'success' });
           router.push(paths.dashboard.roleManagement.module.list);
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
@@ -92,13 +92,13 @@ export default function ModuleForm({ currentModule }) {
               });
             });
           } else {
-            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`error-messages.error`), { variant: 'error' });
           }
         }
-      }else{
-        const action = await dispatch(ModuleCreateApi(data));
+      } else {
+        const action = dispatch(ModuleCreateApi(data));
         if (action.meta.requestStatus === 'fulfilled') {
-          enqueueSnackbar(t(`role-management.modules.Module Created Successfully`), { variant: 'success' });
+          enqueueSnackbar(t(`success-messages.created`), { variant: 'success' });
           // reset();
         } else if (action.meta.requestStatus === 'rejected') {
           const status = action.payload.status;
@@ -113,7 +113,7 @@ export default function ModuleForm({ currentModule }) {
               });
             });
           } else {
-            enqueueSnackbar(action.payload || t(`role-management.modules.An error occurred`), { variant: 'error' });
+            enqueueSnackbar(action.payload || t(`error-messages.error`), { variant: 'error' });
           }
         }
       }
@@ -136,13 +136,13 @@ export default function ModuleForm({ currentModule }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="title" label={t(`role-management.modules.Title`)} />
-              <RHFTextField name="icon" label={t(`role-management.modules.Icon`)} />
-              <RHFTextField name="route" label={t(`role-management.modules.Route`)} />
-              <RHFSelect name="panel" label={t(`role-management.modules.Panel`)}>
+              <RHFTextField name="title" label={t(`role-management.modules.columns.title.label`)} />
+              <RHFTextField name="icon" label={t(`role-management.modules.columns.icon.label`)} />
+              <RHFTextField name="route" label={t(`role-management.modules.columns.route.label`)} />
+              <RHFSelect name="panel" label={t(`role-management.modules.columns.panel.label`)}>
                 {PANEL_OPTIONS.map((panel) => (
                   <MenuItem key={panel.value} value={panel.value}>
-                    {t(panel.label)}
+                    {t(`panel-options.${panel.label}`)}
                   </MenuItem>
                 ))}
               </RHFSelect>
@@ -150,8 +150,8 @@ export default function ModuleForm({ currentModule }) {
             <Box sx={{ mt: 3 }}>
               <RHFAutocomplete
                 name="access"
-                label={t(`role-management.modules.Access`)}
-                placeholder={t(`role-management.modules.+ Access`)}
+                label={t(`role-management.modules.columns.access.label`)}
+                placeholder={"+ " + t(`role-management.modules.columns.access.label`)}
                 multiple
                 freeSolo
                 options={access.map((option) => option)}
@@ -185,7 +185,7 @@ export default function ModuleForm({ currentModule }) {
                   label={
                     <>
                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {t(`role-management.modules.Is Active`)}
+                        {t(`role-management.modules.columns.is_active.label`)}
                       </Typography>
                     </>
                   }
@@ -194,7 +194,7 @@ export default function ModuleForm({ currentModule }) {
               </Stack>
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentModule ? t(`role-management.modules.Create Module`) : t(`role-management.modules.Save Changes`)}
+                  {!currentModule ? t(`role-management.modules.button.create`) : t(`role-management.modules.button.update`)}
                 </LoadingButton>
               </Stack>
             </Box>

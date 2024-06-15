@@ -67,7 +67,7 @@ export default function ModuleTableToolbar({ filters, onFilters, statusOptions }
           <Select
             value={filters.status}
             onChange={handleFilterStatus}
-            input={<OutlinedInput label="Status" />}
+            input={<OutlinedInput label={t(`status`)} />}
             renderValue={(selected) => {
               const option = statusOptions.find(opt => opt.value === selected.value);
               return option ? option.label : '';

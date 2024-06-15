@@ -14,17 +14,17 @@ export default function ModuleCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading={t('role-management.modules.create.create_new_module')}
+        heading={t('role-management.modules.create.title')}
         links={[
           {
-            name: t('role-management.modules.create.dashboard'),
+            name: t('role-management.modules.dashboard'),
             href: paths.dashboard.root,
           },
           {
-            name: t('role-management.modules.create.module'),
+            name: t('role-management.modules.title2'),
             href: paths.dashboard.roleManagement.module.list,
           },
-          { name: t('role-management.modules.create.create') },
+          { name: t('role-management.modules.create.label') },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
