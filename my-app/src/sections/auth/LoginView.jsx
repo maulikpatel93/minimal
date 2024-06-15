@@ -24,13 +24,14 @@ import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { authLoginApi } from 'src/redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
+import IconButtons from '../_examples/mui/button-view/icon-buttons';
 
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
   const dispatch = useDispatch();
   const { login } = useAuthContext();
-  const[openAlert,setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -79,10 +80,24 @@ export default function LoginView() {
 
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
-      console.error(error);
-      // reset();
-      setErrorMsg(typeof error === 'string' ? error : error.message);
+      // console.error('error',error);
+      const status = error?.status
+      if (status === 422) {
+        const errorMessages = error?.data?.error || errorResponse.data.error;
+        let aggregatedErrorMsg = '';
+
+        for (const field in errorMessages) {
+          if (errorMessages.hasOwnProperty(field)) {
+            aggregatedErrorMsg += `${field}: ${errorMessages[field].join(' ')}\n`;
+          }
+        }
+
+        setErrorMsg(aggregatedErrorMsg.trim());
+      } else {
+        setErrorMsg('An unexpected error occurred. Please try again.');
+      }
       setOpenAlert(true);
+      // reset();
     }
   });
 
@@ -145,12 +160,23 @@ export default function LoginView() {
       </Alert> */}
 
       {!!errorMsg && openAlert && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => {
-          setOpenAlert(false);
-        }} slotProps={{
-          closeButton: true,
-          closeIcon: true
-        }}>
+        <Alert
+          severity="error"
+          sx={{ mb: 3 }}
+          onClose={() => setOpenAlert(false)}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpenAlert(false);
+              }}
+            >
+              <Iconify icon="eva:close-outline" />
+            </IconButton>
+          }
+        >
           {errorMsg}
         </Alert>
       )}

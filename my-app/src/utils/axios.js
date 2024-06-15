@@ -13,10 +13,10 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     return Promise.reject(({
-      status:error.response?.status, 
-      data:error.response?.data, 
-      message:error.response?.message
-     }) || 'Something went wrong');
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.response?.message
+    }) || 'Something went wrong');
   }
 );
 
@@ -42,7 +42,7 @@ export const endpoints = {
     me: 'afterlogin/auth/me',
     login: 'beforelogin/guest/login',
     register: 'beforelogin/guest/register',
-    update:'afterlogin/auth/update',
+    update: 'afterlogin/auth/update',
   },
   mail: {
     list: '/api/mail/list',
