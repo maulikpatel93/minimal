@@ -298,7 +298,7 @@ export default function ModuleListView() {
             />
           )}
           <DataGrid
-            localeText={currentLang && currentLang.value == "gu" ? guINDataGrid : currentLang && currentLang.value == "hi" ? hiINDataGrid : ""}
+            localeText={currentLang && currentLang.value == "gu" ? guINDataGrid : currentLang && currentLang.value == "hi" ? hiINDataGrid : {}}
             checkboxSelection
             disableRowSelectionOnClick
             rows={moduleList && moduleList?.data ? moduleList.data : []}
